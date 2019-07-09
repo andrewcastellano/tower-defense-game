@@ -38,9 +38,11 @@
         level: {},
         player: {}
     };
+    var easyTrack;
 
     function preload ()
     {   
+        // HUD assets
         this.load.image('robot', 'images/Robot.png');
         this.load.image('laser', 'images/laser.png');
         this.load.image('signaldisruptor', 'images/signaldisruptor.png');
@@ -48,10 +50,23 @@
         this.load.image('play', 'images/play.png');
         this.load.image('cancel', 'images/cancel.png');
         this.load.image('save', 'images/save.png');
+
+        // Track assets
+        this.load.image('track', 'images/tracks/easyTrack.png');
+        //this.load.image('backdrop', 'images/backdrop.png');   find a good backdrop for levels
+
+        // Enemy assets
+        this.load.image('toaster', 'images/enemies/toaster/toaster.png');
+
+        // Tower assets
+
     }
 
     function create ()
     {
+        // Add backdrop
+        //this.add.image(400, 300, 'backdrop');
+
         var graphics = this.add.graphics();
 
         // Add gray hud panel to screen
@@ -83,12 +98,37 @@
         this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
-    }
 
-    function update ()
-    {
-        this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
-        this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+        // Add track (easy level for now) and give it static physics
+        var levelTrack = this.physics.add.staticGroup();
+
+        // Position track
+        levelTrack.create(325, 195, 'track');
+
+////////// testing...////////////////////////////
+        var pathGraphics = this.add.graphics();
+
+        // Easy Track point data
+        var points = {
+            'x': [   0, 125, 125, 595, 595, 125, 125,  84,  84, 634, 634, 84,  84,   0 ],
+            'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
+        };
+
+        // Load up Easy Track data points into path
+        path = this.add.path(points.x[0], points.y[0]);
+        for (var i = 1; i < points.x.length; i++)
+        {
+            path.lineTo(points.x[i], points.y[i]);
+        }        
+
+        // Draw the path for now
+        pathGraphics.lineStyle(3, 0xffffff, 1);
+        path.draw(pathGraphics);
+
+        // Add toaster
+        var enemies = this.physics.add.staticGroup();
+        enemies.create(0, 185, 'toaster');
+
     }
     </script>
 </body>
