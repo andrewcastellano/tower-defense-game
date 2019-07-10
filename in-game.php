@@ -130,6 +130,13 @@
         enemies.create(0, 185, 'toaster');
 
     }
+
+    function update ()
+    {
+        this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
+        this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+    }
+    
     </script>
 </body>
 </html>
