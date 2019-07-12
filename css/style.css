@@ -67,3 +67,10 @@ h1 {
     color: #ff0000;
     font-weight: 700;
 }
+
+body.high-scores table td,
+body.high-scores table th {
+    border: 1px solid #dee2e6;
+    background: #666666;
+    color: #fff;
+}
