@@ -10,15 +10,17 @@
 </head>
 <body>
     <script>
+
     var config = {
         type: Phaser.AUTO,
         width: 900,
         height: 390,
         physics: {
             default: 'arcade',
+            /* I don't think we need/want gravity
             arcade: {
                 gravity: { y: 200 }
-            }
+            }*/
         },
         scene: {
             preload: preload,
@@ -38,8 +40,17 @@
         level: {},
         player: {}
     };
-    var easyTrack;
+    var path;
+    var enemies;
+    var graphics;
+    
+    // Easy Track point data
+    var easyPoints = {
+        'x': [   0, 125, 125, 595, 595, 125, 125,  84,  84, 634, 634, 84,  84,   0 ],
+        'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
+    };
 
+    // Preload the game scene
     function preload ()
     {   
         // HUD assets
@@ -52,7 +63,7 @@
         this.load.image('save', 'images/save.png');
 
         // Track assets
-        this.load.image('track', 'images/tracks/easyTrack.png');
+        this.load.image('easyTrack', 'images/tracks/easyTrack.png');
         //this.load.image('backdrop', 'images/backdrop.png');   find a good backdrop for levels
 
         // Enemy assets
@@ -62,11 +73,80 @@
 
     }
 
+    // Class for enemies (being used only for toaster enemy currently)
+    var Enemy = new Phaser.Class({
+    
+        Extends: Phaser.GameObjects.Image,
+
+        initialize: 
+
+        // Constructor
+        function Enemy(scene)
+        {
+            // store enemy image
+            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'toaster');
+
+            // to follow track path
+            this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+
+            // enemy specific attributes
+            this.name = "";
+            this.health = 100;
+            this.alive = true;
+            this.speed = 1/30000;
+            this.value = 10;
+        },
+
+        // Spawns enemy in at the start of the track path
+        spawn: function ()
+        {
+            // put enemy to start of track path
+            this.follower.t = 0;
+            
+            // get starting coordinates
+            path.getPoint(this.follower.t, this.follower.vec);
+            
+            // move to starting coordinate
+            this.setPosition(this.follower.vec.x, this.follower.vec.y);            
+        },
+
+        // To be used to receive damage from towers
+        takeDamage: function (damange)
+        {
+            // damage received as a positive value
+            this.health -= damage;
+
+            // access if still alive
+            if (this.health <= 0){
+                this.alive = false;
+            }
+        },
+
+        // Update function for gameplay
+        update: function (time, delta)
+        {
+            // get new progress through track path
+            this.follower.t += this.speed * delta;
+
+            // use progression to find new position coordinate
+            path.getPoint(this.follower.t, this.follower.vec);
+            this.setPosition(this.follower.vec.x, this.follower.vec.y);
+
+            //check relative position on track path, or for death
+            if (this.follower.t >=1 || this.alive === false)
+            {
+                this.setActive(false);
+                this.setVisible(false);
+            }
+        }
+    });
+
+    // Create the game scene
     function create ()
     {
         // Add backdrop
         //this.add.image(400, 300, 'backdrop');
-
+        
         var graphics = this.add.graphics();
 
         // Add gray hud panel to screen
@@ -99,44 +179,56 @@
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
-        // Add track (easy level for now) and give it static physics
-        var levelTrack = this.physics.add.staticGroup();
-
-        // Position track
-        levelTrack.create(325, 195, 'track');
-
-////////// testing...////////////////////////////
-        var pathGraphics = this.add.graphics();
-
-        // Easy Track point data
-        var points = {
-            'x': [   0, 125, 125, 595, 595, 125, 125,  84,  84, 634, 634, 84,  84,   0 ],
-            'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
-        };
-
+        // Position track (will the track need physics??)
+        this.add.image(325, 195, 'easyTrack');
+        
         // Load up Easy Track data points into path
-        path = this.add.path(points.x[0], points.y[0]);
-        for (var i = 1; i < points.x.length; i++)
+        path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
+        for (var i = 1; i < easyPoints.x.length; i++)
         {
-            path.lineTo(points.x[i], points.y[i]);
-        }        
+            path.lineTo(easyPoints.x[i], easyPoints.y[i]);
+        }     
+        
+        // Draw the path to visualize
+        //graphics.lineStyle(3, 0xffffff, 1);
+        //path.draw(graphics);
 
-        // Draw the path for now
-        pathGraphics.lineStyle(3, 0xffffff, 1);
-        path.draw(pathGraphics);
-
-        // Add toaster
-        var enemies = this.physics.add.staticGroup();
-        enemies.create(0, 185, 'toaster');
-
+        // Create group for enemies
+        enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
+	    this.nextEnemy = 0;
     }
 
-    function update ()
+    var enemyCount = 0;
+    var waveCount = 10;
+
+    // Update game scene
+    function update (time, delta)
     {
         this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
         this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+
+        // if its time for the next enemy and still enemies to spawn
+        if (time > this.nextEnemy && enemyCount < waveCount)
+        {   
+            // get another enemy     
+            var enemy = enemies.get();
+            if (enemy)
+            {
+                enemy.setActive(true);
+                enemy.setVisible(true);
+                
+                // place the enemy at the beginning of the path
+                enemy.spawn();
+
+                // tally enemy (to be used for waves)
+                enemyCount++;
+                
+                var gap = 2000; //increase for larger gaps, decrease for smaller gaps
+                this.nextEnemy = time + gap;
+            }       
+        }       
     }
-    
+
     </script>
 </body>
 </html>
