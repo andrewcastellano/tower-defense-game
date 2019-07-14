@@ -16,11 +16,7 @@
         width: 900,
         height: 390,
         physics: {
-            default: 'arcade',
-            /* I don't think we need/want gravity
-            arcade: {
-                gravity: { y: 200 }
-            }*/
+            default: 'arcade' // Maybe we don't even need this ?
         },
         scene: {
             preload: preload,
@@ -30,18 +26,7 @@
         backgroundColor: 'rgba(0,0,255,0.5)',
     };
 
-    var objects = {};
     var game = new Phaser.Game(config);
-    var gamestate = {
-        money: 50,
-        lives: 100,
-        score: 0,
-        towers: {},
-        level: {},
-        player: {},
-        moneyText: "",
-        livesText: ""
-    };
     var path;
     var enemies;
     var graphics;
@@ -51,6 +36,31 @@
         'x': [   0, 125, 125, 595, 595, 125, 125,  84,  84, 634, 634, 84,  84,   0 ],
         'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
     };
+
+    // Tower prices
+    const waterhoseCost = 25;
+    const signaldisruptorCost = 100;
+    const laserCost = 500;
+
+    // Gamestate class definition
+    class GameState {
+        constructor() {
+            this.money = 50;
+            this.lives = 100;
+            this.score = 0;
+            this.towers =  null;
+            this.enemies = null;
+        }
+
+        setMoney(amount) {
+            this.money = amount;
+        }
+
+        setLives(lives) {
+            this.lives = lives;
+        }
+    }
+    var gamestate = new GameState();
     
     // Waterhose class definition
     var waterhose = new Phaser.Class({ 
@@ -166,7 +176,7 @@
                 this.setVisible(false);
                 
                 //take a life away from player
-                gamestate.lives--;
+                gamestate.setLives(gamestate.lives-1);
             }
 
             // check for death
@@ -181,6 +191,36 @@
             }
         }
     });
+
+    // Buy a Waterhose
+    function buyWaterhose() {
+        if (gamestate.money < waterhoseCost) return;
+
+        // Enable drag and drop
+        // Wait for tower placed event
+        // Subtract cost from money
+        gamestate.setMoney(gamestate.money - waterhoseCost);
+    }
+
+    // Buy a Signal Disruptor
+    function buySignalDisruptor() {
+        if (gamestate.money < signaldisruptorCost) return;
+
+        // Enable drag and drop
+        // Wait for tower placed event
+        // Subtract cost from money
+        gamestate.setMoney(gamestate.money - waterhoseCost);
+    }
+
+    // Buy a Laser
+    function buyLaser() {
+        if (gamestate.money < laserCost) return;
+
+        // Enable drag and drop
+        // Wait for tower placed event
+        // Subtract cost from money
+        gamestate.setMoney(gamestate.money - waterhoseCost);
+    }
 
     // Create the game scene
     function create ()
@@ -202,15 +242,21 @@
         graphics.fillRect(675, 312, 225, 3);
         graphics.fillRect(672, 0, 3, 390);
 
-        // Add tower images
-        this.add.image(710, 117, 'waterhose').setScale(0.04);
+        // Add tower icons and text
+        waterhoseIcon = this.add.image(710, 117, 'waterhose').setScale(0.04);
+        waterhoseIcon.setInteractive();
+        waterhoseIcon.on('pointerdown', buyWaterhose);
         this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
-        this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
+
+        signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
+        signaldisruptorIcon.setInteractive();
+        signaldisruptorIcon.on('pointerdown', buySignalDisruptor);
         this.add.text(740, 178, 'Signal Disruptor:$100', { color: '#ffffff', fontSize: '12px' });
-        this.add.text(740, 198, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
-        this.add.image(710, 273, 'laser').setScale(0.04);
+
+        laserIcon = this.add.image(710, 273, 'laser').setScale(0.04);
+        laserIcon.setInteractive();
+        laserIcon.on('pointerdown', buyLaser);
         this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
-        this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
 
         // Add play, save, load buttons
         this.add.image(710, 345, 'play').setScale(0.06);
@@ -223,8 +269,13 @@
       
         waterhoses = this.physics.add.group({ classType: waterhose, runChildUpdate: true });
         // Add money and lives text info
-        gamestate.moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
-        gamestate.livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+        moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
+        livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+
+        // Add not enough funds text under towers
+        cantAffordWaterhoseText = this.add.text(740, 120, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
+        cantAffordSignalDisruptorText = this.add.text(740, 198, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
+        cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
 
         // Position track (will the track need physics??)
         this.add.image(325, 195, 'easyTrack');
@@ -245,17 +296,67 @@
 	    this.nextEnemy = 0;
     }
 
+    // Updates text indicating if player can afford certain towers
+    function updateNotEnoughFundsText() {
+        if (gamestate.money < waterhoseCost) {
+            // Player can't afford any towers
+            cantAffordWaterhoseText.alpha = 1.0;
+            cantAffordSignalDisruptorText.alpha = 1.0;
+            cantAffordLaserText.alpha = 1.0;
+
+            return;
+        } else if (gamestate.money < signaldisruptorCost) {
+            // Player can afford at least a Waterhose
+            cantAffordWaterhoseText.alpha = 0.0;
+            cantAffordSignalDisruptorText.alpha = 1.0;
+            cantAffordLaserText.alpha = 1.0;
+
+            return;
+        } else if (gamestate.money < laserCost) {
+            // Player can affor at least a Signal Disruptor
+            cantAffordWaterhoseText.alpha = 0.0;
+            cantAffordSignalDisruptorText.alpha = 0.0;
+            cantAffordLaserText.alpha = 1.0;
+
+            return;
+        } else {
+            cantAffordWaterhoseText.alpha = 0.0;
+            cantAffordSignalDisruptorText.alpha = 0.0;
+            cantAffordLaserText.alpha = 0.0;
+        }
+    }
+    
+    const addMoneyInterval = 1000; // Passively generate money every second
+
     var enemyCount = 0;
     var waveCount = 10;
+    var nextTimeToAddMoney = 0;
+
+    var waterhoseIcon;
+    var signaldisruptorIcon;
+    var laserIcon;
+
+    // Text displayed on GUI - maybe move into own object or gamestate eventually
+    var moneyText = null;
+    var livesText = null;
+    var cantAffordWaterhoseText = null;
+    var cantAffordSignalDisruptorText = null;
+    var cantAffordLaserText = null;
 
     // Update game scene
     function update (time, delta)
-    {
-        //this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
-        //this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+    {   
+        // add money at regular intervals second
+        if (time > nextTimeToAddMoney) {
+            gamestate.money += 1;
+            nextTimeToAddMoney = time + 1000;
+        }
+
+        updateNotEnoughFundsText();
+
         // update player money and lives
-        gamestate.moneyText.setText('Money: ' + gamestate.money);
-        gamestate.livesText.setText('Lives: ' + gamestate.lives)
+        moneyText.setText('Money: ' + gamestate.money);
+        livesText.setText('Lives: ' + gamestate.lives)
 
         // if its time for the next enemy and still enemies to spawn
         if (time > this.nextEnemy && enemyCount < waveCount)
@@ -276,7 +377,7 @@
                 var gap = 2000; //increase for larger gaps, decrease for smaller gaps
                 this.nextEnemy = time + gap;
             }       
-        }       
+        }
     }
 
     </script>
