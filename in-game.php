@@ -38,7 +38,9 @@
         score: 0,
         towers: {},
         level: {},
-        player: {}
+        player: {},
+        moneyText: "",
+        livesText: ""
     };
     var path;
     var enemies;
@@ -132,11 +134,26 @@
             path.getPoint(this.follower.t, this.follower.vec);
             this.setPosition(this.follower.vec.x, this.follower.vec.y);
 
-            //check relative position on track path, or for death
-            if (this.follower.t >=1 || this.alive === false)
+            //check if enemy completed track path
+            if (this.follower.t >=1)
             {
+                //deactivate enemy
                 this.setActive(false);
                 this.setVisible(false);
+                
+                //take a life away from player
+                gamestate.lives--;
+            }
+
+            // check for death
+            if (this.alive === false)
+            {
+                //deactivate enemy
+                this.setActive(false);
+                this.setVisible(false);
+
+                //give player the value of the destroyed enemy
+                gamestate.money += this.value;
             }
         }
     });
@@ -179,6 +196,10 @@
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
+        // Add money and lives text info
+        gamestate.moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
+        gamestate.livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+
         // Position track (will the track need physics??)
         this.add.image(325, 195, 'easyTrack');
         
@@ -204,8 +225,11 @@
     // Update game scene
     function update (time, delta)
     {
-        this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
-        this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+        //this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
+        //this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+        // update player money and lives
+        gamestate.moneyText.setText('Money: ' + gamestate.money);
+        gamestate.livesText.setText('Lives: ' + gamestate.lives)
 
         // if its time for the next enemy and still enemies to spawn
         if (time > this.nextEnemy && enemyCount < waveCount)
