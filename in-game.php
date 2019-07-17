@@ -195,6 +195,7 @@ var WashingMachine = new Phaser.Class({
     {
         // store enemy image
         Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'washingmachine');
+        this.setScale(.75);
         // to follow track path
         this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
         // enemy specific attributes
@@ -266,6 +267,7 @@ var Robot = new Phaser.Class({
     {
         // store enemy image
         Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'robot_');
+        this.setScale(.75);
         // to follow track path
         this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
         // enemy specific attributes
@@ -427,12 +429,12 @@ var Robot = new Phaser.Class({
         //graphics.lineStyle(3, 0xffffff, 1);
         //path.draw(graphics);
 
-        // Create group for enemies
+        // Create groups for enemies
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
 
-	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
+	    this.nextEnemy = 1000; //initialize to time (in ms) that first wave will start
     }
 
     // Updates text indicating if player can afford certain towers
@@ -480,15 +482,17 @@ var Robot = new Phaser.Class({
     var cantAffordSignalDisruptorText = null;
     var cantAffordLaserText = null;
 
+    // Enemy wave related variables
     var enemyNum = 0;
     var waveNum = 0;
     const enemyGap = 1000;
     const waveGap = 15000;
+    var newWave = false;
     var enemyList = 
     [ 
         ['toaster', 'toaster', 'toaster', 'toaster', 'toaster'],                     //wave 1
         ['toaster', 'toaster', 'toaster', 'toaster', 'toaster', 'wm', 'wm', 'wm'],   //wave 2
-        ['toaster', 'robot', 'toaster', 'robot', 'toaster', 'robot']                 //wave 3
+        ['toaster', 'toaster', 'robot', 'toaster', 'toaster', 'robot']               //wave 3
     ];
 
     // Update game scene
@@ -509,6 +513,12 @@ var Robot = new Phaser.Class({
         // if its time for the next enemy and still enemies to spawn
         if (time > this.nextEnemy && waveNum < enemyList.length)
         {   
+            //check if first enemy of new wave, update display
+            if (newWave)
+            {
+                currentWave.setText('Wave #' + (waveNum + 1));
+                newWave = false;
+            }
             // get next enemy     
             var enemy;
             switch (enemyList[waveNum][enemyNum])
@@ -538,7 +548,7 @@ var Robot = new Phaser.Class({
                     enemyNum = 0;
                     waveNum++;
                     this.nextEnemy = time + waveGap;
-                    currentWave.setText('Wave #' + (waveNum + 1));
+                    newWave = true;
                 }
                 else
                 {
