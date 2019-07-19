@@ -8,7 +8,7 @@
     <script src="./src/enemies/Toaster.js"></script>
     <script src="./src/enemies/WashingMachine.js"></script>
     <script src="./src/enemies/Waterhose.js"></script>
-    <script src="./src/enemies/Waterhose.js"></script>
+    <script src="./src/towers/Waterhose.js"></script>
     <script src="./src/Gamestate.js"></script>
 </head>
 <body>
