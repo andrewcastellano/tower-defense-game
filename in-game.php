@@ -29,6 +29,9 @@
     var game = new Phaser.Game(config);
     var path;
     var enemies;
+    var toasters;
+    var washingmachines;
+    var robots;
     var graphics;
     
     // Easy Track point data
@@ -104,93 +107,225 @@
 
         // Enemy assets
         this.load.image('toaster', 'images/enemies/toaster/toaster.png');
+        this.load.image('washingmachine', 'images/enemies/washingmachine/washingmachine.png');
+        this.load.image('robot_', 'images/enemies/robot/robot.png');
 
         // Tower assets
 
     }
 
-    // Class for enemies (being used only for toaster enemy currently)
-    var Enemy = new Phaser.Class({
+    // Class for Toasters
+    var Toaster = new Phaser.Class({
     
-        Extends: Phaser.GameObjects.Image,
-
-        initialize: 
-
-        // Constructor
-        function Enemy(scene)
-        {
-            // store enemy image
-            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'toaster');
-
-            // to follow track path
-            this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
-
-            // enemy specific attributes
-            this.name = "";
-            this.health = 100;
-            this.alive = true;
-            this.speed = 1/30000;
-            this.value = 10;
-        },
-
-        // Spawns enemy in at the start of the track path
-        spawn: function ()
-        {
-            // put enemy to start of track path
-            this.follower.t = 0;
-            
-            // get starting coordinates
-            path.getPoint(this.follower.t, this.follower.vec);
-            
-            // move to starting coordinate
-            this.setPosition(this.follower.vec.x, this.follower.vec.y);            
-        },
-
-        // To be used to receive damage from towers
-        takeDamage: function (damange)
-        {
-            // damage received as a positive value
-            this.health -= damage;
-
-            // access if still alive
-            if (this.health <= 0){
-                this.alive = false;
-            }
-        },
-
-        // Update function for gameplay
-        update: function (time, delta)
-        {
-            // get new progress through track path
-            this.follower.t += this.speed * delta;
-
-            // use progression to find new position coordinate
-            path.getPoint(this.follower.t, this.follower.vec);
-            this.setPosition(this.follower.vec.x, this.follower.vec.y);
-
-            //check if enemy completed track path
-            if (this.follower.t >=1)
-            {
-                //deactivate enemy
-                this.setActive(false);
-                this.setVisible(false);
-                
-                //take a life away from player
-                gamestate.setLives(gamestate.lives-1);
-            }
-
-            // check for death
-            if (this.alive === false)
-            {
-                //deactivate enemy
-                this.setActive(false);
-                this.setVisible(false);
-
-                //give player the value of the destroyed enemy
-                gamestate.money += this.value;
-            }
+    Extends: Phaser.GameObjects.Sprite,
+    initialize: 
+    // Constructor
+    function Toaster(scene)
+    {
+        // store enemy image
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'toaster');
+        // to follow track path
+        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+        // enemy specific attributes
+        this.name = "";
+        this.health = 100;
+        this.alive = true;
+        this.speed = 1/30000;
+        this.value = 10;
+    },
+    // Spawns enemy in at the start of the track path
+    spawn: function ()
+    {
+        // put enemy to start of track path
+        this.follower.t = 0;
+        
+        // get starting coordinates
+        path.getPoint(this.follower.t, this.follower.vec);
+        
+        // move to starting coordinate
+        this.setPosition(this.follower.vec.x, this.follower.vec.y);            
+    },
+    // To be used to receive damage from towers
+    takeDamage: function (damange)
+    {
+        // damage received as a positive value
+        this.health -= damage;
+        // access if still alive
+        if (this.health <= 0){
+            this.alive = false;
         }
-    });
+    },
+    // Update function for gameplay
+    update: function (time, delta)
+    {
+        // get new progress through track path
+        this.follower.t += this.speed * delta;
+        // use progression to find new position coordinate
+        path.getPoint(this.follower.t, this.follower.vec);
+        this.setPosition(this.follower.vec.x, this.follower.vec.y);
+        //check if enemy completed track path
+        if (this.follower.t >=1)
+        {
+            //deactivate enemy
+            this.setActive(false);
+            this.setVisible(false);
+            
+            //take a life away from player
+            gamestate.setLives(gamestate.lives-1);
+        }
+        // check for death
+        if (this.alive === false)
+        {
+            //deactivate enemy
+            this.setActive(false);
+            this.setVisible(false);
+            //give player the value of the destroyed enemy
+            gamestate.money += this.value;
+        }
+    }
+});
+
+// Class for Washing Machines
+var WashingMachine = new Phaser.Class({
+
+    Extends: Phaser.GameObjects.Sprite,
+    initialize: 
+    // Constructor
+    function WashingMachine(scene)
+    {
+        // store enemy image
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'washingmachine');
+        // to follow track path
+        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+        // enemy specific attributes
+        this.name = "";
+        this.health = 300;
+        this.alive = true;
+        this.speed = 1/40000;
+        this.value = 20;
+    },
+    // Spawns enemy in at the start of the track path
+    spawn: function ()
+    {
+        // put enemy to start of track path
+        this.follower.t = 0;
+        
+        // get starting coordinates
+        path.getPoint(this.follower.t, this.follower.vec);
+        
+        // move to starting coordinate
+        this.setPosition(this.follower.vec.x, this.follower.vec.y);            
+    },
+    // To be used to receive damage from towers
+    takeDamage: function (damange)
+    {
+        // damage received as a positive value
+        this.health -= damage;
+        // access if still alive
+        if (this.health <= 0){
+            this.alive = false;
+        }
+    },
+    // Update function for gameplay
+    update: function (time, delta)
+    {
+        // get new progress through track path
+        this.follower.t += this.speed * delta;
+        // use progression to find new position coordinate
+        path.getPoint(this.follower.t, this.follower.vec);
+        this.setPosition(this.follower.vec.x, this.follower.vec.y);
+        //check if enemy completed track path
+        if (this.follower.t >=1)
+        {
+            //deactivate enemy
+            this.setActive(false);
+            this.setVisible(false);
+            
+            //take a life away from player
+            gamestate.setLives(gamestate.lives-1);
+        }
+        // check for death
+        if (this.alive === false)
+        {
+            //deactivate enemy
+            this.setActive(false);
+            this.setVisible(false);
+            //give player the value of the destroyed enemy
+            gamestate.money += this.value;
+        }
+    }
+});
+
+// Class for Robots
+var Robot = new Phaser.Class({
+
+    Extends: Phaser.GameObjects.Sprite,
+    initialize: 
+    // Constructor
+    function Robot(scene)
+    {
+        // store enemy image
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'robot_');
+        // to follow track path
+        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+        // enemy specific attributes
+        this.name = "";
+        this.health = 200;
+        this.alive = true;
+        this.speed = 1/20000;
+        this.value = 30;
+    },
+    // Spawns enemy in at the start of the track path
+    spawn: function ()
+    {
+        // put enemy to start of track path
+        this.follower.t = 0;
+        
+        // get starting coordinates
+        path.getPoint(this.follower.t, this.follower.vec);
+        
+        // move to starting coordinate
+        this.setPosition(this.follower.vec.x, this.follower.vec.y);            
+    },
+    // To be used to receive damage from towers
+    takeDamage: function (damange)
+    {
+        // damage received as a positive value
+        this.health -= damage;
+        // access if still alive
+        if (this.health <= 0){
+            this.alive = false;
+        }
+    },
+    // Update function for gameplay
+    update: function (time, delta)
+    {
+        // get new progress through track path
+        this.follower.t += this.speed * delta;
+        // use progression to find new position coordinate
+        path.getPoint(this.follower.t, this.follower.vec);
+        this.setPosition(this.follower.vec.x, this.follower.vec.y);
+        //check if enemy completed track path
+        if (this.follower.t >=1)
+        {
+            //deactivate enemy
+            this.setActive(false);
+            this.setVisible(false);
+            
+            //take a life away from player
+            gamestate.setLives(gamestate.lives-1);
+        }
+        // check for death
+        if (this.alive === false)
+        {
+            //deactivate enemy
+            this.setActive(false);
+            this.setVisible(false);
+            //give player the value of the destroyed enemy
+            gamestate.money += this.value;
+        }
+    }
+});
 
     // Buy a Waterhose
     function buyWaterhose() {
@@ -209,7 +344,7 @@
         // Enable drag and drop
         // Wait for tower placed event
         // Subtract cost from money
-        gamestate.setMoney(gamestate.money - waterhoseCost);
+        gamestate.setMoney(gamestate.money - signaldisruptorCost);
     }
 
     // Buy a Laser
@@ -219,7 +354,7 @@
         // Enable drag and drop
         // Wait for tower placed event
         // Subtract cost from money
-        gamestate.setMoney(gamestate.money - waterhoseCost);
+        gamestate.setMoney(gamestate.money - laserCost);
     }
 
     // Create the game scene
@@ -266,11 +401,12 @@
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
-      
         waterhoses = this.physics.add.group({ classType: waterhose, runChildUpdate: true });
+      
         // Add money and lives text info
         moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
         livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
+        currentWave = this.add.text(5, 5, `Wave #1`, { color: '#ffffff' });
 
         // Add not enough funds text under towers
         cantAffordWaterhoseText = this.add.text(740, 120, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
@@ -292,8 +428,11 @@
         //path.draw(graphics);
 
         // Create group for enemies
-        enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
-	    this.nextEnemy = 0;
+        toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
+        washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
+        robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+
+	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
     }
 
     // Updates text indicating if player can afford certain towers
@@ -327,9 +466,6 @@
     }
     
     const addMoneyInterval = 1000; // Passively generate money every second
-
-    var enemyCount = 0;
-    var waveCount = 10;
     var nextTimeToAddMoney = 0;
 
     var waterhoseIcon;
@@ -339,9 +475,21 @@
     // Text displayed on GUI - maybe move into own object or gamestate eventually
     var moneyText = null;
     var livesText = null;
+    var currentWave = null;
     var cantAffordWaterhoseText = null;
     var cantAffordSignalDisruptorText = null;
     var cantAffordLaserText = null;
+
+    var enemyNum = 0;
+    var waveNum = 0;
+    const enemyGap = 1000;
+    const waveGap = 15000;
+    var enemyList = 
+    [ 
+        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster'],                     //wave 1
+        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster', 'wm', 'wm', 'wm'],   //wave 2
+        ['toaster', 'robot', 'toaster', 'robot', 'toaster', 'robot']                 //wave 3
+    ];
 
     // Update game scene
     function update (time, delta)
@@ -359,10 +507,22 @@
         livesText.setText('Lives: ' + gamestate.lives)
 
         // if its time for the next enemy and still enemies to spawn
-        if (time > this.nextEnemy && enemyCount < waveCount)
+        if (time > this.nextEnemy && waveNum < enemyList.length)
         {   
-            // get another enemy     
-            var enemy = enemies.get();
+            // get next enemy     
+            var enemy;
+            switch (enemyList[waveNum][enemyNum])
+            {
+                case 'toaster':
+                    enemy = toasters.get();
+                    break;
+                case 'wm':
+                    enemy = washingmachines.get();
+                    break;
+                case 'robot':
+                    enemy = robots.get();
+                    break;
+            }
             if (enemy)
             {
                 enemy.setActive(true);
@@ -371,11 +531,19 @@
                 // place the enemy at the beginning of the path
                 enemy.spawn();
 
-                // tally enemy (to be used for waves)
-                enemyCount++;
-                
-                var gap = 2000; //increase for larger gaps, decrease for smaller gaps
-                this.nextEnemy = time + gap;
+                // determine index of next enemy
+                enemyNum++;
+                if (enemyNum == enemyList[waveNum].length) // go to next wave
+                {
+                    enemyNum = 0;
+                    waveNum++;
+                    this.nextEnemy = time + waveGap;
+                    currentWave.setText('Wave #' + (waveNum + 1));
+                }
+                else
+                {
+                    this.nextEnemy = time + enemyGap;
+                }
             }       
         }
     }
