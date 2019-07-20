@@ -64,30 +64,7 @@
         }
     }
     var gamestate = new GameState();
-    
-    // Waterhose class definition
-    var waterhose = new Phaser.Class({ 
-        Extends: Phaser.GameObjects.Image,
-        initialize: function Waterhose(scene) {
-            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'sprites', 'waterhose');
-            this.range = 0;
-            this.damage = 0;
-            this.pos = [0, 0];
-            this.cost = 25;
-        },
-        place: function() {
-            //definition for the place function
-        },
-        getEnemyInRange: function () {
-            //definition for finding enemy in range
-        },
-        fire: function() {
-            //definition for the fire function
-        },
-        update: function() {
-            //definition for the update function
-        }
-    });
+
 
     // Preload the game scene
     function preload ()
@@ -111,221 +88,11 @@
         this.load.image('robot_', 'images/enemies/robot/robot.png');
 
         // Tower assets
+        this.load.image('waterdrop', 'images/waterdrop.png');
+        // this.load.image('wave', 'images/wave.png'); // for signal disruptor 
+        // this.load.image('beam', 'images/laser.png'); // for laser
 
     }
-
-    // Class for Toasters
-    var Toaster = new Phaser.Class({
-    
-    Extends: Phaser.GameObjects.Sprite,
-    initialize: 
-    // Constructor
-    function Toaster(scene)
-    {
-        // store enemy image
-        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'toaster');
-        // to follow track path
-        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
-        // enemy specific attributes
-        this.name = "";
-        this.health = 100;
-        this.alive = true;
-        this.speed = 1/30000;
-        this.value = 10;
-    },
-    // Spawns enemy in at the start of the track path
-    spawn: function ()
-    {
-        // put enemy to start of track path
-        this.follower.t = 0;
-        
-        // get starting coordinates
-        path.getPoint(this.follower.t, this.follower.vec);
-        
-        // move to starting coordinate
-        this.setPosition(this.follower.vec.x, this.follower.vec.y);            
-    },
-    // To be used to receive damage from towers
-    takeDamage: function (damange)
-    {
-        // damage received as a positive value
-        this.health -= damage;
-        // access if still alive
-        if (this.health <= 0){
-            this.alive = false;
-        }
-    },
-    // Update function for gameplay
-    update: function (time, delta)
-    {
-        // get new progress through track path
-        this.follower.t += this.speed * delta;
-        // use progression to find new position coordinate
-        path.getPoint(this.follower.t, this.follower.vec);
-        this.setPosition(this.follower.vec.x, this.follower.vec.y);
-        //check if enemy completed track path
-        if (this.follower.t >=1)
-        {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            
-            //take a life away from player
-            gamestate.setLives(gamestate.lives-1);
-        }
-        // check for death
-        if (this.alive === false)
-        {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            //give player the value of the destroyed enemy
-            gamestate.money += this.value;
-        }
-    }
-});
-
-// Class for Washing Machines
-var WashingMachine = new Phaser.Class({
-
-    Extends: Phaser.GameObjects.Sprite,
-    initialize: 
-    // Constructor
-    function WashingMachine(scene)
-    {
-        // store enemy image
-        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'washingmachine');
-        // to follow track path
-        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
-        // enemy specific attributes
-        this.name = "";
-        this.health = 300;
-        this.alive = true;
-        this.speed = 1/40000;
-        this.value = 20;
-    },
-    // Spawns enemy in at the start of the track path
-    spawn: function ()
-    {
-        // put enemy to start of track path
-        this.follower.t = 0;
-        
-        // get starting coordinates
-        path.getPoint(this.follower.t, this.follower.vec);
-        
-        // move to starting coordinate
-        this.setPosition(this.follower.vec.x, this.follower.vec.y);            
-    },
-    // To be used to receive damage from towers
-    takeDamage: function (damange)
-    {
-        // damage received as a positive value
-        this.health -= damage;
-        // access if still alive
-        if (this.health <= 0){
-            this.alive = false;
-        }
-    },
-    // Update function for gameplay
-    update: function (time, delta)
-    {
-        // get new progress through track path
-        this.follower.t += this.speed * delta;
-        // use progression to find new position coordinate
-        path.getPoint(this.follower.t, this.follower.vec);
-        this.setPosition(this.follower.vec.x, this.follower.vec.y);
-        //check if enemy completed track path
-        if (this.follower.t >=1)
-        {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            
-            //take a life away from player
-            gamestate.setLives(gamestate.lives-1);
-        }
-        // check for death
-        if (this.alive === false)
-        {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            //give player the value of the destroyed enemy
-            gamestate.money += this.value;
-        }
-    }
-});
-
-// Class for Robots
-var Robot = new Phaser.Class({
-
-    Extends: Phaser.GameObjects.Sprite,
-    initialize: 
-    // Constructor
-    function Robot(scene)
-    {
-        // store enemy image
-        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'robot_');
-        // to follow track path
-        this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
-        // enemy specific attributes
-        this.name = "";
-        this.health = 200;
-        this.alive = true;
-        this.speed = 1/20000;
-        this.value = 30;
-    },
-    // Spawns enemy in at the start of the track path
-    spawn: function ()
-    {
-        // put enemy to start of track path
-        this.follower.t = 0;
-        
-        // get starting coordinates
-        path.getPoint(this.follower.t, this.follower.vec);
-        
-        // move to starting coordinate
-        this.setPosition(this.follower.vec.x, this.follower.vec.y);            
-    },
-    // To be used to receive damage from towers
-    takeDamage: function (damange)
-    {
-        // damage received as a positive value
-        this.health -= damage;
-        // access if still alive
-        if (this.health <= 0){
-            this.alive = false;
-        }
-    },
-    // Update function for gameplay
-    update: function (time, delta)
-    {
-        // get new progress through track path
-        this.follower.t += this.speed * delta;
-        // use progression to find new position coordinate
-        path.getPoint(this.follower.t, this.follower.vec);
-        this.setPosition(this.follower.vec.x, this.follower.vec.y);
-        //check if enemy completed track path
-        if (this.follower.t >=1)
-        {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            
-            //take a life away from player
-            gamestate.setLives(gamestate.lives-1);
-        }
-        // check for death
-        if (this.alive === false)
-        {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            //give player the value of the destroyed enemy
-            gamestate.money += this.value;
-        }
-    }
-});
 
     // Buy a Waterhose
     function buyWaterhose() {
@@ -400,8 +167,6 @@ var Robot = new Phaser.Class({
         this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
-
-        waterhoses = this.physics.add.group({ classType: waterhose, runChildUpdate: true });
       
         // Add money and lives text info
         moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
@@ -423,15 +188,6 @@ var Robot = new Phaser.Class({
             path.lineTo(easyPoints.x[i], easyPoints.y[i]);
         }     
         
-        // Draw the path to visualize
-        //graphics.lineStyle(3, 0xffffff, 1);
-        //path.draw(graphics);
-
-        // Create group for enemies
-        toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
-        washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
-        robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
-
 	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
     }
 

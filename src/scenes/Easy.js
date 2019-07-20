@@ -2,15 +2,17 @@
 
 // Easy Track point data
 var easyPoints = {
-    'x': [   0, 125, 125, 595, 595, 125, 125,  84,  84, 634, 634, 84,  84,   0 ],
-    'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
+    'x': [0, 125, 125, 595, 595, 125, 125, 84, 84, 634, 634, 84, 84, 0],
+    'y': [185, 185, 95, 95, 295, 295, 245, 245, 335, 335, 55, 55, 145, 145]
 };
 var path;
 var enemies;
 var toasters;
 var washingmachines;
+var waterhoses;
 var robots;
 var graphics;
+var projectiles;
 
 // Tower prices
 const waterhoseCost = 25;
@@ -36,26 +38,26 @@ var enemyNum = 0;
 var waveNum = 0;
 const enemyGap = 1000;
 const waveGap = 15000;
-var enemyList = 
-[ 
-    ['toaster', 'toaster', 'toaster', 'toaster', 'toaster'],                     //wave 1
-    ['toaster', 'toaster', 'toaster', 'toaster', 'toaster', 'wm', 'wm', 'wm'],   //wave 2
-    ['toaster', 'robot', 'toaster', 'robot', 'toaster', 'robot']                 //wave 3
-];
-let waterhoses;	
+var enemyList =
+    [
+        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster'],                     //wave 1
+        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster', 'wm', 'wm', 'wm'],   //wave 2
+        ['toaster', 'robot', 'toaster', 'robot', 'toaster', 'robot']                 //wave 3
+    ];
+
+var testWaterhose = 0;
 
 class Easy extends Phaser.Scene {
 
-	constructor() {
-		super({
-			key: 'Easy',
-			active: false
-		});
-	}
+    constructor() {
+        super({
+            key: 'Easy',
+            active: false
+        });
+    }
 
     // Preload the game scene
-    preload ()
-    {   
+    preload() {
         // HUD assets
         this.load.image('robot', 'images/Robot.png');
         this.load.image('laser', 'images/laser.png');
@@ -75,15 +77,18 @@ class Easy extends Phaser.Scene {
         this.load.image('robot_', 'images/enemies/robot/robot.png');
 
         // Tower assets
+        this.load.image('_waterhose', 'images/towers/waterhose.png');
+
+        // Projectile assets
+        this.load.image('_waterdrop', 'images/projectiles/waterdrop.png');
 
     }
 
     // Create the game scene
-	create ()
-    {
+    create() {
         // Add backdrop
         //this.add.image(400, 300, 'backdrop');
-        
+
         var graphics = this.add.graphics();
 
         // Add gray hud panel to screen
@@ -122,8 +127,6 @@ class Easy extends Phaser.Scene {
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
-        waterhoses = this.physics.add.group({ classType: waterhose, runChildUpdate: true });
-      
         // Add money and lives text info
         moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
         livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
@@ -136,14 +139,13 @@ class Easy extends Phaser.Scene {
 
         // Position track (will the track need physics??)
         this.add.image(325, 195, 'easyTrack');
-        
+
         // Load up Easy Track data points into path
         path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
-        for (var i = 1; i < easyPoints.x.length; i++)
-        {
+        for (var i = 1; i < easyPoints.x.length; i++) {
             path.lineTo(easyPoints.x[i], easyPoints.y[i]);
-        }     
-        
+        }
+
         // Draw the path to visualize
         //graphics.lineStyle(3, 0xffffff, 1);
         //path.draw(graphics);
@@ -152,13 +154,16 @@ class Easy extends Phaser.Scene {
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+        // Create group for towers
+        waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
+        projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
 
-	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
+        this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
+        this.input.on('pointerdown', this.placeWaterhose.bind(this));
     }
 
     // Update game scene
-    update (time, delta)
-    {   
+    update(time, delta) {
         // add money at regular intervals second
         if (time > nextTimeToAddMoney) {
             gamestate.money += 1;
@@ -172,12 +177,10 @@ class Easy extends Phaser.Scene {
         livesText.setText('Lives: ' + gamestate.lives)
 
         // if its time for the next enemy and still enemies to spawn
-        if (time > this.nextEnemy && waveNum < enemyList.length)
-        {   
+        if (time > this.nextEnemy && waveNum < enemyList.length) {
             // get next enemy     
             var enemy;
-            switch (enemyList[waveNum][enemyNum])
-            {
+            switch (enemyList[waveNum][enemyNum]) {
                 case 'toaster':
                     enemy = toasters.get();
                     break;
@@ -188,11 +191,10 @@ class Easy extends Phaser.Scene {
                     enemy = robots.get();
                     break;
             }
-            if (enemy)
-            {
+            if (enemy) {
                 enemy.setActive(true);
                 enemy.setVisible(true);
-                
+
                 // place the enemy at the beginning of the path
                 enemy.spawn();
 
@@ -205,11 +207,37 @@ class Easy extends Phaser.Scene {
                     this.nextEnemy = time + waveGap;
                     currentWave.setText('Wave #' + (waveNum + 1));
                 }
-                else
-                {
+                else {
                     this.nextEnemy = time + enemyGap;
                 }
-            }       
+            }
         }
+
+    }
+
+    //find if there is an enemy in our turret range
+    getEnemy(x, y, distance) {
+        var enemies = toasters.getChildren(); //get entire list of toasters
+        for (var i = 0; i < enemies.length; i++) { //loop through all enemies
+            if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
+                console.log("found enemy");
+                return enemies[i]; //in range and active
+            }
+        }
+        return false;
+    }
+
+    addWaterDrop(x, y, angle) {
+        var wd = new waterdrop(this, 0, 0);
+        projectiles.add(wd);
+        wd.fire(x, y, angle);
+    }
+
+    placeWaterhose(pointer) {
+        var hose = new waterhose(this, pointer.x, pointer.y);
+        waterhoses.add(hose);
+        hose.setActive(true);
+        hose.setVisible(true);
+        hose.setScale(0.04);
     }
 }
