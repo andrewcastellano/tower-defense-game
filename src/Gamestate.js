@@ -4,7 +4,7 @@ class GameState {
         this.money = 50;
         this.lives = 100;
         this.score = 0;
-        this.towers =  null;
+        this.towers =  [];
         this.enemies = null;
     }
 
@@ -53,11 +53,26 @@ function updateNotEnoughFundsText() {
 // Buy a Waterhose
 function buyWaterhose() {
     if (gamestate.money < waterhoseCost) return;
-
     // Enable drag and drop
+    this.input.setDraggable(this);
     // Wait for tower placed event
+    // this.input.on('dragend', (pointer, gameObject) => {
+    //     console.log(gameObject)
+    //     this.input.setDraggable(gameObject, false);
+    // });
     // Subtract cost from money
     gamestate.setMoney(gamestate.money - waterhoseCost);
+}
+
+function startDrag(pointer, targets) {
+    this.input.off('pointerdown', this.startDrag, this);
+    this.dragObj = targets[0];
+    this.input.on('pointermove', this.doDrag, this);
+}
+
+function doDrag(pointer) {
+    this.dragObj.x = pointer.x;
+    this.dragObj.y = pointer.y;
 }
 
 // Buy a Signal Disruptor
