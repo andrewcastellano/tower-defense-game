@@ -98,10 +98,39 @@ class Easy extends Phaser.Scene {
         graphics.fillRect(675, 312, 225, 3);
         graphics.fillRect(672, 0, 3, 390);
 
+        var newTower;
+        var isMovingTower = false;
         // Add tower icons and text
         waterhoseIcon = this.add.image(710, 117, 'waterhose').setScale(0.04);
         waterhoseIcon.setInteractive();
-        waterhoseIcon.on('pointerdown', buyWaterhose);
+        waterhoseIcon.on('pointerdown', () => {
+            newTower = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'waterhose').setScale(0.04);
+            newTower.setInteractive();
+            isMovingTower = !isMovingTower;
+            this.input.on('pointermove', pointer => {
+                if (isMovingTower) {
+                    newTower.x = pointer.x;
+                    newTower.y = pointer.y;
+                }
+            });
+            newTower.on('pointerdown', pointer => {
+                if (gamestate.money < waterhoseCost) return;
+                else if (isMovingTower) {
+                    if (pointer.x < 675) {
+                        // Tower placed in valid area
+                        gamestate.money -= waterhoseCost;
+                        gamestate.towers.push(newTower);
+                        isMovingTower = false;
+                        newTower = null;
+                    } else if (true) {
+                        // Case 1: Cancel tower purchase clicking in the menu area
+                    } else {
+                        // Case 2: Trying to place the tower in the track or invalid area
+                    }
+                }
+            })
+        });
+        // waterhoseIcon.on('pointerdown', buyWaterhose);
         this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
 
         signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
@@ -143,7 +172,8 @@ class Easy extends Phaser.Scene {
         {
             path.lineTo(easyPoints.x[i], easyPoints.y[i]);
         }     
-        
+// TODO: Remove
+        console.log(path.getBounds())
         // Draw the path to visualize
         //graphics.lineStyle(3, 0xffffff, 1);
         //path.draw(graphics);
