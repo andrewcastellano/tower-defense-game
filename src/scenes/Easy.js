@@ -73,8 +73,6 @@ var enemyList =             //Wave order enemies will appear on screen
         [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }]
     ];
 
-let waterhoses;
-
 class Easy extends Phaser.Scene {
 
     constructor() {
@@ -182,6 +180,13 @@ class Easy extends Phaser.Scene {
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+
+        // Create master enemy list
+        // enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
+        // enemies.add(toasters);
+        // enemies.add(washingmachines);
+        // enemies.add(robots);
+
         // Create group for towers
         waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
         projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
@@ -189,7 +194,7 @@ class Easy extends Phaser.Scene {
         // Bullet overlap with enemy
         this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
 
-        this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
+        // this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
         this.input.on('pointerdown', this.placeWaterhose.bind(this));
     }
 
@@ -207,48 +212,18 @@ class Easy extends Phaser.Scene {
         moneyText.setText('Money: ' + gamestate.money);
         livesText.setText('Lives: ' + gamestate.lives)
 
-        // if its time for the next enemy and still enemies to spawn
-        if (time > this.nextEnemy && waveNum < enemyList.length) {
-            // get next enemy     
-            var enemy;
-            switch (enemyList[waveNum][enemyNum]) {
-                case 'toaster':
-                    enemy = toasters.get();
-                    break;
-                case 'wm':
-                    enemy = washingmachines.get();
-                    break;
-                case 'robot':
-                    enemy = robots.get();
-                    break;
-            }
-            if (enemy) {
-                enemy.setActive(true);
-                enemy.setVisible(true);
-
-                // place the enemy at the beginning of the path
-                enemy.spawn();
-
-                // determine index of next enemy
-                enemyNum++;
-                if (enemyNum == enemyList[waveNum].length) // go to next wave
-                {
-                    enemyNum = 0;
-                    waveNum++;
-                    this.nextEnemy = time + waveGap;
-                    currentWave.setText('Wave #' + (waveNum + 1));
-                }
-                else {
-                    this.nextEnemy = time + enemyGap;
-                }
-            }
-        }
-
+        // spawn waves of enemies
+        this.spawnEnemies(time);
     }
+
 
     //find if there is an enemy in our turret range
     getEnemy(x, y, distance) {
         var enemies = toasters.getChildren(); //get entire list of toasters
+        console.log(enemies);
+        enemies += washingmachines.getChildren();
+        enemies += toasters.getChildren();
+        console.log(enemies);
         for (var i = 0; i < enemies.length; i++) { //loop through all enemies
             if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
                 return enemies[i]; //in range and active
@@ -276,6 +251,61 @@ class Easy extends Phaser.Scene {
             proj.setVisible(false);
             proj.setActive(false);
             enemy.takeDamage(proj.dmg); //call take damage function on enemy with the projectiles damage
+        }
+    }
+
+    isBoardEmpty() {
+        var isEmpty = false;
+        var numToasters = toasters.countActive(true);
+        var numWashingMachines = washingmachines.countActive(true);
+        var numRobots = robots.countActive(true);
+        if (numToasters + numWashingMachines + numRobots === 0) {
+            isEmpty = true;
+        }
+        return isEmpty;
+    }
+
+    // Used by Update function to bring enemies onto the track, using wave and enemyList info
+    spawnEnemies(time) {
+        // if its time for the next enemy and still enemies to spawn
+        if (time > nextEnemy && waveNum < enemyList.length) {
+            //check if first enemy of new wave, update display
+            if (newWave) {
+                currentWave.setText('Wave #' + (waveNum + 1));
+                newWave = false;
+            }
+            // get next enemy     
+            var enemy;
+            switch (enemyList[waveNum][enemyNum].name) {
+                case 't':
+                    enemy = toasters.get();
+                    break;
+                case 'w':
+                    enemy = washingmachines.get();
+                    break;
+                case 'r':
+                    enemy = robots.get();
+                    break;
+            }
+            if (enemy) {
+                enemy.setActive(true);
+                enemy.setVisible(true);
+
+                // place the enemy at the beginning of the path
+                enemy.spawn();
+                // determine index of next enemy
+                if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
+                {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum = 0;
+                    waveNum++;
+                    newWave = true;
+                }
+                else {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum++;
+                }
+            }
         }
     }
 }
