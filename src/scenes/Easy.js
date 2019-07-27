@@ -158,6 +158,9 @@ class Easy extends Phaser.Scene {
         waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
         projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
 
+        // Bullet overlap with enemy
+        this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+
         this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
         this.input.on('pointerdown', this.placeWaterhose.bind(this));
     }
@@ -220,7 +223,6 @@ class Easy extends Phaser.Scene {
         var enemies = toasters.getChildren(); //get entire list of toasters
         for (var i = 0; i < enemies.length; i++) { //loop through all enemies
             if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
-                console.log("found enemy");
                 return enemies[i]; //in range and active
             }
         }
@@ -239,5 +241,13 @@ class Easy extends Phaser.Scene {
         hose.setActive(true);
         hose.setVisible(true);
         hose.setScale(0.04);
+    }
+
+    hurtEnemy(enemy, proj) {
+        if (proj.active && enemy.active) {
+            proj.setVisible(false);
+            proj.setActive(false);
+            enemy.takeDamage(proj.dmg); //call take damage function on enemy with the projectiles damage
+        }
     }
 }
