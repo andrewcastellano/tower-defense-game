@@ -25,11 +25,9 @@ var Enemy = new Phaser.Class({
     // To be used to receive damage from towers
     takeDamage: function (damage) {
         // damage received as a positive value
-        console.log("inside takeDamge()");
         this.health -= damage;
         // access if still alive
         if (this.health <= 0) {
-            console.log("killing enemy");
             this.alive = false;
             //kill enemy
             this.setVisible(false);
