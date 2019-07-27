@@ -13,6 +13,7 @@ var waterhoses;
 var robots;
 var graphics;
 var projectiles;
+var allEnemies = [];
 
 // Tower prices
 const waterhoseCost = 25;
@@ -183,10 +184,10 @@ class Easy extends Phaser.Scene {
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
 
         // Create master enemy list
-        // enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
-        // enemies.add(toasters);
-        // enemies.add(washingmachines);
-        // enemies.add(robots);
+        allEnemies.push(toasters);
+        allEnemies.push(washingmachines);
+        allEnemies.push(robots);
+
 
         // Create group for towers
         waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
@@ -194,6 +195,8 @@ class Easy extends Phaser.Scene {
 
         // Bullet overlap with enemy
         this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+        this.physics.add.overlap(washingmachines, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+        this.physics.add.overlap(robots, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
 
         // this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
         this.input.on('pointerdown', this.placeWaterhose.bind(this));
@@ -220,11 +223,13 @@ class Easy extends Phaser.Scene {
 
     //find if there is an enemy in our turret range
     getEnemy(x, y, distance) {
-        var enemies = toasters.getChildren(); //get entire list of toasters
-        console.log(enemies);
-        // enemies += washingmachines.getChildren();
-        // enemies += toasters.getChildren();
-        // console.log(enemies);
+        var enemies = [];
+        for (var i = 0; i < allEnemies.length; i++) {
+            var enemy = allEnemies[i].getChildren();
+            for (var j = 0; j < enemy.length; j++) {
+                enemies.push(enemy[j]);
+            }
+        }
         for (var i = 0; i < enemies.length; i++) { //loop through all enemies
             if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
                 return enemies[i]; //in range and active

@@ -28,10 +28,10 @@ var Enemy = new Phaser.Class({
         this.health -= damage;
         // access if still alive
         if (this.health <= 0) {
-            this.alive = false;
             //kill enemy
             this.setVisible(false);
             this.setActive(false);
+            gamestate.money += this.value;
         }
     },
     // Update function for gameplay
@@ -46,17 +46,8 @@ var Enemy = new Phaser.Class({
             //deactivate enemy
             this.setActive(false);
             this.setVisible(false);
-
             //take a life away from player
             gamestate.setLives(gamestate.lives - 1);
-        }
-        // check for death
-        if (this.alive === false) {
-            //deactivate enemy
-            this.setActive(false);
-            this.setVisible(false);
-            //give player the value of the destroyed enemy
-            gamestate.money += this.value;
         }
     }
 });
