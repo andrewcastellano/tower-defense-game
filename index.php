@@ -9,10 +9,7 @@
     <script src="./src/enemies/Toaster.js"></script>
     <script src="./src/enemies/WashingMachine.js"></script>
     <script src="./src/towers/Waterhose.js"></script>
-<<<<<<< HEAD
     <script src="./src/projectiles/Waterdrop.js"></script>
-=======
->>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
     <script src="./src/Gamestate.js"></script>
 </head>
 <body>
