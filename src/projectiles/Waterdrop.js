@@ -9,6 +9,7 @@ var waterdrop = new Phaser.Class({
             this.deltaY = 0;
             this.speed = Phaser.Math.GetSpeed(400, 1); //how far, how long
             this.scene.add.existing(this);
+            this.dmg = 20;
         },
     fire: function (x, y, angle) {
         this.setActive(true);
@@ -21,6 +22,5 @@ var waterdrop = new Phaser.Class({
     update: function (time, delta) {
         this.x += this.deltaX * (this.speed * delta);
         this.y += this.deltaY * (this.speed * delta);
-        //when collide remove
     }
 });
