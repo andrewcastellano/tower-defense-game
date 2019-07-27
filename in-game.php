@@ -40,6 +40,11 @@
         'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
     };
 
+    var mediumPoints = {
+        'x': [   0,  96,  96, 225, 225, 356, 356, 486, 486, 616, 616, 486, 486, 356, 356, 225, 225,  96,  96,  0],
+        'y': [ 255, 255, 345, 345, 255, 255, 345, 345, 255, 255,  45,  45, 135, 135,  45,  45, 135, 135,  45, 45]
+    };
+
     // Tower prices
     const waterhoseCost = 25;
     const signaldisruptorCost = 100;
@@ -80,6 +85,7 @@
 
         // Track assets
         this.load.image('easyTrack', 'images/tracks/easyTrack.png');
+        this.load.image('mediumTrack', 'images/tracks/mediumTrack.png');
         //this.load.image('backdrop', 'images/backdrop.png');   find a good backdrop for levels
 
         // Enemy assets
@@ -94,6 +100,138 @@
 
     }
 
+<<<<<<< HEAD
+=======
+    var Enemy = new Phaser.Class({
+        Extends: Phaser.GameObjects.Sprite,
+
+        initialize: 
+        function Enemy(scene)
+        {
+            Phaser.GameObjects.Sprite.call(this, scene);
+            this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+            // general/default enemy attributes
+            this.health = 1;
+            this.alive = true;
+            this.speed = 1/100000;
+            this.value = 1;
+        },
+
+        // Spawns enemy in at the start of the track path
+        spawn: function ()
+        {
+            // put enemy to start of track path
+            this.follower.t = 0;
+            
+            // get starting coordinates
+            path.getPoint(this.follower.t, this.follower.vec);
+            
+            // move to starting coordinate
+            this.setPosition(this.follower.vec.x, this.follower.vec.y);            
+        },
+        // To be used to receive damage from towers
+        takeDamage: function (damange)
+        {
+            // damage received as a positive value
+            this.health -= damage;
+            // access if still alive
+            if (this.health <= 0){
+                this.alive = false;
+            }
+        },
+        // Update function for gameplay
+        update: function (time, delta)
+        {
+            // get new progress through track path
+            this.follower.t += this.speed * delta;
+            // use progression to find new position coordinate
+            path.getPoint(this.follower.t, this.follower.vec);
+            this.setPosition(this.follower.vec.x, this.follower.vec.y);
+            //check if enemy completed track path
+            if (this.follower.t >=1)
+            {
+                //deactivate enemy
+                this.setActive(false);
+                this.setVisible(false);
+                
+                //take a life away from player
+                gamestate.setLives(gamestate.lives-1);
+            }
+            // check for death
+            if (this.alive === false)
+            {
+                //deactivate enemy
+                this.setActive(false);
+                this.setVisible(false);
+                //give player the value of the destroyed enemy
+                gamestate.money += this.value;
+            }
+        }
+    });
+
+    // Class for Toasters
+    var Toaster = new Phaser.Class({
+    
+        Extends: Enemy,
+        initialize: 
+        // Constructor
+        function Toaster(scene)
+        {
+            // store enemy image
+            Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'toaster');
+            // to follow track path
+            this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+            // enemy specific attributes
+            this.health = 100;
+            this.alive = true;
+            this.speed = 1/30000;
+            this.value = 10;
+        }
+    });    
+
+    // Class for Washing Machines
+    var WashingMachine = new Phaser.Class({
+
+        Extends: Enemy,
+        initialize: 
+        // Constructor
+        function WashingMachine(scene)
+        {
+            // store enemy image
+            Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'washingmachine');
+            this.setScale(.75);
+            // to follow track path
+            this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+            // enemy specific attributes
+            this.health = 300;
+            this.alive = true;
+            this.speed = 1/40000;
+            this.value = 20;
+        }
+    });    
+
+    // Class for Robots
+    var Robot = new Phaser.Class({
+
+        Extends: Enemy,
+        initialize: 
+        // Constructor
+        function Robot(scene)
+        {
+            // store enemy image
+            Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'robot_');
+            this.setScale(.75);
+            // to follow track path
+            this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
+            // enemy specific attributes
+            this.health = 200;
+            this.alive = true;
+            this.speed = 1/20000;
+            this.value = 30;
+        }
+    });
+
+>>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
     // Buy a Waterhose
     function buyWaterhose() {
         if (gamestate.money < waterhoseCost) return;
@@ -123,6 +261,21 @@
         // Subtract cost from money
         gamestate.setMoney(gamestate.money - laserCost);
     }
+
+    function loadTrackPoints(track)
+    {
+        //set starting position
+        path = new Phaser.Curves.Path(track.x[0], track.y[0]);
+
+        //add track data points to path
+
+
+        for (var i = 1; i < track.x.length; i++)
+        {
+            path.lineTo(track.x[i], track.y[i]);
+        } 
+    }
+
 
     // Create the game scene
     function create ()
@@ -179,16 +332,24 @@
         cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
 
         // Position track (will the track need physics??)
-        this.add.image(325, 195, 'easyTrack');
+        //this.add.image(325, 195, 'easyTrack');
+        this.add.image(316, 195, 'mediumTrack');
         
         // Load up Easy Track data points into path
-        path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
-        for (var i = 1; i < easyPoints.x.length; i++)
-        {
-            path.lineTo(easyPoints.x[i], easyPoints.y[i]);
-        }     
+        loadTrackPoints(mediumPoints);    
         
+<<<<<<< HEAD
 	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
+=======
+        // Draw the path to visualize
+        //graphics.lineStyle(3, 0xffffff, 1);
+        //path.draw(graphics);
+
+        // Create groups for enemies
+        toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
+        washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
+        robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+>>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
     }
 
     // Updates text indicating if player can afford certain towers
@@ -236,15 +397,35 @@
     var cantAffordSignalDisruptorText = null;
     var cantAffordLaserText = null;
 
+    // Enemy wave related variables
     var enemyNum = 0;
     var waveNum = 0;
     const enemyGap = 1000;
     const waveGap = 15000;
+    var newWave = false;
+    var nextEnemy = 1000; //initialize to time (in ms) that first wave will start
+
+    // Enemy wave information
+    // t = toaster, w = washingmachine, r = robot
+    // gap = additional time for next enemy to spawn in
     var enemyList = 
     [ 
-        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster'],                     //wave 1
-        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster', 'wm', 'wm', 'wm'],   //wave 2
-        ['toaster', 'robot', 'toaster', 'robot', 'toaster', 'robot']                 //wave 3
+        //wave 1
+        [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
+         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
+        //wave 2
+        [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
+         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
+         {name: 'w', gap: 1000}, {name: 'w', gap: 1000}, {name: 'w', gap: 41000},],
+        //wave 3
+        [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 1000}, 
+         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 21000},],
+        //wave 4
+        [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
+         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
+         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
+         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
+         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
     ];
 
     // Update game scene
@@ -262,20 +443,49 @@
         moneyText.setText('Money: ' + gamestate.money);
         livesText.setText('Lives: ' + gamestate.lives)
 
+        // spawn waves of enemies
+        spawnEnemies(time);
+
+    }
+
+    function isBoardEmpty()
+    {
+        var isEmpty = false;
+        var numToasters = toasters.countActive(true);
+        var numWashingMachines = washingmachines.countActive(true);
+        var numRobots = robots.countActive(true);
+
+        if (numToasters + numWashingMachines + numRobots === 0)
+        {
+            isEmpty = true;
+        }
+
+        return isEmpty;
+    }
+
+    // Used by Update function to bring enemies onto the track, using wave and enemyList info
+    function spawnEnemies(time)
+    {
         // if its time for the next enemy and still enemies to spawn
-        if (time > this.nextEnemy && waveNum < enemyList.length)
+        if (time > nextEnemy && waveNum < enemyList.length)
         {   
+            //check if first enemy of new wave, update display
+            if (newWave)
+            {
+                currentWave.setText('Wave #' + (waveNum + 1));
+                newWave = false;
+            }
             // get next enemy     
             var enemy;
-            switch (enemyList[waveNum][enemyNum])
+            switch (enemyList[waveNum][enemyNum].name)
             {
-                case 'toaster':
+                case 't': 
                     enemy = toasters.get();
                     break;
-                case 'wm':
+                case 'w':
                     enemy = washingmachines.get();
                     break;
-                case 'robot':
+                case 'r':
                     enemy = robots.get();
                     break;
             }
@@ -288,17 +498,17 @@
                 enemy.spawn();
 
                 // determine index of next enemy
-                enemyNum++;
-                if (enemyNum == enemyList[waveNum].length) // go to next wave
+                if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
                 {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
                     enemyNum = 0;
                     waveNum++;
-                    this.nextEnemy = time + waveGap;
-                    currentWave.setText('Wave #' + (waveNum + 1));
+                    newWave = true;
                 }
                 else
                 {
-                    this.nextEnemy = time + enemyGap;
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum++;
                 }
             }       
         }

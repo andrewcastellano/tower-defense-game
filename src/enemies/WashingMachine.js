@@ -61,4 +61,4 @@ var WashingMachine = new Phaser.Class({
             gamestate.money += this.value;
         }
     }
-});
+});  
