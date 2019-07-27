@@ -36,39 +36,42 @@ var cantAffordLaserText = null;
 var enemyNum = 0;           //tracks index of enemy in current wave
 var waveNum = 0;            //tracks index of wave that has been called to screen
 var newWave = false;        //to help update wave numbers
-var nextEnemy = 1000;       //initialize to time (in ms) that first wave will start in game
+var startTime = 1000;
+var nextEnemy = startTime;  //initialize to time (in ms) that first wave will start in game
 var enemyList =             //Wave order enemies will appear on screen
 // t = toaster, w = washingmachine, r = robot
 // gap = additional time for next enemy to spawn in
 [ 
     //wave 1
     [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
+     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 41000},],
     //wave 2
     [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
      {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
      {name: 'w', gap: 1000}, {name: 'w', gap: 1000}, {name: 'w', gap: 41000},],
     //wave 3
     [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 1000}, 
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 30000},],
+     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 41000},],
     //wave 4
     [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
      {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
      {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
      {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
+     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 41000},],
     //wave 5
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
+    [{name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
+     {name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 41000}],
     //wave 6
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
+    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 41000}],
     //wave 7
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
+    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 41000}],
     //wave 8
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
+    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 41000}],
     //wave 9
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
+    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 41000}],
     //wave 10
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}]
+    [{name: 'r', gap: 1000}, {name: 'r', gap: 2000}, {name: 'r', gap: 3000},
+     {name: 'r', gap: 1000}, {name: 'r', gap: 2000}, {name: 'r', gap: 41000}]
 ];
 
 let waterhoses;	
@@ -181,6 +184,7 @@ class Easy extends Phaser.Scene {
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+        enemies = this.add.group({toasters, washingmachines, robots});
     }
 
     // Update game scene
@@ -220,49 +224,63 @@ function isBoardEmpty()
 // Used by Update function to bring enemies onto the track, using wave and enemyList info
 function spawnEnemies(time)
 {
-    // if its time for the next enemy and still enemies to spawn
-    if (time > nextEnemy && waveNum < enemyList.length)
+    // if there are still enemies to spawn
+    if (waveNum < enemyList.length)
     {   
-        //check if first enemy of new wave, update display
-        if (newWave)
+        //check if board is empty, advance to next round first enemy if all enemies defeated
+        if (time > startTime)
         {
-            currentWave.setText('Wave #' + (waveNum + 1));
-            newWave = false;
-        }
-        // get next enemy     
-        var enemy;
-        switch (enemyList[waveNum][enemyNum].name)
-        {
-            case 't': 
-                enemy = toasters.get();
-                break;
-            case 'w':
-                enemy = washingmachines.get();
-                break;
-            case 'r':
-                enemy = robots.get();
-                break;
-        }
-        if (enemy)
-        {
-            enemy.setActive(true);
-            enemy.setVisible(true);
-            
-            // place the enemy at the beginning of the path
-            enemy.spawn();
-            // determine index of next enemy
-            if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
+            var boardEmpty = isBoardEmpty();
+            if (boardEmpty)
             {
-                nextEnemy = time + enemyList[waveNum][enemyNum].gap;
-                enemyNum = 0;
-                waveNum++;
-                newWave = true;
+                nextEnemy = time- 1;
             }
-            else
+        }
+
+        //get next enemy if timing correct
+        if (time > nextEnemy)
+        {
+            //check if first enemy of new wave, update display
+            if (newWave)
             {
-                nextEnemy = time + enemyList[waveNum][enemyNum].gap;
-                enemyNum++;
+                currentWave.setText('Wave #' + (waveNum + 1));
+                newWave = false;
             }
-        }       
+            // get next enemy     
+            var enemy;
+            switch (enemyList[waveNum][enemyNum].name)
+            {
+                case 't': 
+                    enemy = toasters.get();
+                    break;
+                case 'w':
+                    enemy = washingmachines.get();
+                    break;
+                case 'r':
+                    enemy = robots.get();
+                    break;
+            }
+            if (enemy)
+            {
+                enemy.setActive(true);
+                enemy.setVisible(true);
+                
+                // place the enemy at the beginning of the path
+                enemy.spawn();
+                // determine index of next enemy
+                if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
+                {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum = 0;
+                    waveNum++;
+                    newWave = true;
+                }
+                else
+                {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum++;
+                }
+            } 
+        }      
     }
 }
