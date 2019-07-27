@@ -34,6 +34,9 @@ var Toaster = new Phaser.Class({
         // access if still alive
         if (this.health <= 0) {
             this.alive = false;
+            //kill enemy
+            this.setVisible(false);
+            this.setActive(false);
         }
     },
     // Update function for gameplay
