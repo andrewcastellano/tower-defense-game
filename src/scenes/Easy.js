@@ -220,10 +220,10 @@ class Easy extends Phaser.Scene {
     //find if there is an enemy in our turret range
     getEnemy(x, y, distance) {
         var enemies = toasters.getChildren(); //get entire list of toasters
-        console.log(enemies);
-        enemies += washingmachines.getChildren();
-        enemies += toasters.getChildren();
-        console.log(enemies);
+        // console.log(enemies);
+        // enemies += washingmachines.getChildren();
+        // enemies += toasters.getChildren();
+        // console.log(enemies);
         for (var i = 0; i < enemies.length; i++) { //loop through all enemies
             if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
                 return enemies[i]; //in range and active
