@@ -38,7 +38,8 @@ var cantAffordLaserText = null;
 var enemyNum = 0;           //tracks index of enemy in current wave
 var waveNum = 0;            //tracks index of wave that has been called to screen
 var newWave = false;        //to help update wave numbers
-var nextEnemy = 1000;       //initialize to time (in ms) that first wave will start in game
+var startTime = 1000;
+var nextEnemy = startTime;  //initialize to time (in ms) that first wave will start in game
 var enemyList =             //Wave order enemies will appear on screen
     // t = toaster, w = washingmachine, r = robot
     // gap = additional time for next enemy to spawn in
