@@ -100,8 +100,6 @@
 
     }
 
-<<<<<<< HEAD
-=======
     var Enemy = new Phaser.Class({
         Extends: Phaser.GameObjects.Sprite,
 
@@ -231,7 +229,6 @@
         }
     });
 
->>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
     // Buy a Waterhose
     function buyWaterhose() {
         if (gamestate.money < waterhoseCost) return;
@@ -338,9 +335,7 @@
         // Load up Easy Track data points into path
         loadTrackPoints(mediumPoints);    
         
-<<<<<<< HEAD
 	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
-=======
         // Draw the path to visualize
         //graphics.lineStyle(3, 0xffffff, 1);
         //path.draw(graphics);
@@ -349,7 +344,6 @@
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
->>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
     }
 
     // Updates text indicating if player can afford certain towers
