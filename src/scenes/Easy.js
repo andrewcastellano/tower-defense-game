@@ -34,61 +34,46 @@ var cantAffordWaterhoseText = null;
 var cantAffordSignalDisruptorText = null;
 var cantAffordLaserText = null;
 
-<<<<<<< HEAD
-var enemyNum = 0;
-var waveNum = 0;
-const enemyGap = 1000;
-const waveGap = 15000;
-var enemyList =
-    [
-        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster'],                     //wave 1
-        ['toaster', 'toaster', 'toaster', 'toaster', 'toaster', 'wm', 'wm', 'wm'],   //wave 2
-        ['toaster', 'robot', 'toaster', 'robot', 'toaster', 'robot']                 //wave 3
-    ];
-
-var testWaterhose = 0;
-=======
 //Enemy Wave related variables
 var enemyNum = 0;           //tracks index of enemy in current wave
 var waveNum = 0;            //tracks index of wave that has been called to screen
 var newWave = false;        //to help update wave numbers
 var nextEnemy = 1000;       //initialize to time (in ms) that first wave will start in game
 var enemyList =             //Wave order enemies will appear on screen
-// t = toaster, w = washingmachine, r = robot
-// gap = additional time for next enemy to spawn in
-[
-    //wave 1
-    [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
-    //wave 2
-    [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
-     {name: 'w', gap: 1000}, {name: 'w', gap: 1000}, {name: 'w', gap: 41000},],
-    //wave 3
-    [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 1000},
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 30000},],
-    //wave 4
-    [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
-    //wave 5
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 6
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 7
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 8
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 9
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 10
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}]
-];
+    // t = toaster, w = washingmachine, r = robot
+    // gap = additional time for next enemy to spawn in
+    [
+        //wave 1
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 31000 },],
+        //wave 2
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 'w', gap: 1000 }, { name: 'w', gap: 1000 }, { name: 'w', gap: 41000 },],
+        //wave 3
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: 30000 },],
+        //wave 4
+        [{ name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 31000 },],
+        //wave 5
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 6
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 7
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 8
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 9
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 10
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }]
+    ];
 
 let waterhoses;
->>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
 
 class Easy extends Phaser.Scene {
 
@@ -197,7 +182,6 @@ class Easy extends Phaser.Scene {
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
-<<<<<<< HEAD
         // Create group for towers
         waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
         projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
@@ -207,8 +191,6 @@ class Easy extends Phaser.Scene {
 
         this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
         this.input.on('pointerdown', this.placeWaterhose.bind(this));
-=======
->>>>>>> 7c9ebeb9577a5375e501bde3380198dbb2b7d036
     }
 
     // Update game scene
