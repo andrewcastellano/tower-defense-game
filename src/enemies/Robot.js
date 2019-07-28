@@ -10,9 +10,9 @@ var Robot = new Phaser.Class({
             // to follow track path
             this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
             // enemy specific attributes
-            this.health = 200;
+            this.health = 250;
             this.alive = true;
             this.speed = 1 / 20000;
-            this.value = 30;
+            this.value = 10;
         }
 });

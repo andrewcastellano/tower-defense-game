@@ -195,9 +195,33 @@ class Easy extends Phaser.Scene {
         moneyText.setText('Money: ' + gamestate.money);
         livesText.setText('Lives: ' + gamestate.lives)
 
-        // spawn waves of enemies
+        // spawn waves of enemies and clean up 
         this.spawnEnemies(time);
         this.cleanUpEnemies();
+
+        // check for game over conditions
+        if (this.gameOver() === true)
+        {
+            this.scene.pause();
+            return;
+        }
+    }
+
+    gameOver(){
+        // check if player ran out of lives
+        if (gamestate.lives <= 0)
+        {
+            var endText = this.add.text(150, 150, 'Game Over! You lost all your lives!', { fontSize: '20px', fill: '#ffffff' });
+            return true;
+        }
+        // check if player completed all waves
+        else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) 
+        {
+            var endText = this.add.text(170, 150, 'Congratulations! You won!', { fontSize: '20px', fill: '#ffffff' });
+            return true;
+        }
+        else //game isn't over
+            return false;
     }
 
     // Creates the HUD, including all icons and text

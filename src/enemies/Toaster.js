@@ -13,6 +13,6 @@ var Toaster = new Phaser.Class({
             this.health = 100;
             this.alive = true;
             this.speed = 1 / 30000;
-            this.value = 10;
+            this.value = 2;
         }
 });    

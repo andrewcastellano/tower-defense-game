@@ -13,6 +13,6 @@ var WashingMachine = new Phaser.Class({
             this.health = 300;
             this.alive = true;
             this.speed = 1 / 40000;
-            this.value = 20;
+            this.value = 5;
         }
 });  
