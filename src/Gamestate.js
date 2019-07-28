@@ -50,37 +50,11 @@ function updateNotEnoughFundsText() {
     }
 }
 
-// Buy a Waterhose
-function buyWaterhose() {
-    if (gamestate.money < waterhoseCost) return;
-    // Enable drag and drop
-    this.input.setDraggable(this);
-    // Wait for tower placed event
-    // this.input.on('dragend', (pointer, gameObject) => {
-    //     console.log(gameObject)
-    //     this.input.setDraggable(gameObject, false);
-    // });
-    // Subtract cost from money
-    gamestate.setMoney(gamestate.money - waterhoseCost);
-}
-
-function startDrag(pointer, targets) {
-    this.input.off('pointerdown', this.startDrag, this);
-    this.dragObj = targets[0];
-    this.input.on('pointermove', this.doDrag, this);
-}
-
-function doDrag(pointer) {
-    this.dragObj.x = pointer.x;
-    this.dragObj.y = pointer.y;
-}
-
-// Buy a Signal Disruptor
+// TODO: Replace two functions below with tower placement functions
+// Buy a Signal Disruptor 
 function buySignalDisruptor() {
     if (gamestate.money < signaldisruptorCost) return;
 
-    // Enable drag and drop
-    // Wait for tower placed event
     // Subtract cost from money
     gamestate.setMoney(gamestate.money - signaldisruptorCost);
 }
@@ -89,8 +63,6 @@ function buySignalDisruptor() {
 function buyLaser() {
     if (gamestate.money < laserCost) return;
 
-    // Enable drag and drop
-    // Wait for tower placed event
     // Subtract cost from money
     gamestate.setMoney(gamestate.money - laserCost);
 }

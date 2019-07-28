@@ -152,9 +152,6 @@ class Easy extends Phaser.Scene {
         // while placing a tower
         this.input.on('pointermove', this.applyIndicator.bind(this));
 
-        // Start placing tower mode when clicking on the waterhoseIcon in the HUD
-        waterhoseIcon.on('pointerdown', this.startPlacingTower.bind(this));
-
         // Position track (will the track need physics??)
         this.add.image(325, 195, 'easyTrack');
 
@@ -220,6 +217,8 @@ class Easy extends Phaser.Scene {
         // Add tower icons and text
         waterhoseIcon = this.add.image(710, 117, 'waterhose').setScale(0.04);
         waterhoseIcon.setInteractive();
+        // Start placing tower mode when clicking on the waterhoseIcon in the HUD
+        waterhoseIcon.on('pointerdown', this.startPlacingTower.bind(this));
         this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
 
         signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
