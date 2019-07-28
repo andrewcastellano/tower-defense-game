@@ -42,6 +42,12 @@ var rangeIndicator;
 var cantPlaceTowerIndicator;
 var isPlacingTower = false;
 
+// Vars used for play, save, and cancel
+var playButton;
+var isInPlayMode = false;
+var saveButton;
+var cancelButton;
+
 //Enemy Wave related variables
 var enemyNum = 0;           //tracks index of enemy in current wave
 var waveNum = 0;            //tracks index of wave that has been called to screen
@@ -184,7 +190,7 @@ class Easy extends Phaser.Scene {
     // Update game scene
     update(time, delta) {
         // add money at regular intervals second
-        if (time > nextTimeToAddMoney) {
+        if (isInPlayMode && time > nextTimeToAddMoney) {
             gamestate.money += 1;
             nextTimeToAddMoney = time + 1000;
         }
@@ -232,11 +238,13 @@ class Easy extends Phaser.Scene {
         this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
 
         // Add play, save, load buttons
-        this.add.image(710, 345, 'play').setScale(0.06);
+        playButton = this.add.image(710, 345, 'play').setScale(0.06);
+        playButton.setInteractive();
+        playButton.on('pointerdown', this.startPlayMode);
         this.add.text(697, 365, 'Play', { color: '#ffffff', fontSize: '12px' });
-        this.add.image(780, 345, 'save').setScale(0.06);
+        saveButton = this.add.image(780, 345, 'save').setScale(0.06);
         this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
-        this.add.image(850, 345, 'cancel').setScale(0.06);
+        cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
         // Add money and lives text info
@@ -250,8 +258,13 @@ class Easy extends Phaser.Scene {
         cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
     }
 
+    // Handler for clicking play button, starts play mode
+    startPlayMode() {
+        isInPlayMode = true;
+    }
+
     // Helper function to get array of all active enemies
-    getAllEnemies(){
+    getAllEnemies() {
         var enemies = [];
 
         //for each enemy type
@@ -317,6 +330,8 @@ class Easy extends Phaser.Scene {
 
     // Used by Update function to bring enemies onto the track, using wave and enemyList info
     spawnEnemies(time) {
+        // Return early if game has not started
+        if (!isInPlayMode) return;
 
         //if there are still waves to spawn
         if (waveNum < enemyList.length)
@@ -379,6 +394,8 @@ class Easy extends Phaser.Scene {
 
     // Used by 'update' to clean up and remove enemies that have been defeated by the player's towers
     cleanUpEnemies(){
+        // Return early if game has not started
+        if (!isInPlayMode) return;
 
         //check all enemy types
         for (var i = 0; i < allEnemies.length; i++)
@@ -428,6 +445,9 @@ class Easy extends Phaser.Scene {
 
     // Handler for clicking the waterhose icon in the HUD
     startPlacingTower() {
+        // Return early if game has not started
+        if (!isInPlayMode) return;
+        
         isPlacingTower = !isPlacingTower;
 
         // Indicators track the area of effect for the towers
