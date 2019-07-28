@@ -69,30 +69,7 @@
         }
     }
     var gamestate = new GameState();
-    
-    // Waterhose class definition
-    var waterhose = new Phaser.Class({ 
-        Extends: Phaser.GameObjects.Image,
-        initialize: function Waterhose(scene) {
-            Phaser.GameObjects.Image.call(this, scene, 0, 0, 'sprites', 'waterhose');
-            this.range = 0;
-            this.damage = 0;
-            this.pos = [0, 0];
-            this.cost = 25;
-        },
-        place: function() {
-            //definition for the place function
-        },
-        getEnemyInRange: function () {
-            //definition for finding enemy in range
-        },
-        fire: function() {
-            //definition for the fire function
-        },
-        update: function() {
-            //definition for the update function
-        }
-    });
+
 
     // Preload the game scene
     function preload ()
@@ -117,6 +94,9 @@
         this.load.image('robot_', 'images/enemies/robot/robot.png');
 
         // Tower assets
+        this.load.image('waterdrop', 'images/waterdrop.png');
+        // this.load.image('wave', 'images/wave.png'); // for signal disruptor 
+        // this.load.image('beam', 'images/laser.png'); // for laser
 
     }
 
@@ -337,8 +317,6 @@
         this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
-
-        waterhoses = this.physics.add.group({ classType: waterhose, runChildUpdate: true });
       
         // Add money and lives text info
         moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
@@ -357,6 +335,7 @@
         // Load up Easy Track data points into path
         loadTrackPoints(mediumPoints);    
         
+	    this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
         // Draw the path to visualize
         //graphics.lineStyle(3, 0xffffff, 1);
         //path.draw(graphics);

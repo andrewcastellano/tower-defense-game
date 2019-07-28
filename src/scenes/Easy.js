@@ -2,15 +2,18 @@
 
 // Easy Track point data
 var easyPoints = {
-    'x': [   0, 125, 125, 595, 595, 125, 125,  84,  84, 634, 634, 84,  84,   0 ],
-    'y': [ 185, 185,  95,  95, 295, 295, 245, 245, 335, 335,  55, 55, 145, 145 ]
+    'x': [0, 125, 125, 595, 595, 125, 125, 84, 84, 634, 634, 84, 84, 0],
+    'y': [185, 185, 95, 95, 295, 295, 245, 245, 335, 335, 55, 55, 145, 145]
 };
 var path;
 var enemies;
 var toasters;
 var washingmachines;
+var waterhoses;
 var robots;
 var graphics;
+var projectiles;
+var allEnemies = [];
 
 // Tower prices
 const waterhoseCost = 25;
@@ -36,55 +39,53 @@ var cantAffordLaserText = null;
 var enemyNum = 0;           //tracks index of enemy in current wave
 var waveNum = 0;            //tracks index of wave that has been called to screen
 var newWave = false;        //to help update wave numbers
-var nextEnemy = 1000;       //initialize to time (in ms) that first wave will start in game
+var startTime = 1000;
+var nextEnemy = startTime;  //initialize to time (in ms) that first wave will start in game
 var enemyList =             //Wave order enemies will appear on screen
-// t = toaster, w = washingmachine, r = robot
-// gap = additional time for next enemy to spawn in
-[ 
-    //wave 1
-    [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
-    //wave 2
-    [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
-     {name: 'w', gap: 1000}, {name: 'w', gap: 1000}, {name: 'w', gap: 41000},],
-    //wave 3
-    [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 1000}, 
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 30000},],
-    //wave 4
-    [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
-     {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-     {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 31000},],
-    //wave 5
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 6
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 7
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 8
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 9
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}],
-    //wave 10
-    [{name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: 37000}]
-];
-
-let waterhoses;	
+    // t = toaster, w = washingmachine, r = robot
+    // gap = additional time for next enemy to spawn in
+    [
+        //wave 1
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 31000 },],
+        //wave 2
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 'w', gap: 1000 }, { name: 'w', gap: 1000 }, { name: 'w', gap: 41000 },],
+        //wave 3
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: 30000 },],
+        //wave 4
+        [{ name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 31000 },],
+        //wave 5
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 6
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 7
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 8
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 9
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }],
+        //wave 10
+        [{ name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: 37000 }]
+    ];
 
 class Easy extends Phaser.Scene {
 
-	constructor() {
-		super({
-			key: 'Easy',
-			active: false
-		});
-	}
+    constructor() {
+        super({
+            key: 'Easy',
+            active: false
+        });
+    }
 
     // Preload the game scene
-    preload ()
-    {   
+    preload() {
         // HUD assets
         this.load.image('robot', 'images/Robot.png');
         this.load.image('laser', 'images/laser.png');
@@ -104,15 +105,18 @@ class Easy extends Phaser.Scene {
         this.load.image('robot_', 'images/enemies/robot/robot.png');
 
         // Tower assets
+        this.load.image('_waterhose', 'images/towers/waterhose.png');
+
+        // Projectile assets
+        this.load.image('_waterdrop', 'images/projectiles/waterdrop.png');
 
     }
 
     // Create the game scene
-	create ()
-    {
+    create() {
         // Add backdrop
         //this.add.image(400, 300, 'backdrop');
-        
+
         var graphics = this.add.graphics();
 
         // Add gray hud panel to screen
@@ -151,8 +155,6 @@ class Easy extends Phaser.Scene {
         this.add.image(850, 345, 'cancel').setScale(0.06);
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
-        waterhoses = this.physics.add.group({ classType: waterhose, runChildUpdate: true });
-      
         // Add money and lives text info
         moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
         livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
@@ -165,14 +167,13 @@ class Easy extends Phaser.Scene {
 
         // Position track (will the track need physics??)
         this.add.image(325, 195, 'easyTrack');
-        
+
         // Load up Easy Track data points into path
         path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
-        for (var i = 1; i < easyPoints.x.length; i++)
-        {
+        for (var i = 1; i < easyPoints.x.length; i++) {
             path.lineTo(easyPoints.x[i], easyPoints.y[i]);
-        }     
-        
+        }
+
         // Draw the path to visualize
         //graphics.lineStyle(3, 0xffffff, 1);
         //path.draw(graphics);
@@ -181,11 +182,28 @@ class Easy extends Phaser.Scene {
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
         washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
         robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+
+        // Create master enemy list
+        allEnemies.push(toasters);
+        allEnemies.push(washingmachines);
+        allEnemies.push(robots);
+
+
+        // Create group for towers
+        waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
+        projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
+
+        // Bullet overlap with enemy
+        this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+        this.physics.add.overlap(washingmachines, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+        this.physics.add.overlap(robots, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+
+        // this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
+        this.input.on('pointerdown', this.placeWaterhose.bind(this));
     }
 
     // Update game scene
-    update (time, delta)
-    {   
+    update(time, delta) {
         // add money at regular intervals second
         if (time > nextTimeToAddMoney) {
             gamestate.money += 1;
@@ -199,70 +217,101 @@ class Easy extends Phaser.Scene {
         livesText.setText('Lives: ' + gamestate.lives)
 
         // spawn waves of enemies
-        spawnEnemies(time);
+        this.spawnEnemies(time);
     }
-}
 
-// Helper function to count active enemies on screen, returns true if no active enemies
-function isBoardEmpty()
-{
-    var isEmpty = false;
-    var numToasters = toasters.countActive(true);
-    var numWashingMachines = washingmachines.countActive(true);
-    var numRobots = robots.countActive(true);
-    if (numToasters + numWashingMachines + numRobots === 0)
-    {
-        isEmpty = true;
+
+    //find if there is an enemy in our turret range
+    getEnemy(x, y, distance) {
+        var enemies = [];
+        for (var i = 0; i < allEnemies.length; i++) {
+            var enemy = allEnemies[i].getChildren();
+            for (var j = 0; j < enemy.length; j++) {
+                enemies.push(enemy[j]);
+            }
+        }
+        for (var i = 0; i < enemies.length; i++) { //loop through all enemies
+            if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
+                return enemies[i]; //in range and active
+            }
+        }
+        return false;
     }
-    return isEmpty;
-}
 
-// Used by Update function to bring enemies onto the track, using wave and enemyList info
-function spawnEnemies(time)
-{
-    // if its time for the next enemy and still enemies to spawn
-    if (time > nextEnemy && waveNum < enemyList.length)
-    {   
-        //check if first enemy of new wave, update display
-        if (newWave)
-        {
-            currentWave.setText('Wave #' + (waveNum + 1));
-            newWave = false;
+    addWaterDrop(x, y, angle) {
+        var wd = new waterdrop(this, 0, 0);
+        projectiles.add(wd);
+        wd.fire(x, y, angle);
+    }
+
+    placeWaterhose(pointer) {
+        var hose = new waterhose(this, pointer.x, pointer.y);
+        waterhoses.add(hose);
+        hose.setActive(true);
+        hose.setVisible(true);
+        hose.setScale(0.04);
+    }
+
+    hurtEnemy(enemy, proj) {
+        if (proj.active && enemy.active) {
+            proj.setVisible(false);
+            proj.setActive(false);
+            enemy.takeDamage(proj.dmg); //call take damage function on enemy with the projectiles damage
         }
-        // get next enemy     
-        var enemy;
-        switch (enemyList[waveNum][enemyNum].name)
-        {
-            case 't': 
-                enemy = toasters.get();
-                break;
-            case 'w':
-                enemy = washingmachines.get();
-                break;
-            case 'r':
-                enemy = robots.get();
-                break;
+    }
+
+    isBoardEmpty() {
+        var isEmpty = false;
+        var numToasters = toasters.countActive(true);
+        var numWashingMachines = washingmachines.countActive(true);
+        var numRobots = robots.countActive(true);
+        if (numToasters + numWashingMachines + numRobots === 0) {
+            isEmpty = true;
         }
-        if (enemy)
-        {
-            enemy.setActive(true);
-            enemy.setVisible(true);
-            
-            // place the enemy at the beginning of the path
-            enemy.spawn();
-            // determine index of next enemy
-            if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
-            {
-                nextEnemy = time + enemyList[waveNum][enemyNum].gap;
-                enemyNum = 0;
-                waveNum++;
-                newWave = true;
+        return isEmpty;
+    }
+
+    // Used by Update function to bring enemies onto the track, using wave and enemyList info
+    spawnEnemies(time) {
+        // if its time for the next enemy and still enemies to spawn
+        if (time > nextEnemy && waveNum < enemyList.length) {
+            //check if first enemy of new wave, update display
+            if (newWave) {
+                currentWave.setText('Wave #' + (waveNum + 1));
+                newWave = false;
             }
-            else
-            {
-                nextEnemy = time + enemyList[waveNum][enemyNum].gap;
-                enemyNum++;
+            // get next enemy     
+            var enemy;
+            switch (enemyList[waveNum][enemyNum].name) {
+                case 't':
+                    enemy = toasters.get();
+                    break;
+                case 'w':
+                    enemy = washingmachines.get();
+                    break;
+                case 'r':
+                    enemy = robots.get();
+                    break;
             }
-        }       
+            if (enemy) {
+                enemy.setActive(true);
+                enemy.setVisible(true);
+
+                // place the enemy at the beginning of the path
+                enemy.spawn();
+                // determine index of next enemy
+                if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
+                {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum = 0;
+                    waveNum++;
+                    newWave = true;
+                }
+                else {
+                    nextEnemy = time + enemyList[waveNum][enemyNum].gap;
+                    enemyNum++;
+                }
+            }
+        }
     }
 }

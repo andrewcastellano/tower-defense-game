@@ -1,23 +1,30 @@
 // Waterhose class definition
-var waterhose = new Phaser.Class({ 
+var waterhose = new Phaser.Class({
     Extends: Phaser.GameObjects.Image,
-    initialize: function Waterhose(scene) {
-        Phaser.GameObjects.Image.call(this, scene, 0, 0, 'sprites', 'waterhose');
-        this.range = 0;
-        this.damage = 0;
-        this.pos = [0, 0];
-        this.cost = 25;
+    initialize:
+
+        function Waterhose(scene, x, y) {
+            Phaser.GameObjects.Image.call(this, scene, x, y, 'waterhose');
+            this.nextTic = 0;
+            this.scene.add.existing(this);
+        },
+
+    place: function (i, j) {
+
     },
-    place: function() {
-        //definition for the place function
+    fire: function () {
+        var enemy = this.scene.getEnemy(this.x, this.y, 100);
+        if (enemy) { //if there is an enemy in range
+            var angle = Phaser.Math.Angle.Between(this.x, this.y, enemy.x, enemy.y); //angle between tower and enemy
+            this.scene.addWaterDrop(this.x, this.y, angle); // add bullet at the angle
+            this.angle = (angle + Math.PI / 2) * Phaser.Math.RAD_TO_DEG;
+        }
     },
-    getEnemyInRange: function () {
-        //definition for finding enemy in range
-    },
-    fire: function() {
-        //definition for the fire function
-    },
-    update: function() {
-        //definition for the update function
+    update: function (time, delta) {
+        if (time > this.nextTic) {
+            //we can fire another
+            this.fire();
+            this.nextTic = time + 1000;
+        }
     }
 });
