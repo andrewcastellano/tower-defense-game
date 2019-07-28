@@ -6,6 +6,7 @@ var easyPoints = {
     'y': [185, 185, 95, 95, 295, 295, 245, 245, 335, 335, 55, 55, 145, 145]
 };
 var path;
+var track;
 var enemies;
 var toasters;
 var washingmachines;
@@ -34,6 +35,12 @@ var currentWave = null;
 var cantAffordWaterhoseText = null;
 var cantAffordSignalDisruptorText = null;
 var cantAffordLaserText = null;
+
+// Vars used for drag and drop placement of towers
+var newTowerPlaceholder;
+var rangeIndicator;
+var cantPlaceTowerIndicator;
+var isPlacingTower = false;
 
 //Enemy Wave related variables
 var enemyNum = 0;           //tracks index of enemy in current wave
@@ -109,6 +116,8 @@ class Easy extends Phaser.Scene {
         this.load.image('play', 'images/play.png');
         this.load.image('cancel', 'images/cancel.png');
         this.load.image('save', 'images/save.png');
+        this.load.image('greencircle', 'images/greencircle.png');
+        this.load.image('redcircle', 'images/redcircle.png');
 
         // Track assets
         this.load.image('easyTrack', 'images/tracks/easyTrack.png');
@@ -134,6 +143,65 @@ class Easy extends Phaser.Scene {
 
         var graphics = this.add.graphics();
 
+        this.createHeadsUpDisplay(graphics);
+
+        // Cancel placing tower if ESC key is pressed while tower is following mouse
+        this.input.keyboard.on('keydown_ESC', this.cancelPlacingTower);
+
+        // Handle setting green or red area of effect indicator when moving the pointer
+        // while placing a tower
+        this.input.on('pointermove', this.applyIndicator.bind(this));
+
+        // Position track (will the track need physics??)
+        this.add.image(325, 195, 'easyTrack');
+
+        // Load up Easy Track data points into path
+        path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
+        for (var i = 1; i < easyPoints.x.length; i++) {
+            path.lineTo(easyPoints.x[i], easyPoints.y[i]);
+        }     
+
+        // Create group for enemies
+        toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
+        washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
+        robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
+
+        // Create master enemy list
+        allEnemies.push(toasters);
+        allEnemies.push(washingmachines);
+        allEnemies.push(robots);
+
+        // Create group for towers
+        waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
+        projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
+
+        // Bullet overlap with enemy
+        this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+        this.physics.add.overlap(washingmachines, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+        this.physics.add.overlap(robots, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+    }
+
+    // Update game scene
+    update(time, delta) {
+        // add money at regular intervals second
+        if (time > nextTimeToAddMoney) {
+            gamestate.money += 1;
+            nextTimeToAddMoney = time + 1000;
+        }
+
+        updateNotEnoughFundsText();
+
+        // update player money and lives
+        moneyText.setText('Money: ' + gamestate.money);
+        livesText.setText('Lives: ' + gamestate.lives)
+
+        // spawn waves of enemies
+        this.spawnEnemies(time);
+        this.cleanUpEnemies();
+    }
+
+    // Creates the HUD, including all icons and text
+    createHeadsUpDisplay(graphics) {
         // Add gray hud panel to screen
         graphics.fillStyle(0x646464, 1);
         graphics.fillRect(675, 0, 225, 390);
@@ -149,7 +217,8 @@ class Easy extends Phaser.Scene {
         // Add tower icons and text
         waterhoseIcon = this.add.image(710, 117, 'waterhose').setScale(0.04);
         waterhoseIcon.setInteractive();
-        waterhoseIcon.on('pointerdown', buyWaterhose);
+        // Start placing tower mode when clicking on the waterhoseIcon in the HUD
+        waterhoseIcon.on('pointerdown', this.startPlacingTower.bind(this));
         this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
 
         signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
@@ -179,60 +248,6 @@ class Easy extends Phaser.Scene {
         cantAffordWaterhoseText = this.add.text(740, 120, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
         cantAffordSignalDisruptorText = this.add.text(740, 198, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
         cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
-
-        // Position track (will the track need physics??)
-        this.add.image(325, 195, 'easyTrack');
-
-        // Load up Easy Track data points into path
-        path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
-        for (var i = 1; i < easyPoints.x.length; i++) {
-            path.lineTo(easyPoints.x[i], easyPoints.y[i]);
-        }
-
-        // Draw the path to visualize
-        //graphics.lineStyle(3, 0xffffff, 1);
-        //path.draw(graphics);
-
-        // Create group for enemies
-        toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
-        washingmachines = this.physics.add.group({ classType: WashingMachine, runChildUpdate: true });
-        robots = this.physics.add.group({ classType: Robot, runChildUpdate: true });
-
-        // Create master enemy list
-        allEnemies.push(toasters);
-        allEnemies.push(washingmachines);
-        allEnemies.push(robots);
-
-        // Create group for towers
-        waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
-        projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
-
-        // Bullet overlap with enemy
-        this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
-        this.physics.add.overlap(washingmachines, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
-        this.physics.add.overlap(robots, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
-
-        // this.nextEnemy = 1000; //initialize to time (in ms) that waves will start
-        this.input.on('pointerdown', this.placeWaterhose.bind(this));
-    }
-
-    // Update game scene
-    update(time, delta) {
-        // add money at regular intervals second
-        if (time > nextTimeToAddMoney) {
-            gamestate.money += 1;
-            nextTimeToAddMoney = time + 1000;
-        }
-
-        updateNotEnoughFundsText();
-
-        // update player money and lives
-        moneyText.setText('Money: ' + gamestate.money);
-        livesText.setText('Lives: ' + gamestate.lives)
-
-        // spawn waves of enemies
-        this.spawnEnemies(time);
-        this.cleanUpEnemies();
     }
 
     // Helper function to get array of all active enemies
@@ -257,8 +272,6 @@ class Easy extends Phaser.Scene {
     //find if there is an enemy in our turret range
     getEnemy(x, y, distance) {
         var enemies = this.getAllEnemies();
-        
-        console.log(enemies);
         
         for (var i = 0; i < enemies.length; i++) { //loop through all enemies
             if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
@@ -385,5 +398,115 @@ class Easy extends Phaser.Scene {
             }
         }
 
+    }
+
+    // Returns whether pointer is hovering over part of the track. Used to determine which area of
+    // effect indicator to use when attempting to place a tower.
+    // Why check bounds for track instead of detecing pointer / image overlap?
+    // => Track image is a rectangle even though the visible track area takes up edges of image
+    isPointerOverTrack(pointer) {
+        // Stores bounds of different rectangles on the map that the track image covers
+        let boundariesList = [
+            { leftBound: 0, rightBound: 70, topBound: 126, bottomBound: 198},
+            { leftBound: 70, rightBound: 139, topBound: 41, bottomBound: 200},
+            { leftBound: 138, rightBound: 580, topBound: 40, bottomBound: 110},
+            { leftBound: 576, rightBound: 651, topBound: 41, bottomBound: 351},
+            { leftBound: 138, rightBound: 584, topBound: 281, bottomBound: 350},
+            { leftBound: 69, rightBound: 140, topBound: 231, bottomBound: 350},
+        ]
+
+        // Loop through boundaries to detect collisions with pointer
+        for (let i = 0; i < boundariesList.length; i++) {
+            const boundary = boundariesList[i];
+            if (pointer.x >= boundary.leftBound && pointer.x <= boundary.rightBound
+                && pointer.y >= boundary.topBound && pointer.y <= boundary.bottomBound) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Handler for clicking the waterhose icon in the HUD
+    startPlacingTower() {
+        isPlacingTower = !isPlacingTower;
+
+        // Indicators track the area of effect for the towers
+        // The rangeIndicator is green and set when the tower is over a valid position
+        // The cantPlaceTowerIndicator is red and set when hovering over invalid positions
+        rangeIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'greencircle').setVisible(false);
+        rangeIndicator.alpha = 0.2;
+        rangeIndicator.createBitmapMask();
+        cantPlaceTowerIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'redcircle').setVisible(false);
+        cantPlaceTowerIndicator.alpha = 0.2;
+        cantPlaceTowerIndicator.createBitmapMask();
+
+        // Tower icon image that follows the pointer
+        newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'waterhose').setScale(0.04);
+        newTowerPlaceholder.setInteractive();
+
+        // Handle placing the tower into position if valid or cancel by clicking into the HUD
+        newTowerPlaceholder.on('pointerdown', this.placeTower.bind(this));
+    }
+
+    // Applies the correct indicator to the pointer if placing the tower
+    applyIndicator(pointer) {
+        if (isPlacingTower) {
+            // Have tower icon and indicators follow pointer
+            newTowerPlaceholder.x = pointer.x;
+            newTowerPlaceholder.y = pointer.y;
+            rangeIndicator.x = pointer.x;
+            rangeIndicator.y = pointer.y;
+            cantPlaceTowerIndicator.x = pointer.x;
+            cantPlaceTowerIndicator.y = pointer.y;
+            if (pointer.x < 675) {
+                // Pointer is in game area
+                if (this.isPointerOverTrack(pointer)) {
+                    // Set red indicator when over track
+                    rangeIndicator.setVisible(false);
+                    cantPlaceTowerIndicator.setVisible(true);
+                } else {
+                    // Set green indicator in valid board positions
+                    rangeIndicator.setVisible(true);
+                    cantPlaceTowerIndicator.setVisible(false);
+                }
+            } else if (pointer.x >= 675 && rangeIndicator.visible) {
+                // Turn off indicatos in HUD
+                rangeIndicator.setVisible(false);
+                cantPlaceTowerIndicator.setVisible(false);
+            }
+        }
+    }
+
+    // Handle placing tower when the mouse is clicked 
+    placeTower(pointer) {
+        if (gamestate.money < waterhoseCost) return;
+        else if (isPlacingTower) {
+            if (pointer.x < 675) {
+                // Pointer is in the game area
+                if (!this.isPointerOverTrack(pointer)) {
+                    // Tower placed in valid area
+                    gamestate.money -= waterhoseCost;
+                    this.placeWaterhose(pointer);
+                    isPlacingTower = false;
+                    newTowerPlaceholder.destroy();
+                    rangeIndicator.setVisible(false);
+                    cantPlaceTowerIndicator.setVisible(false);
+                }
+            } else if (pointer.x >= 675) {
+                // Cancel tower purchase by clicking in the HUD area
+                isPlacingTower = false;
+                newTowerPlaceholder.destroy();
+            }
+        }
+    }
+    
+    // Cancels drag and drop tower placement when the ESC key is pressed
+    cancelPlacingTower(event) {
+        if (isPlacingTower) {
+            isPlacingTower = false;
+            newTowerPlaceholder.destroy();
+            rangeIndicator.destroy();
+            cantPlaceTowerIndicator.destroy();
+        }
     }
 }

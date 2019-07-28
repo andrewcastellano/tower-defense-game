@@ -4,7 +4,7 @@ class GameState {
         this.money = 50;
         this.lives = 100;
         this.score = 0;
-        this.towers =  null;
+        this.towers =  [];
         this.enemies = null;
     }
 
@@ -50,22 +50,11 @@ function updateNotEnoughFundsText() {
     }
 }
 
-// Buy a Waterhose
-function buyWaterhose() {
-    if (gamestate.money < waterhoseCost) return;
-
-    // Enable drag and drop
-    // Wait for tower placed event
-    // Subtract cost from money
-    gamestate.setMoney(gamestate.money - waterhoseCost);
-}
-
-// Buy a Signal Disruptor
+// TODO: Replace two functions below with tower placement functions
+// Buy a Signal Disruptor 
 function buySignalDisruptor() {
     if (gamestate.money < signaldisruptorCost) return;
 
-    // Enable drag and drop
-    // Wait for tower placed event
     // Subtract cost from money
     gamestate.setMoney(gamestate.money - signaldisruptorCost);
 }
@@ -74,8 +63,6 @@ function buySignalDisruptor() {
 function buyLaser() {
     if (gamestate.money < laserCost) return;
 
-    // Enable drag and drop
-    // Wait for tower placed event
     // Subtract cost from money
     gamestate.setMoney(gamestate.money - laserCost);
 }
