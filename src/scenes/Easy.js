@@ -133,6 +133,8 @@ class Easy extends Phaser.Scene {
         this.load.image('toaster', 'images/enemies/toaster/toaster.png');
         this.load.image('washingmachine', 'images/enemies/washingmachine/washingmachine.png');
         this.load.image('robot_', 'images/enemies/robot/robot.png');
+        this.load.atlas('toaster_atlas', 'images/enemies/toaster/toaster_atlas.png', 'images/enemies/toaster/toaster_atlas.json');
+        this.load.atlas('washingmachine_atlas', 'images/enemies/washingmachine/washingmachine_atlas.png', 'images/enemies/washingmachine/washingmachine_atlas.json');
 
         // Tower assets
         this.load.image('_waterhose', 'images/towers/waterhose.png');
@@ -146,7 +148,7 @@ class Easy extends Phaser.Scene {
     create() {
         // Add backdrop
         //this.add.image(400, 300, 'backdrop');
-
+        
         var graphics = this.add.graphics();
 
         this.createHeadsUpDisplay(graphics);
@@ -166,6 +168,9 @@ class Easy extends Phaser.Scene {
         for (var i = 1; i < easyPoints.x.length; i++) {
             path.lineTo(easyPoints.x[i], easyPoints.y[i]);
         }     
+
+        // Create enemy animations
+        this.createEnemyAnimations();
 
         // Create group for enemies
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
@@ -282,6 +287,57 @@ class Easy extends Phaser.Scene {
         cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
     }
 
+    // Creates all enemy movement animations to be used in their update functions
+    createEnemyAnimations() {
+        this.anims.create({
+            key: 'toasterMoveRight',
+            frames: this.anims.generateFrameNames('toaster_atlas', {
+                prefix: 'toaster_right_',
+                start: 0,
+                end: 4
+            }),
+            frameRate: 5,
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'toasterMoveLeft',
+            frames: this.anims.generateFrameNames('toaster_atlas', {
+                prefix: 'toaster_left_',
+                start: 0,
+                end: 4
+            }),
+            frameRate: 5,
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'washingMachineMoveRight',
+            frames: this.anims.generateFrameNames('washingmachine_atlas', {
+                prefix: 'washingmachine_right_',
+                start: 0,
+                end: 8
+            }),
+            frameRate: 5,
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'washingMachineMoveLeft',
+            frames: this.anims.generateFrameNames('washingmachine_atlas', {
+                prefix: 'washingmachine_left_',
+                start: 0,
+                end: 8
+            }),
+            frameRate: 5,
+            yoyo: true,
+            repeat: -1
+        });
+    }
+
     // Handler for clicking play button, starts play mode
     startPlayMode() {
         isInPlayMode = true;
@@ -392,6 +448,7 @@ class Easy extends Phaser.Scene {
                         enemy = robots.get();
                         break;
                 }
+                
                 if (enemy) {
                     enemy.setActive(true);
                     enemy.setVisible(true);
