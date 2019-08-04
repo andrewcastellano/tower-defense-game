@@ -8,10 +8,19 @@ var easyPoints = {
 var path;
 var track;
 var enemies;
+
 var toasters;
 var washingmachines;
-var waterhoses;
 var robots;
+
+var waterhoses;
+var signaldisruptors;
+var lasers;
+
+var waterdrops;
+var radiowaves;
+var laserbeams;
+
 var graphics;
 var projectiles;
 var allEnemies = [];
@@ -59,48 +68,48 @@ var TTF = 45000;            //slowest time enemies take to complete track
 var enemyList =             //Wave order enemies will appear on screen
     // t = toaster, w = washingmachine, r = robot
     // gap = additional time for next enemy to spawn in
-    [ 
+    [
         //wave 1
-        [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: TTF}],
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: TTF }],
         //wave 2
-        [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
-         {name: 'w', gap: 1000}, {name: 'w', gap: 1000}, {name: 'w', gap: TTF}],
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+        { name: 'w', gap: 1000 }, { name: 'w', gap: 1000 }, { name: 'w', gap: TTF }],
         //wave 3
-        [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 1000}, 
-         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: TTF}],
+        [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: 1000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: TTF }],
         //wave 4
-        [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
-         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: TTF}],
+        [{ name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: TTF }],
         //wave 5
-        [{name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-         {name: 't', gap: 1000}, {name: 'w', gap: 3000}, {name: 'r', gap: 2000},
-         {name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 't', gap: TTF}],
+        [{ name: 'r', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+        { name: 't', gap: 1000 }, { name: 'w', gap: 3000 }, { name: 'r', gap: 2000 },
+        { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 't', gap: TTF }],
         //wave 6
-        [{name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-         {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 3000},
-         {name: 'r', gap: 3000}, {name: 'r', gap: 3000}, {name: 'r', gap: TTF}],
+        [{ name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+        { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 3000 },
+        { name: 'r', gap: 3000 }, { name: 'r', gap: 3000 }, { name: 'r', gap: TTF }],
         //wave 7
-        [{name: 'w', gap: 2000}, {name: 't', gap: 2000}, {name: 'w', gap: 2000},
-         {name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'r', gap: 2000},
-         {name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: TTF}],
+        [{ name: 'w', gap: 2000 }, { name: 't', gap: 2000 }, { name: 'w', gap: 2000 },
+        { name: 'r', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'r', gap: 2000 },
+        { name: 'r', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: TTF }],
         //wave 8
-        [{name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-         {name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-         {name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: TTF}],
+        [{ name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+        { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+        { name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: TTF }],
         //wave 9
-        [{name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-         {name: 't', gap: 2000}, {name: 't', gap: 2000}, {name: 't', gap: 2000},
-         {name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: TTF}],
+        [{ name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+        { name: 't', gap: 2000 }, { name: 't', gap: 2000 }, { name: 't', gap: 2000 },
+        { name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: TTF }],
         //wave 10
-        [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
-         {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-         {name: 'r', gap: 1000}, {name: 'r', gap: 2000}, {name: 'r', gap: 3000},
-         {name: 'r', gap: 1000}, {name: 'r', gap: 2000}, {name: 'r', gap: TTF}]
+        [{ name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+        { name: 'r', gap: 1000 }, { name: 'r', gap: 2000 }, { name: 'r', gap: 3000 },
+        { name: 'r', gap: 1000 }, { name: 'r', gap: 2000 }, { name: 'r', gap: TTF }]
     ];
 
 class Easy extends Phaser.Scene {
@@ -136,9 +145,13 @@ class Easy extends Phaser.Scene {
 
         // Tower assets
         this.load.image('_waterhose', 'images/towers/waterhose.png');
+        this.load.image('_signaldisruptor', 'images/towers/signaldisruptor.png');
+        this.load.image('_laser', 'images/towers/laser.png');
 
         // Projectile assets
         this.load.image('_waterdrop', 'images/projectiles/waterdrop.png');
+        this.load.image('_radiowave', 'images/projectiles/radiowave.png');
+        this.load.image('_laserbeam', 'images/projectiles/laserbeam.png');
 
     }
 
@@ -165,7 +178,7 @@ class Easy extends Phaser.Scene {
         path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
         for (var i = 1; i < easyPoints.x.length; i++) {
             path.lineTo(easyPoints.x[i], easyPoints.y[i]);
-        }     
+        }
 
         // Create group for enemies
         toasters = this.physics.add.group({ classType: Toaster, runChildUpdate: true });
@@ -178,13 +191,30 @@ class Easy extends Phaser.Scene {
         allEnemies.push(robots);
 
         // Create group for towers
-        waterhoses = this.add.group({ classType: waterhose, runChildUpdate: true });
-        projectiles = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
+        waterhoses = this.add.group({ classType: Waterhose, runChildUpdate: true });
+        lasers = this.add.group({ classType: Laser, runChildUpdate: true });
+        signaldisruptors = this.add.group({ classType: SignalDisruptor, runChildUpdate: true });
+
+        //create group for projectiles
+        waterdrops = this.physics.add.group({ classType: waterdrop, runChildUpdate: true });
+        laserbeams = this.physics.add.group({ classType: laserbeam, runChildUpdate: true });
+        radiowaves = this.physics.add.group({ classType: radiowave, runChildUpdate: true });
 
         // Bullet overlap with enemy
-        this.physics.add.overlap(toasters, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
-        this.physics.add.overlap(washingmachines, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
-        this.physics.add.overlap(robots, projectiles, this.hurtEnemy.bind(this)); //run hurt enemy function when overlap
+
+        //waterdrop overlap
+        this.physics.add.overlap(toasters, waterdrops, this.hurtEnemy.bind(this));
+        this.physics.add.overlap(washingmachines, waterdrops, this.hurtEnemy.bind(this));
+        this.physics.add.overlap(robots, waterdrops, this.hurtEnemy.bind(this));
+        //laserbeam overlap
+        this.physics.add.overlap(toasters, laserbeams, this.hurtEnemy.bind(this));
+        this.physics.add.overlap(washingmachines, laserbeams, this.hurtEnemy.bind(this));
+        this.physics.add.overlap(robots, laserbeams, this.hurtEnemy.bind(this));
+        //waves overlap
+        this.physics.add.overlap(toasters, radiowaves, this.hurtEnemy.bind(this));
+        this.physics.add.overlap(washingmachines, radiowaves, this.hurtEnemy.bind(this));
+        this.physics.add.overlap(robots, radiowaves, this.hurtEnemy.bind(this));
+
     }
 
     // Update game scene
@@ -206,23 +236,20 @@ class Easy extends Phaser.Scene {
         this.cleanUpEnemies();
 
         // check for game over conditions
-        if (this.gameOver() === true)
-        {
+        if (this.gameOver() === true) {
             this.scene.pause();
             return;
         }
     }
 
-    gameOver(){
+    gameOver() {
         // check if player ran out of lives
-        if (gamestate.lives <= 0)
-        {
+        if (gamestate.lives <= 0) {
             var endText = this.add.text(150, 150, 'Game Over! You lost all your lives!', { fontSize: '20px', fill: '#ffffff' });
             return true;
         }
         // check if player completed all waves
-        else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) 
-        {
+        else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
             var endText = this.add.text(170, 150, 'Congratulations! You won!', { fontSize: '20px', fill: '#ffffff' });
             return true;
         }
@@ -248,17 +275,19 @@ class Easy extends Phaser.Scene {
         waterhoseIcon = this.add.image(710, 117, 'waterhose').setScale(0.04);
         waterhoseIcon.setInteractive();
         // Start placing tower mode when clicking on the waterhoseIcon in the HUD
-        waterhoseIcon.on('pointerdown', this.startPlacingTower.bind(this));
+        waterhoseIcon.on('pointerdown', this.startPlacingWaterhose.bind(this));
         this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
 
         signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
         signaldisruptorIcon.setInteractive();
-        signaldisruptorIcon.on('pointerdown', buySignalDisruptor);
+        // Start placing tower mode when clicking on the signaldisruptorIcon in the HUD
+        signaldisruptorIcon.on('pointerdown', this.startPlacingSignalDisruptor.bind(this));
         this.add.text(740, 178, 'Signal Disruptor:$100', { color: '#ffffff', fontSize: '12px' });
 
         laserIcon = this.add.image(710, 273, 'laser').setScale(0.04);
         laserIcon.setInteractive();
-        laserIcon.on('pointerdown', buyLaser);
+        // Start placing tower mode when clicking on the waterhoseIcon in the HUD
+        laserIcon.on('pointerdown', this.startPlacingLaser.bind(this));
         this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
 
         // Add play, save, load buttons
@@ -292,13 +321,11 @@ class Easy extends Phaser.Scene {
         var enemies = [];
 
         //for each enemy type
-        for (var i = 0; i < allEnemies.length; i++)
-        {
+        for (var i = 0; i < allEnemies.length; i++) {
             //get their children
             var enemy = allEnemies[i].getChildren();
 
-            for (var j = 0; j < enemy.length; j++)
-            {
+            for (var j = 0; j < enemy.length; j++) {
                 //add child to array
                 enemies.push(enemy[j]);
             }
@@ -309,7 +336,7 @@ class Easy extends Phaser.Scene {
     //find if there is an enemy in our turret range
     getEnemy(x, y, distance) {
         var enemies = this.getAllEnemies();
-        
+
         for (var i = 0; i < enemies.length; i++) { //loop through all enemies
             if (enemies[i].active && Phaser.Math.Distance.Between(x, y, enemies[i].x, enemies[i].y) <= distance) {
                 return enemies[i]; //in range and active
@@ -318,21 +345,49 @@ class Easy extends Phaser.Scene {
         return false;
     }
 
-    addWaterDrop(x, y, angle) {
+    //projectile functions
+    addWaterDrops(x, y, angle) {
         var wd = new waterdrop(this, 0, 0);
-        projectiles.add(wd);
+        waterdrops.add(wd);
         wd.fire(x, y, angle);
     }
+    addRadioWaves(x, y, angle) {
+        var wv = new radiowave(this, 0, 0);
+        radiowaves.add(wv);
+        wv.fire(x, y, angle);
+    }
+    addLaserBeams(x, y, angle) {
+        var lb = new laserbeam(this, 0, 0);
+        laserbeams.add(lb);
+        lb.fire(x, y, angle);
+    }
 
+
+    //place tower functions
     placeWaterhose(pointer) {
-        var hose = new waterhose(this, pointer.x, pointer.y);
+        var hose = new Waterhose(this, pointer.x, pointer.y);
         waterhoses.add(hose);
         hose.setActive(true);
         hose.setVisible(true);
         hose.setScale(0.04);
     }
+    placeLaser(pointer) {
+        var laser = new Laser(this, pointer.x, pointer.y);
+        laserbeams.add(laser);
+        laser.setActive(true);
+        laser.setVisible(true);
+        laser.setScale(0.04);
+    }
+    placeSignalDisruptor(pointer) {
+        var signaldisruptor = new SignalDisruptor(this, pointer.x, pointer.y);
+        signaldisruptors.add(signaldisruptor);
+        signaldisruptor.setActive(true);
+        signaldisruptor.setVisible(true);
+        signaldisruptor.setScale(0.04);
+    }
 
     hurtEnemy(enemy, proj) {
+        console.log("inside hurt enemy!");
         if (proj.active && enemy.active) {
             proj.setVisible(false);
             proj.setActive(false);
@@ -358,22 +413,18 @@ class Easy extends Phaser.Scene {
         if (!isInPlayMode) return;
 
         //if there are still waves to spawn
-        if (waveNum < enemyList.length)
-        {
+        if (waveNum < enemyList.length) {
             //check if board is empty after full wave, advance to next round first enemy if all enemies defeated
-            if (time > startTime && waveSpawned)
-            {
+            if (time > startTime && waveSpawned) {
                 var boardEmpty = this.isBoardEmpty();
-                if (boardEmpty)
-                {
+                if (boardEmpty) {
                     nextEnemy = time + 2000; // 2 second gap to new wave when cleared early
                     waveSpawned = false;
                 }
             }
 
             //if it's time for the next enemy to spawn
-            if (time > nextEnemy)
-            {
+            if (time > nextEnemy) {
                 if (newWave) {
                     currentWave.setText('Wave #' + (waveNum + 1));
                     newWave = false;
@@ -395,7 +446,7 @@ class Easy extends Phaser.Scene {
                 if (enemy) {
                     enemy.setActive(true);
                     enemy.setVisible(true);
-    
+
                     // place the enemy at the beginning of the path
                     enemy.spawn();
                     // determine index of next enemy
@@ -417,22 +468,19 @@ class Easy extends Phaser.Scene {
     }
 
     // Used by 'update' to clean up and remove enemies that have been defeated by the player's towers
-    cleanUpEnemies(){
+    cleanUpEnemies() {
         // Return early if game has not started
         if (!isInPlayMode) return;
 
         //check all enemy types
-        for (var i = 0; i < allEnemies.length; i++)
-        {
+        for (var i = 0; i < allEnemies.length; i++) {
             //get children of that type
             var children = allEnemies[i].getChildren();
 
             //check children
-            for (var j = 0; j < children.length; j++)
-            {
+            for (var j = 0; j < children.length; j++) {
                 // check if enemy completed track or defeated
-                if (children[j].follower.t >= 1 || children[j].health <= 0)
-                {
+                if (children[j].follower.t >= 1 || children[j].health <= 0) {
                     //remove enemy from group/game
                     allEnemies[i].remove(children[j], true, true);
                 }
@@ -448,12 +496,12 @@ class Easy extends Phaser.Scene {
     isPointerOverTrack(pointer) {
         // Stores bounds of different rectangles on the map that the track image covers
         let boundariesList = [
-            { leftBound: 0, rightBound: 70, topBound: 126, bottomBound: 198},
-            { leftBound: 70, rightBound: 139, topBound: 41, bottomBound: 200},
-            { leftBound: 138, rightBound: 580, topBound: 40, bottomBound: 110},
-            { leftBound: 576, rightBound: 651, topBound: 41, bottomBound: 351},
-            { leftBound: 138, rightBound: 584, topBound: 281, bottomBound: 350},
-            { leftBound: 69, rightBound: 140, topBound: 231, bottomBound: 350},
+            { leftBound: 0, rightBound: 70, topBound: 126, bottomBound: 198 },
+            { leftBound: 70, rightBound: 139, topBound: 41, bottomBound: 200 },
+            { leftBound: 138, rightBound: 580, topBound: 40, bottomBound: 110 },
+            { leftBound: 576, rightBound: 651, topBound: 41, bottomBound: 351 },
+            { leftBound: 138, rightBound: 584, topBound: 281, bottomBound: 350 },
+            { leftBound: 69, rightBound: 140, topBound: 231, bottomBound: 350 },
         ]
 
         // Loop through boundaries to detect collisions with pointer
@@ -465,31 +513,6 @@ class Easy extends Phaser.Scene {
             }
         }
         return false;
-    }
-
-    // Handler for clicking the waterhose icon in the HUD
-    startPlacingTower() {
-        // Return early if game has not started
-        if (!isInPlayMode) return;
-        
-        isPlacingTower = !isPlacingTower;
-
-        // Indicators track the area of effect for the towers
-        // The rangeIndicator is green and set when the tower is over a valid position
-        // The cantPlaceTowerIndicator is red and set when hovering over invalid positions
-        rangeIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'greencircle').setVisible(false);
-        rangeIndicator.alpha = 0.2;
-        rangeIndicator.createBitmapMask();
-        cantPlaceTowerIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'redcircle').setVisible(false);
-        cantPlaceTowerIndicator.alpha = 0.2;
-        cantPlaceTowerIndicator.createBitmapMask();
-
-        // Tower icon image that follows the pointer
-        newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'waterhose').setScale(0.04);
-        newTowerPlaceholder.setInteractive();
-
-        // Handle placing the tower into position if valid or cancel by clicking into the HUD
-        newTowerPlaceholder.on('pointerdown', this.placeTower.bind(this));
     }
 
     // Applies the correct indicator to the pointer if placing the tower
@@ -520,9 +543,44 @@ class Easy extends Phaser.Scene {
             }
         }
     }
+    // Cancels drag and drop tower placement when the ESC key is pressed
+    cancelPlacingTower(event) {
+        if (isPlacingTower) {
+            isPlacingTower = false;
+            newTowerPlaceholder.destroy();
+            rangeIndicator.destroy();
+            cantPlaceTowerIndicator.destroy();
+        }
+    }
+
+    // Handler for clicking the waterhose icon in the HUD
+    startPlacingWaterhose() {
+        // Return early if game has not started
+        if (!isInPlayMode) return;
+
+        isPlacingTower = !isPlacingTower;
+
+        // Indicators track the area of effect for the towers
+        // The rangeIndicator is green and set when the tower is over a valid position
+        // The cantPlaceTowerIndicator is red and set when hovering over invalid positions
+        rangeIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'greencircle').setVisible(false);
+        rangeIndicator.alpha = 0.2;
+        rangeIndicator.createBitmapMask();
+        cantPlaceTowerIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'redcircle').setVisible(false);
+        cantPlaceTowerIndicator.alpha = 0.2;
+        cantPlaceTowerIndicator.createBitmapMask();
+
+        // Tower icon image that follows the pointer
+        newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'waterhose').setScale(0.04);
+        newTowerPlaceholder.setInteractive();
+
+        // Handle placing the tower into position if valid or cancel by clicking into the HUD
+        newTowerPlaceholder.on('pointerdown', this.placeTowerWaterhose.bind(this));
+    }
+
 
     // Handle placing tower when the mouse is clicked 
-    placeTower(pointer) {
+    placeTowerWaterhose(pointer) {
         if (gamestate.money < waterhoseCost) return;
         else if (isPlacingTower) {
             if (pointer.x < 675) {
@@ -543,14 +601,101 @@ class Easy extends Phaser.Scene {
             }
         }
     }
-    
-    // Cancels drag and drop tower placement when the ESC key is pressed
-    cancelPlacingTower(event) {
-        if (isPlacingTower) {
-            isPlacingTower = false;
-            newTowerPlaceholder.destroy();
-            rangeIndicator.destroy();
-            cantPlaceTowerIndicator.destroy();
+    // Handler for clicking the waterhose icon in the HUD
+    startPlacingSignalDisruptor() {
+        // Return early if game has not started
+        if (!isInPlayMode) return;
+
+        isPlacingTower = !isPlacingTower;
+
+        // Indicators track the area of effect for the towers
+        // The rangeIndicator is green and set when the tower is over a valid position
+        // The cantPlaceTowerIndicator is red and set when hovering over invalid positions
+        rangeIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'greencircle').setVisible(false);
+        rangeIndicator.alpha = 0.2;
+        rangeIndicator.createBitmapMask();
+        cantPlaceTowerIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'redcircle').setVisible(false);
+        cantPlaceTowerIndicator.alpha = 0.2;
+        cantPlaceTowerIndicator.createBitmapMask();
+
+        // Tower icon image that follows the pointer
+        newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'signaldisruptor').setScale(0.04);
+        newTowerPlaceholder.setInteractive();
+
+        // Handle placing the tower into position if valid or cancel by clicking into the HUD
+        newTowerPlaceholder.on('pointerdown', this.placeTowerSignalDisruptor.bind(this));
+    }
+
+
+    // Handle placing tower when the mouse is clicked 
+    placeTowerSignalDisruptor(pointer) {
+        if (gamestate.money < signaldisruptorCost) return;
+        else if (isPlacingTower) {
+            if (pointer.x < 675) {
+                // Pointer is in the game area
+                if (!this.isPointerOverTrack(pointer)) {
+                    // Tower placed in valid area
+                    gamestate.money -= signaldisruptorCost;
+                    this.placeSignalDisruptor(pointer);
+                    isPlacingTower = false;
+                    newTowerPlaceholder.destroy();
+                    rangeIndicator.setVisible(false);
+                    cantPlaceTowerIndicator.setVisible(false);
+                }
+            } else if (pointer.x >= 675) {
+                // Cancel tower purchase by clicking in the HUD area
+                isPlacingTower = false;
+                newTowerPlaceholder.destroy();
+            }
         }
     }
+    // Handler for clicking the waterhose icon in the HUD
+    startPlacingLaser() {
+        // Return early if game has not started
+        if (!isInPlayMode) return;
+
+        isPlacingTower = !isPlacingTower;
+
+        // Indicators track the area of effect for the towers
+        // The rangeIndicator is green and set when the tower is over a valid position
+        // The cantPlaceTowerIndicator is red and set when hovering over invalid positions
+        rangeIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'greencircle').setVisible(false);
+        rangeIndicator.alpha = 0.2;
+        rangeIndicator.createBitmapMask();
+        cantPlaceTowerIndicator = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'redcircle').setVisible(false);
+        cantPlaceTowerIndicator.alpha = 0.2;
+        cantPlaceTowerIndicator.createBitmapMask();
+
+        // Tower icon image that follows the pointer
+        newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'laser').setScale(0.04);
+        newTowerPlaceholder.setInteractive();
+
+        // Handle placing the tower into position if valid or cancel by clicking into the HUD
+        newTowerPlaceholder.on('pointerdown', this.placeTowerLaser.bind(this));
+    }
+
+
+    // Handle placing tower when the mouse is clicked 
+    placeTowerLaser(pointer) {
+        if (gamestate.money < laserCost) return;
+        else if (isPlacingTower) {
+            if (pointer.x < 675) {
+                // Pointer is in the game area
+                if (!this.isPointerOverTrack(pointer)) {
+                    // Tower placed in valid area
+                    gamestate.money -= laserCost;
+                    this.placeLaser(pointer);
+                    isPlacingTower = false;
+                    newTowerPlaceholder.destroy();
+                    rangeIndicator.setVisible(false);
+                    cantPlaceTowerIndicator.setVisible(false);
+                }
+            } else if (pointer.x >= 675) {
+                // Cancel tower purchase by clicking in the HUD area
+                isPlacingTower = false;
+                newTowerPlaceholder.destroy();
+            }
+        }
+    }
+
 }
