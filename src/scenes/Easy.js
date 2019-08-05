@@ -135,6 +135,7 @@ class Easy extends Phaser.Scene {
         this.load.image('robot_', 'images/enemies/robot/robot.png');
         this.load.atlas('toaster_atlas', 'images/enemies/toaster/toaster_atlas.png', 'images/enemies/toaster/toaster_atlas.json');
         this.load.atlas('washingmachine_atlas', 'images/enemies/washingmachine/washingmachine_atlas.png', 'images/enemies/washingmachine/washingmachine_atlas.json');
+        this.load.atlas('robot_atlas', 'images/enemies/robot/robot_atlas.png', 'images/enemies/robot/robot_atlas.json');
 
         // Tower assets
         this.load.image('_waterhose', 'images/towers/waterhose.png');
@@ -334,6 +335,18 @@ class Easy extends Phaser.Scene {
             }),
             frameRate: 5,
             yoyo: true,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'robotMove',
+            frames: this.anims.generateFrameNames('robot_atlas', {
+                prefix: 'robot_',
+                start: 0,
+                end: 11
+            }),
+            frameRate: 5,
+            yoyo: false,
             repeat: -1
         });
     }
