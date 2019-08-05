@@ -243,8 +243,16 @@ class Easy extends Phaser.Scene {
         playButton.on('pointerdown', this.startPlayMode);
         this.add.text(697, 365, 'Play', { color: '#ffffff', fontSize: '12px' });
         saveButton = this.add.image(780, 345, 'save').setScale(0.06);
+        saveButton.setInteractive();
+        saveButton.on('pointerdown', () => {
+            this.scene.start('SaveGame');
+        });
         this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
         cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
+        cancelButton.setInteractive();
+        cancelButton.on('pointerdown', () => {
+            this.scene.start('NewGame');
+        });
         this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
         // Add money and lives text info
