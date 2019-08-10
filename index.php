@@ -5,6 +5,7 @@
     <!-- Scenes -->
     <script src="./src/scenes/TitlePage.js"></script>
     <script src="./src/scenes/NewGame.js"></script>
+    <script src="./src/scenes/GameBase.js"></script>
     <script src="./src/scenes/Easy.js"></script>
     <script src="./src/scenes/LoadGame.js"></script>
     <script src="./src/scenes/SaveGame.js"></script>

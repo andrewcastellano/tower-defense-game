@@ -6,9 +6,7 @@ class GameState {
         this.score = 0;
         this.towers =  [];
         this.enemies = null;
-        this.time = 0;
-        this.enemyNum = 0;
-        this.waveNum = 0;
+        this.isInPlayMode = false;
     }
 
     setMoney(amount) {
@@ -20,8 +18,6 @@ class GameState {
     }
 }
 var gamestate = new GameState();
-
-// TODO: Find a home for these functions and vars
 
 // Updates text indicating if player can afford certain towers
 function updateNotEnoughFundsText() {
@@ -69,3 +65,4 @@ function buyLaser() {
     // Subtract cost from money
     gamestate.setMoney(gamestate.money - laserCost);
 }
+
