@@ -6,6 +6,9 @@ class GameState {
         this.score = 0;
         this.towers =  [];
         this.enemies = null;
+        this.time = 0;
+        this.enemyNum = 0;
+        this.waveNum = 0;
     }
 
     setMoney(amount) {

@@ -26,5 +26,14 @@ class LoadGame extends Phaser.Scene {
 		cancelText.on('pointerdown', () => {
 			this.scene.start('TitlePage');
 		});
+
+		save1Text.setInteractive();
+		save1Text.on('pointerdown', () => {
+			this.scene.start('Easy');
+			this.scene.destroy('LoadGame');
+			gamestate.score = save1.score;
+			gamestate.lives = save1.lives;
+			gamestate.money = save1.money;
+		})
 	}
 }

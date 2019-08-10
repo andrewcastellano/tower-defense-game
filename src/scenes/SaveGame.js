@@ -24,6 +24,7 @@ class SaveGame extends Phaser.Scene {
 			localStorage.setItem('save1', JSON.stringify(save1));
 
 			this.scene.start('TitlePage');
+			this.scene.destroy('SaveGame');
 		});
 	}
 }

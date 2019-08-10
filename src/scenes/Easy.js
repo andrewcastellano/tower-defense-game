@@ -276,6 +276,7 @@ class Easy extends Phaser.Scene {
         saveButton.setInteractive();
         saveButton.on('pointerdown', () => {
             this.scene.start('SaveGame');
+            this.scene.destroy('Easy');
         });
         this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
         cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
