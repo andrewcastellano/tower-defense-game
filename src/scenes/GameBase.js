@@ -16,15 +16,23 @@ var waterdrops;
 var radiowaves;
 var laserbeams;
 
-
 var waterhoseIcon;
 var signaldisruptorIcon;
 var laserIcon;
+var upgradeWaterhoseIcon;
+var upgradeSignalDisruptorIcon;
+var upgradeLaserIcon;
 
 // Tower prices
 const waterhoseCost = 25;
 const signaldisruptorCost = 100;
 const laserCost = 500;
+
+// Upgrade prices
+const waterhoseUpgradeCost = 50;
+const signalDisruptorUpgradeCost = 75;
+const laserUpgradeCost = 100;
+
 
 // Text displayed on GUI - maybe move into own object or gamestate eventually
 var moneyText = null;
@@ -39,6 +47,9 @@ var newTowerPlaceholder;
 var rangeIndicator;
 var cantPlaceTowerIndicator;
 var isPlacingTower = false;
+
+// Vars used for upgrading towers
+var isUpgradingTower = false;
 
 // Vars used for play, save, and cancel
 var playButton;
@@ -75,6 +86,7 @@ class GameBase extends Phaser.Scene {
 		this.load.image('save', 'images/save.png');
 		this.load.image('greencircle', 'images/greencircle.png');
 		this.load.image('redcircle', 'images/redcircle.png');
+		this.load.image('upgrade', 'images/upgrade.png');
 
 
 		// Enemy assets
@@ -252,15 +264,15 @@ class GameBase extends Phaser.Scene {
 	// Creates the HUD, including all icons and text
 	createHeadsUpDisplay(graphics) {
 		// Add gray hud panel to screen
-		graphics.fillStyle(0x646464, 1);
-		graphics.fillRect(675, 0, 225, 390);
+		graphics.fillStyle(0x2c3e50, 1);
+		graphics.fillRect(675, 0, 375, 390);
 
 		// Add white border lines to hud
-		graphics.fillStyle(0xffffff, 1);
-		graphics.fillRect(675, 78, 225, 3);
-		graphics.fillRect(675, 156, 225, 3);
-		graphics.fillRect(675, 234, 225, 3);
-		graphics.fillRect(675, 312, 225, 3);
+		graphics.fillStyle(0x34495e, 1);
+		graphics.fillRect(675, 78, 375, 3);
+		graphics.fillRect(675, 156, 375, 3);
+		graphics.fillRect(675, 234, 375, 3);
+		graphics.fillRect(675, 312, 375, 3);
 		graphics.fillRect(672, 0, 3, 390);
 
 		// Add tower icons and text
@@ -269,16 +281,28 @@ class GameBase extends Phaser.Scene {
 		// Start placing tower mode when clicking on the waterhoseIcon in the HUD
 		waterhoseIcon.on('pointerdown', this.startPlacingWaterhose.bind(this));
 		this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
+		upgradeWaterhoseIcon = this.add.image(972, 132, 'upgrade').setScale(0.5);
+		upgradeWaterhoseIcon.setInteractive();
+		upgradeWaterhoseIcon.on('pointerdown', this.startUpgradeWaterhose.bind(this));
+		this.add.text(940, 100, 'Upgrade:$50', { color: '#ffffff', fontSize: '12px' });
 
 		signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
 		signaldisruptorIcon.setInteractive();
 		signaldisruptorIcon.on('pointerdown', this.startPlacingSignalDisruptor.bind(this));
 		this.add.text(740, 178, 'Signal Disruptor:$100', { color: '#ffffff', fontSize: '12px' });
+		upgradeSignalDisruptorIcon = this.add.image(972, 210, 'upgrade').setScale(0.5);
+		upgradeSignalDisruptorIcon.setInteractive();
+		upgradeSignalDisruptorIcon.on('pointerdown', this.startUpgradeSignalDisruptor.bind(this));
+		this.add.text(940, 178, 'Upgrade:$75', { color: '#ffffff', fontSize: '12px' });
 
 		laserIcon = this.add.image(710, 273, 'laser').setScale(0.04);
 		laserIcon.setInteractive();
 		laserIcon.on('pointerdown', this.startPlacingLaser.bind(this));
 		this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
+		upgradeLaserIcon = this.add.image(972, 288, 'upgrade').setScale(0.5);
+		upgradeLaserIcon.setInteractive();
+		upgradeLaserIcon.on('pointerdown', this.startUpgradeLaser.bind(this));
+		this.add.text(940, 256, 'Upgrade:$100', { color: '#ffffff', fontSize: '12px' });
 
 		// Add play, save, load buttons
 		playButton = this.add.image(710, 345, 'play').setScale(0.06);
@@ -308,6 +332,7 @@ class GameBase extends Phaser.Scene {
 		cantAffordWaterhoseText = this.add.text(740, 120, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
 		cantAffordSignalDisruptorText = this.add.text(740, 198, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
 		cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
+
 	}
 
 	// Helper function to get array of all active enemies
@@ -347,11 +372,14 @@ class GameBase extends Phaser.Scene {
 		}
 		wd.fire(x, y, angle);
 	}
-	addRadioWaves(x, y, angle) {
+	addRadioWaves(x, y, angle, upgraded) {
 		var wv = radiowaves.getFirstDead();
 		if (!wv) {
 			var wv = new radiowave(this, 0, 0);
 			radiowaves.add(wv);
+		}
+		if (upgraded) {
+			wv.dmg = 20;
 		}
 		wv.fire(x, y, angle);
 	}
@@ -371,19 +399,18 @@ class GameBase extends Phaser.Scene {
 			var hose = new Waterhose(this, pointer.x, pointer.y);
 			waterhoses.add(hose);
 		}
+		hose.setInteractive();
+		hose.on('pointerdown', () => {
+			if (isUpgradingTower) {
+				hose.upgrade = true;
+				hose.setScale(0.05);
+				gamestate.money -= waterhoseUpgradeCost;
+				isUpgradingTower = !isUpgradingTower;
+			}
+		});
 		hose.setActive(true);
 		hose.setVisible(true);
 		hose.setScale(0.04);
-	}
-	placeLaser(pointer) {
-		var laser = lasers.getFirstDead();
-		if (!laser) {
-			var laser = new Laser(this, pointer.x, pointer.y);
-			lasers.add(laser);
-		}
-		laser.setActive(true);
-		laser.setVisible(true);
-		laser.setScale(0.04);
 	}
 	placeSignalDisruptor(pointer) {
 		var signaldisruptor = signaldisruptors.getFirstDead();
@@ -391,9 +418,37 @@ class GameBase extends Phaser.Scene {
 			var signaldisruptor = new SignalDisruptor(this, pointer.x, pointer.y);
 			signaldisruptors.add(signaldisruptor);
 		}
+		signaldisruptor.setInteractive();
+		signaldisruptor.on('pointerdown', () => {
+			if (isUpgradingTower) {
+				signaldisruptor.upgrade = true;
+				signaldisruptor.setScale(0.05);
+				gamestate.money -= signalDisruptorUpgradeCost;
+				isUpgradingTower = !isUpgradingTower;
+			}
+		});
 		signaldisruptor.setActive(true);
 		signaldisruptor.setVisible(true);
 		signaldisruptor.setScale(0.04);
+	}
+	placeLaser(pointer) {
+		var laser = lasers.getFirstDead();
+		if (!laser) {
+			var laser = new Laser(this, pointer.x, pointer.y);
+			lasers.add(laser);
+		}
+		laser.setInteractive();
+		laser.on('pointerdown', () => {
+			if (isUpgradingTower) {
+				laser.upgrade = true;
+				laser.setScale(0.05);
+				gamestate.money -= laserUpgradeCost;
+				isUpgradingTower = !isUpgradingTower;
+			}
+		});
+		laser.setActive(true);
+		laser.setVisible(true);
+		laser.setScale(0.04);
 	}
 
 	hurtEnemy(enemy, proj) {
@@ -684,6 +739,23 @@ class GameBase extends Phaser.Scene {
 			cantPlaceTowerIndicator.destroy();
 		}
 	}
+
+	startUpgradeWaterhose() {
+		if (waterhoses.getChildren().length > 0 && gamestate.money > waterhoseUpgradeCost) { //if there are waterhoses and we have the funds
+			isUpgradingTower = !isUpgradingTower;
+		}
+	}
+	startUpgradeSignalDisruptor() {
+		if (signaldisruptors.getChildren().length > 0 && gamestate.money > signalDisruptorUpgradeCost) { //if there are waterhoses and we have the funds
+			isUpgradingTower = !isUpgradingTower;
+		}
+	}
+	startUpgradeLaser() {
+		if (lasers.getChildren().length > 0 && gamestate.money > laserUpgradeCost) { //if there are waterhoses and we have the funds
+			isUpgradingTower = !isUpgradingTower;
+		}
+	}
+
 
 	startPlayMode() {
 		isInPlayMode = true;
