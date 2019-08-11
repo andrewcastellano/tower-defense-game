@@ -638,7 +638,7 @@ class GameBase extends Phaser.Scene {
 		cantPlaceTowerIndicator.createBitmapMask();
 
 		// Tower icon image that follows the pointer
-		newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'laser').setScale(0.04);
+		newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'laser');
 		newTowerPlaceholder.setInteractive();
 
 		// Handle placing the tower into position if valid or cancel by clicking into the HUD
