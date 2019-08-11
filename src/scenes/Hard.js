@@ -34,10 +34,25 @@ class Hard extends GameBase {
         this.add.image(336, 180, 'hardTrack');
 
         // Load up Hard Track data points into path
-        path = this.add.path(hardPoints1.x[0], hardPoints1.y[0]);
+        var hardPath1 = this.add.path(hardPoints1.x[0], hardPoints1.y[0]);        
         for (var i = 1; i < hardPoints1.x.length; i++) {
-            path.lineTo(hardPoints1.x[i], hardPoints1.y[i]);
+            hardPath1.lineTo(hardPoints1.x[i], hardPoints1.y[i]);
         }
+        path.push(hardPath1);
+        var hardPath2 = this.add.path(hardPoints2.x[0], hardPoints2.y[0]);
+        for (var i = 1; i < hardPoints2.x.length; i++) {
+            hardPath2.lineTo(hardPoints2.x[i], hardPoints2.y[i]);
+        }
+        path.push(hardPath2);
+
+        /*
+        var hardPath1;
+        var hardPath2;
+        this.loadTrackPoints(hardPoints1, hardPath1);
+        this.loadTrackPoints(hardPoints2, hardPath2);
+        path.push(hardPath1);
+        path.push(hardPath2);
+        */
 
         /*
         var graphics = this.add.graphics();

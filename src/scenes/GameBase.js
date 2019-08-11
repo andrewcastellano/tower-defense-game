@@ -1,4 +1,4 @@
-var path;
+var path = [];
 var track;
 var enemies;
 var toasters;
@@ -97,8 +97,6 @@ class GameBase extends Phaser.Scene {
     }
 
     create() {
-        // Add backdrop
-        //this.add.image(400, 300, 'backdrop');
 
         var graphics = this.add.graphics();
 
@@ -398,6 +396,17 @@ class GameBase extends Phaser.Scene {
         return isEmpty;
     }
 
+    loadTrackPoints(pathPoints, pathVar)
+    {
+        //set starting position
+        pathVar = new Phaser.Curves.Path(pathPoints.x[0], pathPoints.y[0]);
+        //add track data points to path
+        for (var i = 1; i < pathPoints.x.length; i++)
+        {
+            pathVar.lineTo(pathPoints.x[i], pathPoints.y[i]);
+        } 
+    }
+
     // Used by Update function to bring enemies onto the track, using wave and enemyList info
     spawnEnemies(time) {
         // Return early if game has not started
@@ -435,6 +444,11 @@ class GameBase extends Phaser.Scene {
                         break;
                 }
                 if (enemy) {
+
+                    //set path enemy will use (needed for Hard level)
+                    //get random path from path array
+                    //enemy.setPath(path[Math.floor(Math.random() * path.length)])
+
                     enemy.setActive(true);
                     enemy.setVisible(true);
 

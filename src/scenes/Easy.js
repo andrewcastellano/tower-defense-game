@@ -4,8 +4,6 @@ var easyPoints = {
     'y': [185, 185, 95, 95, 295, 295, 245, 245, 335, 335, 55, 55, 145, 145]
 };
 
-
-
 class Easy extends GameBase {
 
     constructor() {
@@ -30,10 +28,11 @@ class Easy extends GameBase {
         this.add.image(325, 195, 'easyTrack');
 
         // Load up Easy Track data points into path
-        path = this.add.path(easyPoints.x[0], easyPoints.y[0]);
+        var easyPath = this.add.path(easyPoints.x[0], easyPoints.y[0]);
         for (var i = 1; i < easyPoints.x.length; i++) {
-            path.lineTo(easyPoints.x[i], easyPoints.y[i]);
+            easyPath.lineTo(easyPoints.x[i], easyPoints.y[i]);
         }
+        path.push(easyPath);
 
         enemyList =             //Wave order enemies will appear on screen
             // t = toaster, w = washingmachine, r = robot

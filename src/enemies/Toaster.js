@@ -19,6 +19,7 @@ var Toaster = new Phaser.Class({
             this.value = 2;
             this.movingRight = true;
             this.anims.play('toasterMoveRight', true);
+            this.path = path[Math.floor(Math.random() * path.length)];
         },
         // Update function for path tracking and animations
         update: function (time, delta) {
@@ -26,7 +27,7 @@ var Toaster = new Phaser.Class({
             // get new progress through track path
             this.follower.t += this.speed * delta;
             // use progression to find new position coordinate
-            path.getPoint(this.follower.t, this.follower.vec);
+            this.path.getPoint(this.follower.t, this.follower.vec);
             this.setPosition(this.follower.vec.x, this.follower.vec.y);
             //check if enemy completed track path
             if (this.follower.t >= 1) {

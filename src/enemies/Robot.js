@@ -15,5 +15,6 @@ var Robot = new Phaser.Class({
             this.speed = 1 / 20000;
             this.value = 10;
             this.anims.play('robotMove', true);
+            this.path = path[Math.floor(Math.random() * path.length)];
         }
 });

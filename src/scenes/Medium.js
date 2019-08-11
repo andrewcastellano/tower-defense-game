@@ -28,10 +28,11 @@ class Medium extends GameBase {
         this.add.image(315, 195, 'mediumTrack');
 
         // Load up Medium Track data points into path
-        path = this.add.path(mediumPoints.x[0], mediumPoints.y[0]);
+        var mediumPath = this.add.path(mediumPoints.x[0], mediumPoints.y[0]);
         for (var i = 1; i < mediumPoints.x.length; i++) {
-            path.lineTo(mediumPoints.x[i], mediumPoints.y[i]);
+            mediumPath.lineTo(mediumPoints.x[i], mediumPoints.y[i]);
         }
+        path.push(mediumPath);
 
         /*
         var graphics = this.add.graphics();
