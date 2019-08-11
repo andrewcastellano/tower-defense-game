@@ -272,13 +272,11 @@ class GameBase extends Phaser.Scene {
 
         signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
         signaldisruptorIcon.setInteractive();
-        signaldisruptorIcon.on('pointerdown', buySignalDisruptor);
         signaldisruptorIcon.on('pointerdown', this.startPlacingSignalDisruptor.bind(this));
         this.add.text(740, 178, 'Signal Disruptor:$100', { color: '#ffffff', fontSize: '12px' });
 
         laserIcon = this.add.image(710, 273, 'laser').setScale(0.04);
         laserIcon.setInteractive();
-        laserIcon.on('pointerdown', buyLaser);
         laserIcon.on('pointerdown', this.startPlacingLaser.bind(this));
         this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
 
