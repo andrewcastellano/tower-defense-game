@@ -340,39 +340,57 @@ class GameBase extends Phaser.Scene {
 	}
 
 	addWaterDrops(x, y, angle) {
-		var wd = new waterdrop(this, 0, 0);
-		waterdrops.add(wd);
+		var wd = waterdrops.getFirstDead();
+		if (!wd) {
+			var wd = new waterdrop(this, 0, 0);
+			waterdrops.add(wd);
+		}
 		wd.fire(x, y, angle);
 	}
 	addRadioWaves(x, y, angle) {
-		var wv = new radiowave(this, 0, 0);
-		radiowaves.add(wv);
+		var wv = radiowaves.getFirstDead();
+		if (!wv) {
+			var wv = new radiowave(this, 0, 0);
+			radiowaves.add(wv);
+		}
 		wv.fire(x, y, angle);
 	}
 	addLaserBeams(x, y, angle) {
-		var lb = new laserbeam(this, 0, 0);
-		laserbeams.add(lb);
+		var lb = laserbeams.getFirstDead();
+		if (!lb) {
+			var lb = new laserbeam(this, 0, 0);
+			laserbeams.add(lb);
+		}
 		lb.fire(x, y, angle);
 	}
 
 
 	placeWaterhose(pointer) {
-		var hose = new Waterhose(this, pointer.x, pointer.y);
-		waterhoses.add(hose);
+		var hose = waterhoses.getFirstDead();
+		if (!hose) {
+			var hose = new Waterhose(this, pointer.x, pointer.y);
+			waterhoses.add(hose);
+		}
 		hose.setActive(true);
 		hose.setVisible(true);
 		hose.setScale(0.04);
 	}
 	placeLaser(pointer) {
-		var laser = new Laser(this, pointer.x, pointer.y);
-		lasers.add(laser);
+		var laser = lasers.getFirstDead();
+		if (!laser) {
+			var laser = new Laser(this, pointer.x, pointer.y);
+			lasers.add(laser);
+		}
 		laser.setActive(true);
 		laser.setVisible(true);
 		laser.setScale(0.04);
 	}
 	placeSignalDisruptor(pointer) {
-		var signaldisruptor = new SignalDisruptor(this, pointer.x, pointer.y);
-		signaldisruptors.add(signaldisruptor);
+		var signaldisruptor = signaldisruptors.getFirstDead();
+		if (!signaldisruptor) {
+			var signaldisruptor = new SignalDisruptor(this, pointer.x, pointer.y);
+			signaldisruptors.add(signaldisruptor);
+		}
 		signaldisruptor.setActive(true);
 		signaldisruptor.setVisible(true);
 		signaldisruptor.setScale(0.04);
