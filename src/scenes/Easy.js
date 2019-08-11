@@ -387,7 +387,6 @@ class Easy extends Phaser.Scene {
     }
 
     hurtEnemy(enemy, proj) {
-        console.log("inside hurt enemy!");
         if (proj.active && enemy.active) {
             proj.setVisible(false);
             proj.setActive(false);
