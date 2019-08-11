@@ -19,6 +19,18 @@ class NewGame extends Phaser.Scene {
 		easyText.on('pointerdown', () => {
 			this.scene.start('Easy');
 		});
+		
+		// Change scene to Medium
+		mediumText.setInteractive();
+		mediumText.on('pointerdown', () => {
+			this.scene.start('Medium');
+		});
+
+		// Change scene to Medium
+		hardText.setInteractive();
+		hardText.on('pointerdown', () => {
+			this.scene.start('Hard');
+		});
 
 		// Change scene to TitlePage
 		cancelText.setInteractive();
