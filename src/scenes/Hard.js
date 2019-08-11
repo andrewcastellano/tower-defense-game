@@ -1,12 +1,12 @@
 // Hard Track point data
 var hardPoints1 = {                     //<-- splits here
-    'x': [   0, 100, 100, 200, 200, 300, 300, 400, 400, 675], 
-    'y': [ 350, 350,  50,  50, 300, 300, 200, 200, 100, 100]
+    'x': [   0,  90,  90, 220, 220, 335, 335, 675], 
+    'y': [ 275, 275,  52,  52, 227, 227, 105, 105]
 };
 
 var hardPoints2 = {                     //<-- splits here
-    'x': [   0, 100, 100, 200, 200, 300, 400, 400, 675], 
-    'y': [ 350, 350,  50,  50, 300, 300, 300, 350, 350]
+    'x': [   0,  90,  90, 220, 220, 335, 482, 482, 675], 
+    'y': [ 275, 275,  52,  52, 227, 227, 227, 307, 307]
 };
 
 
@@ -102,25 +102,15 @@ class Hard extends GameBase {
     isPointerOverTrack(pointer) {
         // Stores bounds of different rectangles on the map that the track image covers
         let boundariesList = [
-            { leftBound:   0, rightBound: 110, topBound: 240, bottomBound: 270},
-            { leftBound:  80, rightBound: 110, topBound: 270, bottomBound: 360},
-            { leftBound: 110, rightBound: 240, topBound: 330, bottomBound: 360},
-            { leftBound: 210, rightBound: 240, topBound: 240, bottomBound: 330},
-            { leftBound: 240, rightBound: 370, topBound: 240, bottomBound: 270},
-            { leftBound: 340, rightBound: 370, topBound: 210, bottomBound: 360},
-            { leftBound: 370, rightBound: 500, topBound: 330, bottomBound: 360},
-            { leftBound: 470, rightBound: 500, topBound: 240, bottomBound: 330},
-            { leftBound: 500, rightBound: 630, topBound: 240, bottomBound: 270},
-            { leftBound: 600, rightBound: 630, topBound:  30, bottomBound: 240},
-            { leftBound: 470, rightBound: 600, topBound:  30, bottomBound:  60},
-            { leftBound: 470, rightBound: 500, topBound:  60, bottomBound: 150},
-            { leftBound: 340, rightBound: 470, topBound: 120, bottomBound: 150},
-            { leftBound: 340, rightBound: 370, topBound:  30, bottomBound: 120},
-            { leftBound: 210, rightBound: 340, topBound:  30, bottomBound:  60},
-            { leftBound: 210, rightBound: 240, topBound:  60, bottomBound: 150},
-            { leftBound:  80, rightBound: 240, topBound: 120, bottomBound: 150},
-            { leftBound:  80, rightBound: 110, topBound:  30, bottomBound: 120},
-            { leftBound:   0, rightBound:  80, topBound:  30, bottomBound:  60},
+            { leftBound:   0, rightBound: 105, topBound: 260, bottomBound: 290},
+            { leftBound:  75, rightBound: 105, topBound:  37, bottomBound: 260},
+            { leftBound: 105, rightBound: 235, topBound:  37, bottomBound:  67},
+            { leftBound: 205, rightBound: 235, topBound:  67, bottomBound: 242},
+            { leftBound: 235, rightBound: 497, topBound: 212, bottomBound: 242},
+            { leftBound: 467, rightBound: 497, topBound: 242, bottomBound: 322},
+            { leftBound: 497, rightBound: 675, topBound: 292, bottomBound: 322},
+            { leftBound: 320, rightBound: 350, topBound:  90, bottomBound: 212},
+            { leftBound: 320, rightBound: 675, topBound:  90, bottomBound: 120}            
         ] 
 
         // Loop through boundaries to detect collisions with pointer
