@@ -30,7 +30,7 @@
     <script>
     var config = {
         type: Phaser.AUTO,
-        width: 900,
+        width: 1050,
         height: 390,
         physics: {
             default: 'arcade',
