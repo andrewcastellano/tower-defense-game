@@ -602,7 +602,7 @@ class GameBase extends Phaser.Scene {
 			cantPlaceTowerIndicator.y = pointer.y;
 			if (pointer.x < 675) {
 				// Pointer is in game area
-				if (this.isPointerOverTrack(pointer)) {
+				if (this.isPointerOverTrack(pointer) || this.isOnTopOfTower(pointer)) {
 					// Set red indicator when over track
 					rangeIndicator.setVisible(false);
 					cantPlaceTowerIndicator.setVisible(true);
@@ -625,7 +625,7 @@ class GameBase extends Phaser.Scene {
 		else if (isPlacingTower) {
 			if (pointer.x < 675) {
 				// Pointer is in the game area
-				if (!this.isPointerOverTrack(pointer)) {
+				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
 					gamestate.money -= waterhoseCost;
 					this.placeWaterhose(pointer);
@@ -673,7 +673,7 @@ class GameBase extends Phaser.Scene {
 		else if (isPlacingTower) {
 			if (pointer.x < 675) {
 				// Pointer is in the game area
-				if (!this.isPointerOverTrack(pointer)) {
+				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
 					gamestate.money -= signaldisruptorCost;
 					this.placeSignalDisruptor(pointer);
@@ -721,7 +721,7 @@ class GameBase extends Phaser.Scene {
 		else if (isPlacingTower) {
 			if (pointer.x < 675) {
 				// Pointer is in the game area
-				if (!this.isPointerOverTrack(pointer)) {
+				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
 					gamestate.money -= laserCost;
 					this.placeLaser(pointer);
@@ -738,8 +738,51 @@ class GameBase extends Phaser.Scene {
 		}
 	}
 
+    // Checks that towers can't be placed on another tower
+    isOnTopOfTower(pointer) {
+        const hoses = waterhoses.getChildren();
+        for (var i = 0; i < hoses.length; i++) {
+            const hoseX = hoses[i].x;
+            const hoseY = hoses[i].y;
+            const hoseWidth = hoses[i].width;
+            const hoseHeight = hoses[i].height;
 
+            if (pointer.x >= hoseX - hoseWidth && pointer.x <= hoseX + hoseWidth
+                && pointer.y >= hoseY - hoseWidth && pointer.y <= hoseY + hoseWidth) {
+                // Pointer is over a hose
+                return true;                
+            }
+        }
 
+        const disruptors = signaldisruptors.getChildren();
+        for (var i = 0; i < disruptors.length; i++) {
+            const disruptorX = disruptors[i].x;
+            const disruptorY = disruptors[i].y;
+            const disruptorWidth = disruptors[i].width;
+            const disruptorHeight = disruptors[i].height;
+
+            if (pointer.x >= disruptorX - disruptorWidth && pointer.x <= disruptorX + disruptorWidth
+                && pointer.y >= disruptorY - disruptorWidth && pointer.y <= disruptorY + disruptorWidth) {
+                // Pointer is over a hose
+                return true;                
+            }
+        }
+
+        const lazers = lasers.getChildren();
+        for (var i = 0; i < lazers.length; i++) {
+            const lazerX = lazers[i].x;
+            const lazerY = lazers[i].y;
+            const lazerWidth = lazers[i].width;
+            const lazerHeight = lazers[i].height;
+
+            if (pointer.x >= lazerX - lazerWidth && pointer.x <= lazerX + lazerWidth
+                && pointer.y >= lazerY - lazerWidth && pointer.y <= lazerY + lazerWidth) {
+                // Pointer is over a hose
+                return true;                
+            }
+        }
+        return false;
+    }
 
 	// Cancels drag and drop tower placement when the ESC key is pressed
 	cancelPlacingTower(event) {
