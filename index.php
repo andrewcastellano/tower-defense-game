@@ -15,8 +15,13 @@
     <script src="./src/enemies/Toaster.js"></script>
     <script src="./src/enemies/WashingMachine.js"></script>
     <!-- Towers -->
-    <script src="./src/towers/Waterhose.js"></script>
+    <script src="./src/towers/Waterhose.js"></script>    
+    <script src="./src/towers/SignalDisruptor.js"></script>
+    <script src="./src/towers/Laser.js"></script>
+    <!-- Projectiles -->
     <script src="./src/projectiles/Waterdrop.js"></script>
+    <script src="./src/projectiles/Laserbeam.js"></script>
+    <script src="./src/projectiles/RadioWave.js"></script>
     <!-- Misc -->
     <script src="./src/Gamestate.js"></script>
 </head>
