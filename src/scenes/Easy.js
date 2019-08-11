@@ -36,51 +36,51 @@ class Easy extends GameBase {
         }
 
         enemyList =             //Wave order enemies will appear on screen
-        // t = toaster, w = washingmachine, r = robot
-        // gap = additional time for next enemy to spawn in
-        [ 
-            //wave 1
-            [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-             {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: TTF}],
-            //wave 2
-            [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000}, 
-             {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 1000},
-             {name: 'w', gap: 1000}, {name: 'w', gap: 1000}, {name: 'w', gap: TTF}],
-            //wave 3
-            [{name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: 1000}, 
-             {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 'r', gap: TTF}],
-            //wave 4
-            [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
-             {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-             {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-             {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-             {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: TTF}],
-            //wave 5
-            [{name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-             {name: 't', gap: 1000}, {name: 'w', gap: 3000}, {name: 'r', gap: 2000},
-             {name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 't', gap: TTF}],
-            //wave 6
-            [{name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-             {name: 't', gap: 1000}, {name: 't', gap: 1000}, {name: 't', gap: 3000},
-             {name: 'r', gap: 3000}, {name: 'r', gap: 3000}, {name: 'r', gap: TTF}],
-            //wave 7
-            [{name: 'w', gap: 2000}, {name: 't', gap: 2000}, {name: 'w', gap: 2000},
-             {name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'r', gap: 2000},
-             {name: 'r', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: TTF}],
-            //wave 8
-            [{name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-             {name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-             {name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: TTF}],
-            //wave 9
-            [{name: 'w', gap: 2000}, {name: 'w', gap: 2000}, {name: 'w', gap: 2000},
-             {name: 't', gap: 2000}, {name: 't', gap: 2000}, {name: 't', gap: 2000},
-             {name: 't', gap: 2000}, {name: 'w', gap: 4000}, {name: 'r', gap: TTF}],
-            //wave 10
-            [{name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 }, 
-             {name: 't', gap: 500 }, {name: 't', gap: 500 }, {name: 't', gap: 500 },
-             {name: 'r', gap: 1000}, {name: 'r', gap: 2000}, {name: 'r', gap: 3000},
-             {name: 'r', gap: 1000}, {name: 'r', gap: 2000}, {name: 'r', gap: TTF}]
-        ];
+            // t = toaster, w = washingmachine, r = robot
+            // gap = additional time for next enemy to spawn in
+            [
+                //wave 1
+                [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+                { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: TTF }],
+                //wave 2
+                [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+                { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 1000 },
+                { name: 'w', gap: 1000 }, { name: 'w', gap: 1000 }, { name: 'w', gap: TTF }],
+                //wave 3
+                [{ name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: 1000 },
+                { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 'r', gap: TTF }],
+                //wave 4
+                [{ name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+                { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+                { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+                { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+                { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: TTF }],
+                //wave 5
+                [{ name: 'r', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+                { name: 't', gap: 1000 }, { name: 'w', gap: 3000 }, { name: 'r', gap: 2000 },
+                { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 't', gap: TTF }],
+                //wave 6
+                [{ name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+                { name: 't', gap: 1000 }, { name: 't', gap: 1000 }, { name: 't', gap: 3000 },
+                { name: 'r', gap: 3000 }, { name: 'r', gap: 3000 }, { name: 'r', gap: TTF }],
+                //wave 7
+                [{ name: 'w', gap: 2000 }, { name: 't', gap: 2000 }, { name: 'w', gap: 2000 },
+                { name: 'r', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'r', gap: 2000 },
+                { name: 'r', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: TTF }],
+                //wave 8
+                [{ name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+                { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+                { name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: TTF }],
+                //wave 9
+                [{ name: 'w', gap: 2000 }, { name: 'w', gap: 2000 }, { name: 'w', gap: 2000 },
+                { name: 't', gap: 2000 }, { name: 't', gap: 2000 }, { name: 't', gap: 2000 },
+                { name: 't', gap: 2000 }, { name: 'w', gap: 4000 }, { name: 'r', gap: TTF }],
+                //wave 10
+                [{ name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+                { name: 't', gap: 500 }, { name: 't', gap: 500 }, { name: 't', gap: 500 },
+                { name: 'r', gap: 1000 }, { name: 'r', gap: 2000 }, { name: 'r', gap: 3000 },
+                { name: 'r', gap: 1000 }, { name: 'r', gap: 2000 }, { name: 'r', gap: TTF }]
+            ];
 
         GameBase.prototype.create.call(this);
     }
@@ -148,7 +148,7 @@ class Easy extends GameBase {
         });
     }
 
-  
+
 
     // Used by Update function to bring enemies onto the track, using wave and enemyList info
     spawnEnemies(time) {
@@ -156,22 +156,18 @@ class Easy extends GameBase {
         if (!isInPlayMode) return;
 
         //if there are still waves to spawn
-        if (waveNum < enemyList.length)
-        {
+        if (waveNum < enemyList.length) {
             //check if board is empty after full wave, advance to next round first enemy if all enemies defeated
-            if (time > startTime && waveSpawned)
-            {
+            if (time > startTime && waveSpawned) {
                 var boardEmpty = this.isBoardEmpty();
-                if (boardEmpty)
-                {
+                if (boardEmpty) {
                     nextEnemy = time + 2000; // 2 second gap to new wave when cleared early
                     waveSpawned = false;
                 }
             }
 
             //if it's time for the next enemy to spawn
-            if (time > nextEnemy)
-            {
+            if (time > nextEnemy) {
                 if (newWave) {
                     currentWave.setText('Wave #' + (waveNum + 1));
                     newWave = false;
@@ -190,11 +186,11 @@ class Easy extends GameBase {
                         enemy = robots.get();
                         break;
                 }
-                
+
                 if (enemy) {
                     enemy.setActive(true);
                     enemy.setVisible(true);
-    
+
                     // place the enemy at the beginning of the path
                     enemy.spawn();
                     // determine index of next enemy
@@ -222,12 +218,12 @@ class Easy extends GameBase {
     isPointerOverTrack(pointer) {
         // Stores bounds of different rectangles on the map that the track image covers
         let boundariesList = [
-            { leftBound: 0, rightBound: 70, topBound: 126, bottomBound: 198},
-            { leftBound: 70, rightBound: 139, topBound: 41, bottomBound: 200},
-            { leftBound: 138, rightBound: 580, topBound: 40, bottomBound: 110},
-            { leftBound: 576, rightBound: 651, topBound: 41, bottomBound: 351},
-            { leftBound: 138, rightBound: 584, topBound: 281, bottomBound: 350},
-            { leftBound: 69, rightBound: 140, topBound: 231, bottomBound: 350},
+            { leftBound: 0, rightBound: 70, topBound: 126, bottomBound: 198 },
+            { leftBound: 70, rightBound: 139, topBound: 41, bottomBound: 200 },
+            { leftBound: 138, rightBound: 580, topBound: 40, bottomBound: 110 },
+            { leftBound: 576, rightBound: 651, topBound: 41, bottomBound: 351 },
+            { leftBound: 138, rightBound: 584, topBound: 281, bottomBound: 350 },
+            { leftBound: 69, rightBound: 140, topBound: 231, bottomBound: 350 },
         ]
 
         // Loop through boundaries to detect collisions with pointer

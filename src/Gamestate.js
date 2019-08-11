@@ -1,10 +1,10 @@
 // Gamestate class definition
 class GameState {
     constructor() {
-        this.money = 50;
+        this.money = 500;
         this.lives = 50;
         this.score = 0;
-        this.towers =  [];
+        this.towers = [];
         this.enemies = null;
         this.isInPlayMode = false;
     }
