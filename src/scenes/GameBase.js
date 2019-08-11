@@ -67,9 +67,9 @@ class GameBase extends Phaser.Scene {
 	preload() {
 		// HUD assets
 		this.load.image('robot', 'images/Robot.png');
-		this.load.image('laser', 'images/laser.png');
-		this.load.image('signaldisruptor', 'images/signaldisruptor.png');
-		this.load.image('waterhose', 'images/waterhose.png');
+		this.load.image('laser', 'images/towers/laser_color.png');
+		this.load.image('signaldisruptor', 'images/towers/signaldisruptor_color.png');
+		this.load.image('waterhose', 'images/towers/waterhose_color.png');
 		this.load.image('play', 'images/play.png');
 		this.load.image('cancel', 'images/cancel.png');
 		this.load.image('save', 'images/save.png');
@@ -86,9 +86,9 @@ class GameBase extends Phaser.Scene {
 		this.load.atlas('robot_atlas', 'images/enemies/robot/robot_atlas.png', 'images/enemies/robot/robot_atlas.json');
 
 		// Tower assets
-		this.load.image('_waterhose', 'images/towers/waterhose.png');
-		this.load.image('_signaldisruptor', 'images/towers/signaldisruptor.png');
-		this.load.image('_laser', 'images/towers/laser.png');
+		this.load.image('_waterhose', 'images/towers/waterhose_color.png');
+		this.load.image('_signaldisruptor', 'images/towers/signaldisruptor_color.png');
+		this.load.image('_laser', 'images/towers/laser_color.png');
 
 		// Projectile assets
 		this.load.image('_waterdrop', 'images/projectiles/waterdrop.png');
@@ -264,18 +264,18 @@ class GameBase extends Phaser.Scene {
 		graphics.fillRect(672, 0, 3, 390);
 
 		// Add tower icons and text
-		waterhoseIcon = this.add.image(710, 117, 'waterhose').setScale(0.04);
+		waterhoseIcon = this.add.image(710, 117, 'waterhose');
 		waterhoseIcon.setInteractive();
 		// Start placing tower mode when clicking on the waterhoseIcon in the HUD
 		waterhoseIcon.on('pointerdown', this.startPlacingWaterhose.bind(this));
 		this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
 
-		signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor').setScale(0.04);
+		signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor');
 		signaldisruptorIcon.setInteractive();
 		signaldisruptorIcon.on('pointerdown', this.startPlacingSignalDisruptor.bind(this));
 		this.add.text(740, 178, 'Signal Disruptor:$100', { color: '#ffffff', fontSize: '12px' });
 
-		laserIcon = this.add.image(710, 273, 'laser').setScale(0.04);
+		laserIcon = this.add.image(710, 273, 'laser');
 		laserIcon.setInteractive();
 		laserIcon.on('pointerdown', this.startPlacingLaser.bind(this));
 		this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
@@ -373,7 +373,6 @@ class GameBase extends Phaser.Scene {
 		}
 		hose.setActive(true);
 		hose.setVisible(true);
-		hose.setScale(0.04);
 	}
 	placeLaser(pointer) {
 		var laser = lasers.getFirstDead();
@@ -383,7 +382,6 @@ class GameBase extends Phaser.Scene {
 		}
 		laser.setActive(true);
 		laser.setVisible(true);
-		laser.setScale(0.04);
 	}
 	placeSignalDisruptor(pointer) {
 		var signaldisruptor = signaldisruptors.getFirstDead();
@@ -393,7 +391,6 @@ class GameBase extends Phaser.Scene {
 		}
 		signaldisruptor.setActive(true);
 		signaldisruptor.setVisible(true);
-		signaldisruptor.setScale(0.04);
 	}
 
 	hurtEnemy(enemy, proj) {
@@ -516,7 +513,7 @@ class GameBase extends Phaser.Scene {
 		cantPlaceTowerIndicator.createBitmapMask();
 
 		// Tower icon image that follows the pointer
-		newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'waterhose').setScale(0.04);
+		newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'waterhose');
 		newTowerPlaceholder.setInteractive();
 
 		// Handle placing the tower into position if valid or cancel by clicking into the HUD
@@ -593,7 +590,7 @@ class GameBase extends Phaser.Scene {
 		cantPlaceTowerIndicator.createBitmapMask();
 
 		// Tower icon image that follows the pointer
-		newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'signaldisruptor').setScale(0.04);
+		newTowerPlaceholder = this.add.image(this.input.mousePointer.x, this.input.mousePointer.y, 'signaldisruptor');
 		newTowerPlaceholder.setInteractive();
 
 		// Handle placing the tower into position if valid or cancel by clicking into the HUD
