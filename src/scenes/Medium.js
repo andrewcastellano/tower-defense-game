@@ -34,6 +34,9 @@ class Medium extends GameBase {
         }
         path.push(mediumPath);
 
+        //scalar to adjust enemy speed on this level
+        MAP_SPEED = 1.5;
+
         /*
         var graphics = this.add.graphics();
         graphics.lineStyle(3, 0xffffff, 1);

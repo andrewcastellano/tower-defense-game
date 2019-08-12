@@ -9,7 +9,6 @@ var hardPoints2 = {                     //<-- splits here
     'y': [ 275, 275,  52,  52, 227, 227, 227, 307, 307]
 };
 
-
 class Hard extends GameBase {
 
     constructor() {
@@ -44,6 +43,9 @@ class Hard extends GameBase {
             hardPath2.lineTo(hardPoints2.x[i], hardPoints2.y[i]);
         }
         path.push(hardPath2);
+
+        //scalar to adjust enemy speed on this level
+        MAP_SPEED = 2;
 
         /*
         var hardPath1;

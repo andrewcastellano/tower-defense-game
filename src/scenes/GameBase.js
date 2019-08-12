@@ -7,6 +7,7 @@ var robots;
 var graphics;
 var projectiles;
 var allEnemies = [];
+var MAP_SPEED;  //set in each level, modifies speed enemies move for each level difficulty
 
 var waterhoses;
 var signaldisruptors;

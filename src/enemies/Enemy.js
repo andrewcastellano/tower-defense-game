@@ -35,12 +35,8 @@ var Enemy = new Phaser.Class({
             gamestate.money += this.value;
         }
     },
-    // will be called after enemy is obtained from group, sets path enemy will follow (necessary for Hard level)
-    setPath: function(path){
-        this.path = path;        
-    },
     // Update function for gameplay
-    update: function (time, delta) {
+    update: function (time, delta) {        
         // get new progress through track path
         this.follower.t += this.speed * delta;
         // use progression to find new position coordinate

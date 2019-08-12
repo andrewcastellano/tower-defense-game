@@ -15,7 +15,7 @@ var Toaster = new Phaser.Class({
             // enemy specific attributes
             this.health = 100;
             this.alive = true;
-            this.speed = 1 / 30000;
+            this.speed = 1 / 30000 * MAP_SPEED;
             this.value = 2;
             this.movingRight = true;
             this.anims.play('toasterMoveRight', true);

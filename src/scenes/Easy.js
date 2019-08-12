@@ -34,6 +34,9 @@ class Easy extends GameBase {
         }
         path.push(easyPath);
 
+        //scalar to adjust enemy speed on this level
+        MAP_SPEED = 1;
+
         enemyList =             //Wave order enemies will appear on screen
             // t = toaster, w = washingmachine, r = robot
             // gap = additional time for next enemy to spawn in

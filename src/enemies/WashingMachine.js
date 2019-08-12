@@ -12,7 +12,7 @@ var WashingMachine = new Phaser.Class({
             // enemy specific attributes
             this.health = 300;
             this.alive = true;
-            this.speed = 1 / 40000;
+            this.speed = 1 / 40000 * MAP_SPEED;
             this.value = 5;
             this.movingRight = true;
             this.anims.play('washingMachineMoveRight', true);
