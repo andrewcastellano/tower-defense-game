@@ -405,7 +405,7 @@ class GameBase extends Phaser.Scene {
 		hose.on('pointerdown', () => {
 			if (isUpgradingWaterhose && !hose.upgrade) {
 				hose.upgrade = true;
-				hose.setScale(0.05);
+				hose.setScale(1.2);
 				gamestate.money -= waterhoseUpgradeCost;
 				isUpgradingWaterhose = !isUpgradingWaterhose;
 			}
@@ -423,7 +423,7 @@ class GameBase extends Phaser.Scene {
 		signaldisruptor.on('pointerdown', () => {
 			if (isUpgradingSignalDisruptor && !signaldisruptor.upgrade) {
 				signaldisruptor.upgrade = true;
-				signaldisruptor.setScale(0.05);
+				signaldisruptor.setScale(1.2);
 				gamestate.money -= signalDisruptorUpgradeCost;
 				isUpgradingSignalDisruptor = !isUpgradingSignalDisruptor;
 			}
@@ -441,14 +441,13 @@ class GameBase extends Phaser.Scene {
 		laser.on('pointerdown', () => {
 			if (isUpgradingLaser && !laser.upgrade) {
 				laser.upgrade = true;
-				laser.setScale(0.05);
+				laser.setScale(1.2);
 				gamestate.money -= laserUpgradeCost;
 				isUpgradingLaser = !isUpgradingLaser;
 			}
 		});
 		laser.setActive(true);
 		laser.setVisible(true);
-		laser.setScale(0.04);
 	}
 
 	hurtEnemy(enemy, proj) {
