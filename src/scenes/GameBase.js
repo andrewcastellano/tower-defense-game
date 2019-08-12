@@ -49,7 +49,9 @@ var cantPlaceTowerIndicator;
 var isPlacingTower = false;
 
 // Vars used for upgrading towers
-var isUpgradingTower = false;
+var isUpgradingWaterhose = false;
+var isUpgradingSignalDisruptor = false;
+var isUpgradingLaser = false;
 
 // Vars used for play, save, and cancel
 var playButton;
@@ -401,11 +403,11 @@ class GameBase extends Phaser.Scene {
 		}
 		hose.setInteractive();
 		hose.on('pointerdown', () => {
-			if (isUpgradingTower) {
+			if (isUpgradingWaterhose && !hose.upgrade) {
 				hose.upgrade = true;
 				hose.setScale(0.05);
 				gamestate.money -= waterhoseUpgradeCost;
-				isUpgradingTower = !isUpgradingTower;
+				isUpgradingWaterhose = !isUpgradingWaterhose;
 			}
 		});
 		hose.setActive(true);
@@ -420,11 +422,11 @@ class GameBase extends Phaser.Scene {
 		}
 		signaldisruptor.setInteractive();
 		signaldisruptor.on('pointerdown', () => {
-			if (isUpgradingTower) {
+			if (isUpgradingSignalDisruptor && !signaldisruptor.upgrade) {
 				signaldisruptor.upgrade = true;
 				signaldisruptor.setScale(0.05);
 				gamestate.money -= signalDisruptorUpgradeCost;
-				isUpgradingTower = !isUpgradingTower;
+				isUpgradingSignalDisruptor = !isUpgradingSignalDisruptor;
 			}
 		});
 		signaldisruptor.setActive(true);
@@ -439,11 +441,11 @@ class GameBase extends Phaser.Scene {
 		}
 		laser.setInteractive();
 		laser.on('pointerdown', () => {
-			if (isUpgradingTower) {
+			if (isUpgradingLaser && !laser.upgrade) {
 				laser.upgrade = true;
 				laser.setScale(0.05);
 				gamestate.money -= laserUpgradeCost;
-				isUpgradingTower = !isUpgradingTower;
+				isUpgradingLaser = !isUpgradingLaser;
 			}
 		});
 		laser.setActive(true);
@@ -742,17 +744,17 @@ class GameBase extends Phaser.Scene {
 
 	startUpgradeWaterhose() {
 		if (waterhoses.getChildren().length > 0 && gamestate.money > waterhoseUpgradeCost) { //if there are waterhoses and we have the funds
-			isUpgradingTower = !isUpgradingTower;
+			isUpgradingWaterhose = !isUpgradingWaterhose;
 		}
 	}
 	startUpgradeSignalDisruptor() {
 		if (signaldisruptors.getChildren().length > 0 && gamestate.money > signalDisruptorUpgradeCost) { //if there are waterhoses and we have the funds
-			isUpgradingTower = !isUpgradingTower;
+			isUpgradingSignalDisruptor = !isUpgradingSignalDisruptor;
 		}
 	}
 	startUpgradeLaser() {
 		if (lasers.getChildren().length > 0 && gamestate.money > laserUpgradeCost) { //if there are waterhoses and we have the funds
-			isUpgradingTower = !isUpgradingTower;
+			isUpgradingLaser = !isUpgradingLaser;
 		}
 	}
 
