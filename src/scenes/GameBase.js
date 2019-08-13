@@ -469,7 +469,18 @@ class GameBase extends Phaser.Scene {
 			isEmpty = true;
 		}
 		return isEmpty;
-	}
+    }
+    
+    // Helper function to load track path points into path variable
+    loadTrackPoints(pathPoints)
+    {
+        var pathVar = this.add.path(pathPoints.x[0], pathPoints.y[0]);
+        for (var i = 1; i < pathPoints.x.length; i++) {
+            pathVar.lineTo(pathPoints.x[i], pathPoints.y[i]);
+        }
+
+        return pathVar;
+    }
 
 	// Used by Update function to bring enemies onto the track, using wave and enemyList info
 	spawnEnemies(time) {
