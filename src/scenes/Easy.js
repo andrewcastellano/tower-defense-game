@@ -28,10 +28,7 @@ class Easy extends GameBase {
         this.add.image(325, 195, 'easyTrack');
 
         // Load up Easy Track data points into path
-        var easyPath = this.add.path(easyPoints.x[0], easyPoints.y[0]);
-        for (var i = 1; i < easyPoints.x.length; i++) {
-            easyPath.lineTo(easyPoints.x[i], easyPoints.y[i]);
-        }
+        var easyPath = this.loadTrackPoints(easyPoints);
         path.push(easyPath);
 
         //scalar to adjust enemy speed on this level
@@ -149,7 +146,6 @@ class Easy extends GameBase {
             repeat: -1
         });
     }
-
 
 
     // Used by Update function to bring enemies onto the track, using wave and enemyList info

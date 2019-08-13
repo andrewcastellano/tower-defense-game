@@ -28,20 +28,11 @@ class Medium extends GameBase {
         this.add.image(315, 195, 'mediumTrack');
 
         // Load up Medium Track data points into path
-        var mediumPath = this.add.path(mediumPoints.x[0], mediumPoints.y[0]);
-        for (var i = 1; i < mediumPoints.x.length; i++) {
-            mediumPath.lineTo(mediumPoints.x[i], mediumPoints.y[i]);
-        }
+        var mediumPath = this.loadTrackPoints(mediumPoints);
         path.push(mediumPath);
 
         //scalar to adjust enemy speed on this level
         MAP_SPEED = 1.5;
-
-        /*
-        var graphics = this.add.graphics();
-        graphics.lineStyle(3, 0xffffff, 1);
-        path.draw(graphics);
-        */
 
         enemyList =             //Wave order enemies will appear on screen
         // t = toaster, w = washingmachine, r = robot

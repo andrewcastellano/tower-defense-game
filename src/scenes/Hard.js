@@ -33,34 +33,13 @@ class Hard extends GameBase {
         this.add.image(336, 180, 'hardTrack');
 
         // Load up Hard Track data points into path
-        var hardPath1 = this.add.path(hardPoints1.x[0], hardPoints1.y[0]);        
-        for (var i = 1; i < hardPoints1.x.length; i++) {
-            hardPath1.lineTo(hardPoints1.x[i], hardPoints1.y[i]);
-        }
+        var hardPath1 = this.loadTrackPoints(hardPoints1);
+        var hardPath2 = this.loadTrackPoints(hardPoints2);
         path.push(hardPath1);
-        var hardPath2 = this.add.path(hardPoints2.x[0], hardPoints2.y[0]);
-        for (var i = 1; i < hardPoints2.x.length; i++) {
-            hardPath2.lineTo(hardPoints2.x[i], hardPoints2.y[i]);
-        }
         path.push(hardPath2);
 
         //scalar to adjust enemy speed on this level
         MAP_SPEED = 2;
-
-        /*
-        var hardPath1;
-        var hardPath2;
-        this.loadTrackPoints(hardPoints1, hardPath1);
-        this.loadTrackPoints(hardPoints2, hardPath2);
-        path.push(hardPath1);
-        path.push(hardPath2);
-        */
-
-        /*
-        var graphics = this.add.graphics();
-        graphics.lineStyle(3, 0xffffff, 1);
-        path.draw(graphics);
-        */
 
         enemyList =             //Wave order enemies will appear on screen
         // t = toaster, w = washingmachine, r = robot

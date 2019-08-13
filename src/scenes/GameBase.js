@@ -397,8 +397,15 @@ class GameBase extends Phaser.Scene {
         return isEmpty;
     }
 
-    loadTrackPoints(pathPoints, pathVar)
+    loadTrackPoints(pathPoints)
     {
+        var pathVar = this.add.path(pathPoints.x[0], pathPoints.y[0]);
+        for (var i = 1; i < pathPoints.x.length; i++) {
+            pathVar.lineTo(pathPoints.x[i], pathPoints.y[i]);
+        }
+
+        return pathVar;
+/*
         //set starting position
         pathVar = new Phaser.Curves.Path(pathPoints.x[0], pathPoints.y[0]);
         //add track data points to path
@@ -406,6 +413,7 @@ class GameBase extends Phaser.Scene {
         {
             pathVar.lineTo(pathPoints.x[i], pathPoints.y[i]);
         } 
+*/
     }
 
     // Used by Update function to bring enemies onto the track, using wave and enemyList info
