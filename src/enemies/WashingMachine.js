@@ -12,10 +12,11 @@ var WashingMachine = new Phaser.Class({
             // enemy specific attributes
             this.health = 300;
             this.alive = true;
-            this.speed = 1 / 40000;
+            this.speed = 1 / 40000 * MAP_SPEED;
             this.value = 5;
             this.movingRight = true;
             this.anims.play('washingMachineMoveRight', true);
+            this.path = path[Math.floor(Math.random() * path.length)];
         },
         // Update function for path tracking and animations
         update: function (time, delta) {
@@ -23,7 +24,7 @@ var WashingMachine = new Phaser.Class({
             // get new progress through track path
             this.follower.t += this.speed * delta;
             // use progression to find new position coordinate
-            path.getPoint(this.follower.t, this.follower.vec);
+            this.path.getPoint(this.follower.t, this.follower.vec);
             this.setPosition(this.follower.vec.x, this.follower.vec.y);
             //check if enemy completed track path
             if (this.follower.t >= 1) {

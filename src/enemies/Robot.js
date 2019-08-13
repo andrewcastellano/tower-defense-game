@@ -12,8 +12,9 @@ var Robot = new Phaser.Class({
             // enemy specific attributes
             this.health = 250;
             this.alive = true;
-            this.speed = 1 / 20000;
+            this.speed = 1 / 20000 * MAP_SPEED;
             this.value = 10;
             this.anims.play('robotMove', true);
+            this.path = path[Math.floor(Math.random() * path.length)];
         }
 });

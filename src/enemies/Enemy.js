@@ -10,6 +10,7 @@ var Enemy = new Phaser.Class({
             this.alive = true;
             this.speed = 1 / 100000;
             this.value = 1;
+            this.path = path[Math.floor(Math.random() * path.length)];
         },
     // Spawns enemy in at the start of the track path
     spawn: function () {
@@ -17,7 +18,7 @@ var Enemy = new Phaser.Class({
         this.follower.t = 0;
 
         // get starting coordinates
-        path.getPoint(this.follower.t, this.follower.vec);
+        this.path.getPoint(this.follower.t, this.follower.vec);
 
         // move to starting coordinate
         this.setPosition(this.follower.vec.x, this.follower.vec.y);
@@ -35,11 +36,11 @@ var Enemy = new Phaser.Class({
         }
     },
     // Update function for gameplay
-    update: function (time, delta) {
+    update: function (time, delta) {        
         // get new progress through track path
         this.follower.t += this.speed * delta;
         // use progression to find new position coordinate
-        path.getPoint(this.follower.t, this.follower.vec);
+        this.path.getPoint(this.follower.t, this.follower.vec);
         this.setPosition(this.follower.vec.x, this.follower.vec.y);
         //check if enemy completed track path
         if (this.follower.t >= 1) {

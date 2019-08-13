@@ -7,6 +7,8 @@
     <script src="./src/scenes/NewGame.js"></script>
     <script src="./src/scenes/GameBase.js"></script>
     <script src="./src/scenes/Easy.js"></script>
+    <script src="./src/scenes/Medium.js"></script>
+    <script src="./src/scenes/Hard.js"></script>
     <script src="./src/scenes/LoadGame.js"></script>
     <script src="./src/scenes/SaveGame.js"></script>
     <!-- Enemies -->
@@ -36,7 +38,7 @@
             default: 'arcade',
         },
         backgroundColor: 'rgba(0,0,255,0.5)',
-        scene: [ TitlePage, NewGame, Easy, LoadGame, SaveGame ]
+        scene: [ TitlePage, NewGame, Easy, Medium, Hard, LoadGame, SaveGame ]
     };
 
     var game = new Phaser.Game(config);
