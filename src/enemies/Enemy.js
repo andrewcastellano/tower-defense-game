@@ -1,9 +1,9 @@
 // Parent Class for Enemies
 var Enemy = new Phaser.Class({
-    Extends: Phaser.GameObjects.Sprite,
+    Extends: Phaser.Physics.Arcade.Sprite,
     initialize:
         function Enemy(scene) {
-            Phaser.GameObjects.Sprite.call(this, scene);
+            Phaser.Physics.Arcade.Sprite.call(this, scene);
             this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
             // general/default enemy attributes
             this.health = 1;
