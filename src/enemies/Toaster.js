@@ -9,7 +9,7 @@ var Toaster = new Phaser.Class({
             Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'toaster_atlas');
             scene.physics.world.enable(this);
             this.setScale(.50);
-            this.setSize(80, 60);
+            this.setSize(90, 80);
 
             // to follow track path
             this.follower = { t: 0, vec: new Phaser.Math.Vector2() };

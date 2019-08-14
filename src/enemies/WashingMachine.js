@@ -8,7 +8,7 @@ var WashingMachine = new Phaser.Class({
             Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'washingmachine_atlas');
             scene.physics.world.enable(this);
             this.setScale(.50);
-            this.setSize(100, 100);
+            this.setSize(130, 130);
 
             // to follow track path
             this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
