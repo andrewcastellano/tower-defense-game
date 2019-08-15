@@ -244,18 +244,27 @@ class GameBase extends Phaser.Scene {
 	}
 
 	gameOver() {
+        // Add gray panel to screen
+        var msgBox = this.add.graphics();
+        msgBox.fillStyle(0x2c3e50, 1);
+        msgBox.fillRect(175, 150, 375, 100);
+        msgBox.active = false;
+        msgBox.visible = false;
+
 		// check if player ran out of lives
 		if (gamestate.lives <= 0) {
-            // Add gray panel to screen
-        var msgBox = this.add.graphics();
-		msgBox.fillStyle(0x2c3e50, 1);
-        msgBox.fillRect(175, 125, 375, 150);
-			var endText = this.add.text(150, 150, 'Game Over! You lost all your lives!', { fontSize: '20px', fill: '#ffffff' });
-			return true;
+            msgBox.active = true;
+            msgBox.visible = true;
+			var endText = this.add.text(362, 185, 'Game Over!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+			endText = this.add.text(362, 215, 'You lost all your lives!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+            return true;
 		}
 		// check if player completed all waves
 		else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
-			var endText = this.add.text(170, 150, 'Congratulations! You won!', { fontSize: '20px', fill: '#ffffff' });
+            msgBox.active = true;
+            msgBox.visible = true;
+            var endText = this.add.text(362, 185, 'Congratulations!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+            endText = this.add.text(362, 215, 'You Won!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
 			return true;
 		}
 		else //game isn't over
