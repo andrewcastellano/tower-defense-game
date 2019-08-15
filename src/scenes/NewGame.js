@@ -2,7 +2,7 @@ class NewGame extends Phaser.Scene {
 	constructor() {
 		super({
 			key: 'NewGame',
-			active: false
+			active: true
 		})
 	}
 
@@ -51,7 +51,7 @@ class NewGame extends Phaser.Scene {
 		// Rectangle to cover right menu and preserve proportions of menu
 		const rect = new Phaser.Geom.Rectangle(900, 0, 150, 390);
 		const graphics = this.add.graphics();
-		graphics.fillStyle(0xffffff, 1.0);
+		graphics.fillStyle(0x202020, 1.0);
 		graphics.fillRectShape(rect);
 	}
 }

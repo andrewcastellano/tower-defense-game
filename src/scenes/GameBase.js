@@ -624,6 +624,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}
@@ -671,6 +673,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}
@@ -718,6 +722,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}

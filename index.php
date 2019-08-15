@@ -37,7 +37,7 @@
             default: 'arcade',
         },
         backgroundColor: 'rgba(0,0,255,0.5)',
-        scene: [ TitlePage, NewGame, Easy, Medium, Hard, HighScores ]
+        scene: [ NewGame, Easy, Medium, Hard ]
     };
 
     var game = new Phaser.Game(config);

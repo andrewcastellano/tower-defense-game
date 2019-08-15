@@ -2,7 +2,7 @@ class TitlePage extends Phaser.Scene {
 	constructor() {
 		super({
 			key: 'TitlePage',
-			active: true
+			active: false
 		})
 	}
 
