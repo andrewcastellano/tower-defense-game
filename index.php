@@ -27,7 +27,7 @@
     <!-- Misc -->
     <script src="./src/Gamestate.js"></script>
 </head>
-<body>
+<body style="background:#202020">
 
     <script>
     var config = {
