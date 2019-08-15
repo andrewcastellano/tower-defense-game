@@ -246,6 +246,10 @@ class GameBase extends Phaser.Scene {
 	gameOver() {
 		// check if player ran out of lives
 		if (gamestate.lives <= 0) {
+            // Add gray panel to screen
+        var msgBox = this.add.graphics();
+		msgBox.fillStyle(0x2c3e50, 1);
+        msgBox.fillRect(175, 125, 375, 150);
 			var endText = this.add.text(150, 150, 'Game Over! You lost all your lives!', { fontSize: '20px', fill: '#ffffff' });
 			return true;
 		}
@@ -314,9 +318,9 @@ class GameBase extends Phaser.Scene {
 		this.add.text(760, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
 		// Add money and lives text info
-		moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
+		moneyText = this.add.text(700, 10, `Money: ${gamestate.money}`, { color: '#ffffff' });
 		livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
-		currentWave = this.add.text(5, 5, `Wave #1`, { color: '#ffffff' });
+		currentWave = this.add.text(940, 10, `Wave #1`, { color: '#ffffff' });
 
 		// Add not enough funds text under towers
 		cantAffordWaterhoseText = this.add.text(740, 120, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });

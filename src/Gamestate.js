@@ -2,7 +2,7 @@
 class GameState {
     constructor() {
         this.money = 1000;
-        this.lives = 50;
+        this.lives = 1;
         this.score = 0;
         this.towers = [];
         this.enemies = null;
