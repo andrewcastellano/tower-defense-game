@@ -7,11 +7,11 @@ class NewGame extends Phaser.Scene {
 	}
 
 	create() {
-		const titleText = this.add.text(300, 185, 'AI UPRISING', { color: '#ff0000', fontSize: '48px' });
-		const easyText = this.add.text(100, 100, 'EASY', { color: '#ffffff', fontSize: '24px' });
-		const mediumText = this.add.text(100, 200, 'MEDIUM', { color: '#ffffff', fontSize: '24px' });
-		const hardText = this.add.text(100, 300, 'HARD', { color: '#ffffff', fontSize: '24px' });
-		const cancelText = this.add.text(700, 200, 'CANCEL', { color: '#ffffff', fontSize: '24px'});
+		const titleText = this.add.text(300, 185, 'ai uprising', { color: '#eb4d4b', fontSize: '48px', fontFamily: 'Arial' });
+		const easyText = this.add.text(100, 100, 'easy', { color: '#ffffff', fontSize: '24px', fontFamily: 'Arial' });
+		const mediumText = this.add.text(100, 200, 'medium', { color: '#ffffff', fontSize: '24px', fontFamily: 'Arial' });
+		const hardText = this.add.text(100, 300, 'hard', { color: '#ffffff', fontSize: '24px', fontFamily: 'Arial' });
+		const cancelText = this.add.text(700, 200, 'cancel', { color: '#ffffff', fontSize: '24px', fontFamily: 'Arial' });
 
 
 		// Change scene to Easy
@@ -19,7 +19,7 @@ class NewGame extends Phaser.Scene {
 		easyText.on('pointerdown', () => {
 			this.scene.start('Easy');
 		});
-		
+
 		// Change scene to Medium
 		mediumText.setInteractive();
 		mediumText.on('pointerdown', () => {
