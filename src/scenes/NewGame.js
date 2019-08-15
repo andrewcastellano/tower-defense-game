@@ -20,7 +20,7 @@ class NewGame extends Phaser.Scene {
 			const hardClearedText = this.add.text(100, 280, 'CLEARED', { color: '#ff0000', fontSize: '24px' });
 		}
 		const hardText = this.add.text(100, 300, 'HARD', { color: '#ffffff', fontSize: '24px' });
-		const cancelText = this.add.text(700, 200, 'CANCEL', { color: '#ffffff', fontSize: '24px'});
+		// const cancelText = this.add.text(700, 200, 'CANCEL', { color: '#ffffff', fontSize: '24px'});
 
 
 		// Change scene to Easy
@@ -43,10 +43,10 @@ class NewGame extends Phaser.Scene {
 		});
 
 		// Change scene to TitlePage
-		cancelText.setInteractive();
-		cancelText.on('pointerdown', () => {
-			this.scene.start('TitlePage');
-		});
+		// cancelText.setInteractive();
+		// cancelText.on('pointerdown', () => {
+		// 	this.scene.start('TitlePage');
+		// });
 
 		// Rectangle to cover right menu and preserve proportions of menu
 		const rect = new Phaser.Geom.Rectangle(900, 0, 150, 390);
