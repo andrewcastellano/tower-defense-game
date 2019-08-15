@@ -172,8 +172,8 @@ class GameBase extends Phaser.Scene {
 		updateNotEnoughFundsText();
 
 		// update player money and lives
-		moneyText.setText('Money: ' + gamestate.money);
-		livesText.setText('Lives: ' + gamestate.lives)
+		moneyText.setText('money: ' + gamestate.money);
+		livesText.setText('lives: ' + gamestate.lives)
 
 		// spawn waves of enemies and clean up 
 		this.spawnEnemies(time);
@@ -283,58 +283,58 @@ class GameBase extends Phaser.Scene {
 		waterhoseIcon.setInteractive();
 		// Start placing tower mode when clicking on the waterhoseIcon in the HUD
 		waterhoseIcon.on('pointerdown', this.startPlacingWaterhose.bind(this));
-		this.add.text(740, 100, 'Waterhose:$25', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(740, 100, 'waterhose: $25', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 		upgradeWaterhoseIcon = this.add.image(972, 132, 'upgrade').setScale(0.5);
 		upgradeWaterhoseIcon.setInteractive();
 		upgradeWaterhoseIcon.on('pointerdown', this.startUpgradeWaterhose.bind(this));
-		this.add.text(940, 100, 'Upgrade:$50', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(940, 100, 'upgrade: $50', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 
 		signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor');
 		signaldisruptorIcon.setInteractive();
 		signaldisruptorIcon.on('pointerdown', this.startPlacingSignalDisruptor.bind(this));
-		this.add.text(740, 178, 'Signal Disruptor:$100', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(740, 178, 'signal disruptor: $100', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 		upgradeSignalDisruptorIcon = this.add.image(972, 210, 'upgrade').setScale(0.5);
 		upgradeSignalDisruptorIcon.setInteractive();
 		upgradeSignalDisruptorIcon.on('pointerdown', this.startUpgradeSignalDisruptor.bind(this));
-		this.add.text(940, 178, 'Upgrade:$75', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(940, 178, 'upgrade: $75', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 
 		laserIcon = this.add.image(710, 273, 'laser');
 		laserIcon.setInteractive();
 		laserIcon.on('pointerdown', this.startPlacingLaser.bind(this));
-		this.add.text(740, 256, 'Laser:$500', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(740, 256, 'laser: $500', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 		upgradeLaserIcon = this.add.image(972, 288, 'upgrade').setScale(0.5);
 		upgradeLaserIcon.setInteractive();
 		upgradeLaserIcon.on('pointerdown', this.startUpgradeLaser.bind(this));
-		this.add.text(940, 256, 'Upgrade:$100', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(940, 256, 'upgrade: $100', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 
 		// Add play, save, load buttons
 		playButton = this.add.image(710, 345, 'play').setScale(0.06);
 		playButton.setInteractive();
 		playButton.on('pointerdown', this.startPlayMode);
-		this.add.text(697, 365, 'Play', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(697, 365, 'play', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 		saveButton = this.add.image(780, 345, 'save').setScale(0.06);
 		saveButton.setInteractive();
 		saveButton.on('pointerdown', () => {
 			this.scene.start('SaveGame');
 			this.scene.destroy('Easy');
 		});
-		this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(765, 365, 'save', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 		cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
 		cancelButton.setInteractive();
 		cancelButton.on('pointerdown', () => {
 			this.scene.start('NewGame');
 		});
-		this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(830, 365, 'cancel', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 
 		// Add money and lives text info
-		moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
-		livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff' });
-		currentWave = this.add.text(5, 5, `Wave #1`, { color: '#ffffff' });
+		moneyText = this.add.text(700, 5, `money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		livesText = this.add.text(700, 45, `lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		currentWave = this.add.text(5, 5, `wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
 
 		// Add not enough funds text under towers
-		cantAffordWaterhoseText = this.add.text(740, 120, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
-		cantAffordSignalDisruptorText = this.add.text(740, 198, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
-		cantAffordLaserText = this.add.text(740, 276, 'Not enough funds', { color: '#ff0000', fontSize: '12px' });
+		cantAffordWaterhoseText = this.add.text(740, 120, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
+		cantAffordSignalDisruptorText = this.add.text(740, 198, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
+		cantAffordLaserText = this.add.text(740, 276, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
 
 	}
 
@@ -469,18 +469,17 @@ class GameBase extends Phaser.Scene {
 			isEmpty = true;
 		}
 		return isEmpty;
-    }
-    
-    // Helper function to load track path points into path variable
-    loadTrackPoints(pathPoints)
-    {
-        var pathVar = this.add.path(pathPoints.x[0], pathPoints.y[0]);
-        for (var i = 1; i < pathPoints.x.length; i++) {
-            pathVar.lineTo(pathPoints.x[i], pathPoints.y[i]);
-        }
+	}
 
-        return pathVar;
-    }
+	// Helper function to load track path points into path variable
+	loadTrackPoints(pathPoints) {
+		var pathVar = this.add.path(pathPoints.x[0], pathPoints.y[0]);
+		for (var i = 1; i < pathPoints.x.length; i++) {
+			pathVar.lineTo(pathPoints.x[i], pathPoints.y[i]);
+		}
+
+		return pathVar;
+	}
 
 	// Used by Update function to bring enemies onto the track, using wave and enemyList info
 	spawnEnemies(time) {
@@ -738,51 +737,51 @@ class GameBase extends Phaser.Scene {
 		}
 	}
 
-    // Checks that towers can't be placed on another tower
-    isOnTopOfTower(pointer) {
-        const hoses = waterhoses.getChildren();
-        for (var i = 0; i < hoses.length; i++) {
-            const hoseX = hoses[i].x;
-            const hoseY = hoses[i].y;
-            const hoseWidth = hoses[i].width;
-            const hoseHeight = hoses[i].height;
+	// Checks that towers can't be placed on another tower
+	isOnTopOfTower(pointer) {
+		const hoses = waterhoses.getChildren();
+		for (var i = 0; i < hoses.length; i++) {
+			const hoseX = hoses[i].x;
+			const hoseY = hoses[i].y;
+			const hoseWidth = hoses[i].width;
+			const hoseHeight = hoses[i].height;
 
-            if (pointer.x >= hoseX - hoseWidth && pointer.x <= hoseX + hoseWidth
-                && pointer.y >= hoseY - hoseWidth && pointer.y <= hoseY + hoseWidth) {
-                // Pointer is over a hose
-                return true;                
-            }
-        }
+			if (pointer.x >= hoseX - hoseWidth && pointer.x <= hoseX + hoseWidth
+				&& pointer.y >= hoseY - hoseWidth && pointer.y <= hoseY + hoseWidth) {
+				// Pointer is over a hose
+				return true;
+			}
+		}
 
-        const disruptors = signaldisruptors.getChildren();
-        for (var i = 0; i < disruptors.length; i++) {
-            const disruptorX = disruptors[i].x;
-            const disruptorY = disruptors[i].y;
-            const disruptorWidth = disruptors[i].width;
-            const disruptorHeight = disruptors[i].height;
+		const disruptors = signaldisruptors.getChildren();
+		for (var i = 0; i < disruptors.length; i++) {
+			const disruptorX = disruptors[i].x;
+			const disruptorY = disruptors[i].y;
+			const disruptorWidth = disruptors[i].width;
+			const disruptorHeight = disruptors[i].height;
 
-            if (pointer.x >= disruptorX - disruptorWidth && pointer.x <= disruptorX + disruptorWidth
-                && pointer.y >= disruptorY - disruptorWidth && pointer.y <= disruptorY + disruptorWidth) {
-                // Pointer is over a hose
-                return true;                
-            }
-        }
+			if (pointer.x >= disruptorX - disruptorWidth && pointer.x <= disruptorX + disruptorWidth
+				&& pointer.y >= disruptorY - disruptorWidth && pointer.y <= disruptorY + disruptorWidth) {
+				// Pointer is over a hose
+				return true;
+			}
+		}
 
-        const lazers = lasers.getChildren();
-        for (var i = 0; i < lazers.length; i++) {
-            const lazerX = lazers[i].x;
-            const lazerY = lazers[i].y;
-            const lazerWidth = lazers[i].width;
-            const lazerHeight = lazers[i].height;
+		const lazers = lasers.getChildren();
+		for (var i = 0; i < lazers.length; i++) {
+			const lazerX = lazers[i].x;
+			const lazerY = lazers[i].y;
+			const lazerWidth = lazers[i].width;
+			const lazerHeight = lazers[i].height;
 
-            if (pointer.x >= lazerX - lazerWidth && pointer.x <= lazerX + lazerWidth
-                && pointer.y >= lazerY - lazerWidth && pointer.y <= lazerY + lazerWidth) {
-                // Pointer is over a hose
-                return true;                
-            }
-        }
-        return false;
-    }
+			if (pointer.x >= lazerX - lazerWidth && pointer.x <= lazerX + lazerWidth
+				&& pointer.y >= lazerY - lazerWidth && pointer.y <= lazerY + lazerWidth) {
+				// Pointer is over a hose
+				return true;
+			}
+		}
+		return false;
+	}
 
 	// Cancels drag and drop tower placement when the ESC key is pressed
 	cancelPlacingTower(event) {
