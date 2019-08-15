@@ -178,12 +178,6 @@ class GameBase extends Phaser.Scene {
 		// spawn waves of enemies and clean up 
 		this.spawnEnemies(time);
 		this.cleanUpEnemies();
-
-		// check for game over conditions
-		if (this.gameOver() === true) {
-			this.scene.pause();
-			return;
-		}
 	}
 
 	// Creates all enemy movement animations to be used in their update functions
@@ -312,19 +306,12 @@ class GameBase extends Phaser.Scene {
 		playButton.setInteractive();
 		playButton.on('pointerdown', this.startPlayMode);
 		this.add.text(697, 365, 'Play', { color: '#ffffff', fontSize: '12px' });
-		saveButton = this.add.image(780, 345, 'save').setScale(0.06);
-		saveButton.setInteractive();
-		saveButton.on('pointerdown', () => {
-			this.scene.start('SaveGame');
-			this.scene.destroy('Easy');
-		});
-		this.add.text(765, 365, 'Save', { color: '#ffffff', fontSize: '12px' });
-		cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
+		cancelButton = this.add.image(780, 345, 'cancel').setScale(0.06);
 		cancelButton.setInteractive();
 		cancelButton.on('pointerdown', () => {
-			this.scene.start('NewGame');
+			location.reload();
 		});
-		this.add.text(830, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(760, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
 		// Add money and lives text info
 		moneyText = this.add.text(700, 5, `Money: ${gamestate.money}`, { color: '#ffffff' });
@@ -621,9 +608,8 @@ class GameBase extends Phaser.Scene {
 
 	// Handle placing tower when the mouse is clicked 
 	placeTowerWaterhose(pointer) {
-		if (gamestate.money < waterhoseCost) return;
-		else if (isPlacingTower) {
-			if (pointer.x < 675) {
+		if (isPlacingTower) {
+			if (pointer.x < 675 && gamestate.money >= waterhoseCost) {
 				// Pointer is in the game area
 				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
@@ -638,6 +624,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}
@@ -669,9 +657,8 @@ class GameBase extends Phaser.Scene {
 
 	// Handle placing tower when the mouse is clicked 
 	placeTowerSignalDisruptor(pointer) {
-		if (gamestate.money < signaldisruptorCost) return;
-		else if (isPlacingTower) {
-			if (pointer.x < 675) {
+		if (isPlacingTower) {
+			if (pointer.x < 675 && gamestate.money >= signaldisruptorCost) {
 				// Pointer is in the game area
 				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
@@ -686,6 +673,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}
@@ -717,9 +706,8 @@ class GameBase extends Phaser.Scene {
 
 	// Handle placing tower when the mouse is clicked 
 	placeTowerLaser(pointer) {
-		if (gamestate.money < laserCost) return;
-		else if (isPlacingTower) {
-			if (pointer.x < 675) {
+		if (isPlacingTower) {
+			if (pointer.x < 675 && gamestate.money >= laserCost) {
 				// Pointer is in the game area
 				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
@@ -734,6 +722,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}

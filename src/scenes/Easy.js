@@ -84,128 +84,17 @@ class Easy extends GameBase {
         GameBase.prototype.create.call(this);
     }
 
-    // Creates all enemy movement animations to be used in their update functions
-    createEnemyAnimations() {
-        this.anims.create({
-            key: 'toasterMoveRight',
-            frames: this.anims.generateFrameNames('toaster_atlas', {
-                prefix: 'toaster_right_',
-                start: 0,
-                end: 4
-            }),
-            frameRate: 5,
-            yoyo: true,
-            repeat: -1
-        });
 
-        this.anims.create({
-            key: 'toasterMoveLeft',
-            frames: this.anims.generateFrameNames('toaster_atlas', {
-                prefix: 'toaster_left_',
-                start: 0,
-                end: 4
-            }),
-            frameRate: 5,
-            yoyo: true,
-            repeat: -1
-        });
+    // Update game scene
+    update(time, delta) {
+        GameBase.prototype.update.call(this, time, delta);
 
-        this.anims.create({
-            key: 'washingMachineMoveRight',
-            frames: this.anims.generateFrameNames('washingmachine_atlas', {
-                prefix: 'washingmachine_right_',
-                start: 0,
-                end: 8
-            }),
-            frameRate: 5,
-            yoyo: true,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'washingMachineMoveLeft',
-            frames: this.anims.generateFrameNames('washingmachine_atlas', {
-                prefix: 'washingmachine_left_',
-                start: 0,
-                end: 8
-            }),
-            frameRate: 5,
-            yoyo: true,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'robotMove',
-            frames: this.anims.generateFrameNames('robot_atlas', {
-                prefix: 'robot_',
-                start: 0,
-                end: 11
-            }),
-            frameRate: 5,
-            yoyo: false,
-            repeat: -1
-        });
-    }
-
-
-    // Used by Update function to bring enemies onto the track, using wave and enemyList info
-    spawnEnemies(time) {
-        // Return early if game has not started
-        if (!isInPlayMode) return;
-
-        //if there are still waves to spawn
-        if (waveNum < enemyList.length) {
-            //check if board is empty after full wave, advance to next round first enemy if all enemies defeated
-            if (time > startTime && waveSpawned) {
-                var boardEmpty = this.isBoardEmpty();
-                if (boardEmpty) {
-                    nextEnemy = time + 2000; // 2 second gap to new wave when cleared early
-                    waveSpawned = false;
-                }
-            }
-
-            //if it's time for the next enemy to spawn
-            if (time > nextEnemy) {
-                if (newWave) {
-                    currentWave.setText('Wave #' + (waveNum + 1));
-                    newWave = false;
-                    waveSpawned = false;
-                }
-                // get next enemy     
-                var enemy;
-                switch (enemyList[waveNum][enemyNum].name) {
-                    case 't':
-                        enemy = toasters.get();
-                        break;
-                    case 'w':
-                        enemy = washingmachines.get();
-                        break;
-                    case 'r':
-                        enemy = robots.get();
-                        break;
-                }
-
-                if (enemy) {
-                    enemy.setActive(true);
-                    enemy.setVisible(true);
-
-                    // place the enemy at the beginning of the path
-                    enemy.spawn();
-                    // determine index of next enemy
-                    if ((enemyNum + 1) == enemyList[waveNum].length) // go to next wave
-                    {
-                        nextEnemy = time + enemyList[waveNum][enemyNum].gap;
-                        enemyNum = 0;
-                        waveNum++;
-                        newWave = true;
-                        waveSpawned = true;
-                    }
-                    else {
-                        nextEnemy = time + enemyList[waveNum][enemyNum].gap;
-                        enemyNum++;
-                    }
-                }
-            }
+        // check for game over conditions
+        if (GameBase.prototype.gameOver.call(this) === true) {
+            // Save Easy stage cleared data
+            localStorage.setItem("isEasyCleared", "true");
+            this.scene.pause();
+            return;
         }
     }
 

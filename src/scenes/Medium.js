@@ -84,6 +84,19 @@ class Medium extends GameBase {
         GameBase.prototype.create.call(this);
     }
 
+    // Update game scene
+    update(time, delta) {
+        GameBase.prototype.update.call(this, time, delta);
+
+        // check for game over conditions
+        if (GameBase.prototype.gameOver.call(this) === true) {
+            // Save Easy stage cleared data
+            localStorage.setItem("isMediumCleared", "true");
+            this.scene.pause();
+            return;
+        }
+    }
+
     // Returns whether pointer is hovering over part of the track. Used to determine which area of
     // effect indicator to use when attempting to place a tower.
     // Why check bounds for track instead of detecing pointer / image overlap?
