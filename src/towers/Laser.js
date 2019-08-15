@@ -6,12 +6,12 @@ var Laser = new Phaser.Class({
 			Phaser.GameObjects.Image.call(this, scene, x, y, 'laser');
 			this.nextTic = 0;
 			this.upgrade = false;
-			this.range = 200;
+			this.range = 250;
 			this.scene.add.existing(this);
 		},
 	fire: function () {
 		if (this.upgrade) {
-			this.range = 350;
+			this.range = 400;
 		}
 		var enemy = this.scene.getEnemy(this.x, this.y, this.range);
 		if (enemy) { //if there is an enemy in range
@@ -24,7 +24,7 @@ var Laser = new Phaser.Class({
 		if (time > this.nextTic) {
 			//we can fire another
 			this.fire();
-			this.nextTic = time + 3000;
+			this.nextTic = time + 2500;
 		}
 	}
 }); 
