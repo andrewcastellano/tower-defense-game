@@ -283,53 +283,53 @@ class GameBase extends Phaser.Scene {
 		waterhoseIcon.setInteractive();
 		// Start placing tower mode when clicking on the waterhoseIcon in the HUD
 		waterhoseIcon.on('pointerdown', this.startPlacingWaterhose.bind(this));
-		this.add.text(740, 100, 'waterhose: $25', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(740, 100, 'waterhose: $25', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 		upgradeWaterhoseIcon = this.add.image(972, 132, 'upgrade').setScale(0.5);
 		upgradeWaterhoseIcon.setInteractive();
 		upgradeWaterhoseIcon.on('pointerdown', this.startUpgradeWaterhose.bind(this));
-		this.add.text(940, 100, 'upgrade: $50', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(930, 100, 'upgrade: $50', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		signaldisruptorIcon = this.add.image(710, 195, 'signaldisruptor');
 		signaldisruptorIcon.setInteractive();
 		signaldisruptorIcon.on('pointerdown', this.startPlacingSignalDisruptor.bind(this));
-		this.add.text(740, 178, 'signal disruptor: $100', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(740, 178, 'signal disruptor: $100', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 		upgradeSignalDisruptorIcon = this.add.image(972, 210, 'upgrade').setScale(0.5);
 		upgradeSignalDisruptorIcon.setInteractive();
 		upgradeSignalDisruptorIcon.on('pointerdown', this.startUpgradeSignalDisruptor.bind(this));
-		this.add.text(940, 178, 'upgrade: $75', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(930, 178, 'upgrade: $75', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		laserIcon = this.add.image(710, 273, 'laser');
 		laserIcon.setInteractive();
 		laserIcon.on('pointerdown', this.startPlacingLaser.bind(this));
-		this.add.text(740, 256, 'laser: $500', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(740, 256, 'laser: $500', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 		upgradeLaserIcon = this.add.image(972, 288, 'upgrade').setScale(0.5);
 		upgradeLaserIcon.setInteractive();
 		upgradeLaserIcon.on('pointerdown', this.startUpgradeLaser.bind(this));
-		this.add.text(940, 256, 'upgrade: $100', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(930, 256, 'upgrade: $100', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		// Add play, save, load buttons
 		playButton = this.add.image(710, 345, 'play').setScale(0.06);
 		playButton.setInteractive();
 		playButton.on('pointerdown', this.startPlayMode);
-		this.add.text(697, 365, 'play', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(697, 365, 'play', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 		saveButton = this.add.image(780, 345, 'save').setScale(0.06);
 		saveButton.setInteractive();
 		saveButton.on('pointerdown', () => {
 			this.scene.start('SaveGame');
 			this.scene.destroy('Easy');
 		});
-		this.add.text(765, 365, 'save', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(765, 365, 'save', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 		cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
 		cancelButton.setInteractive();
 		cancelButton.on('pointerdown', () => {
 			this.scene.start('NewGame');
 		});
-		this.add.text(830, 365, 'cancel', { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		this.add.text(830, 365, 'cancel', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		// Add money and lives text info
-		moneyText = this.add.text(700, 5, `money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
-		livesText = this.add.text(700, 45, `lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
-		currentWave = this.add.text(5, 5, `wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Arial' });
+		moneyText = this.add.text(700, 5, `money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		livesText = this.add.text(700, 45, `lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		currentWave = this.add.text(5, 5, `wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		// Add not enough funds text under towers
 		cantAffordWaterhoseText = this.add.text(740, 120, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
