@@ -318,7 +318,7 @@ class GameBase extends Phaser.Scene {
 		playButton = this.add.image(710, 345, 'play').setScale(0.06);
 		playButton.setInteractive();
 		playButton.on('pointerdown', this.startPlayMode);
-		this.add.text(697, 365, 'Play', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		this.add.text(697, 365, 'play', { color: '#ffffff', fontSize: '12px', fontFamily: 'Montserrat' });
 		cancelButton = this.add.image(780, 345, 'cancel').setScale(0.06);
 		cancelButton.setInteractive();
 		cancelButton.on('pointerdown', () => {
