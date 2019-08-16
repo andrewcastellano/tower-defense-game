@@ -9,7 +9,7 @@ var radiowave = new Phaser.Class({
 			this.deltaY = 0;
 			this.speed = Phaser.Math.GetSpeed(400, 1); //how far, how long
 			this.scene.add.existing(this);
-			this.dmg = 10;
+			this.dmg = 5;
 			this.lifespan = 0;
 		},
 	fire: function (x, y, angle) {

@@ -9,7 +9,7 @@ var laserbeam = new Phaser.Class({
 			this.deltaY = 0;
 			this.speed = Phaser.Math.GetSpeed(400, 1); //how fast, how long
 			this.scene.add.existing(this);
-			this.dmg = 200;
+			this.dmg = 100;
 			this.lifespan = 0;
 		},
 	fire: function (x, y, angle) {

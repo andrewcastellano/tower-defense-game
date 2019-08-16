@@ -21,7 +21,7 @@ var SignalDisruptor = new Phaser.Class({
 		if (time > this.nextTic) {
 			//we can fire another
 			this.fire();
-			this.nextTic = time + 500;
+			this.nextTic = time + 800;
 		}
 	}
 }); 
