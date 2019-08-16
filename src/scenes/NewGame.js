@@ -19,7 +19,7 @@ class NewGame extends Phaser.Scene {
 		if (localStorage.getItem('isHardCleared')) {
 			const hardClearedText = this.add.text(100, 280, 'cleared', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		}
-		const hardText = this.add.text(100, 300, 'hard', { color: '#ffffff', fontSize: '24px' });
+		const hardText = this.add.text(100, 300, 'hard', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		// const cancelText = this.add.text(700, 200, 'CANCEL', { color: '#ffffff', fontSize: '24px'});
 
 
