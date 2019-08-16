@@ -255,16 +255,16 @@ class GameBase extends Phaser.Scene {
 		if (gamestate.lives <= 0) {
 			msgBox.active = true;
 			msgBox.visible = true;
-			var endText = this.add.text(362, 185, 'Game Over!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
-			endText = this.add.text(362, 215, 'You lost all your lives!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+			var endText = this.add.text(362, 185, 'game over!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+			endText = this.add.text(362, 215, 'you lost all your lives!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
 			return true;
 		}
 		// check if player completed all waves
 		else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
 			msgBox.active = true;
 			msgBox.visible = true;
-			var endText = this.add.text(362, 185, 'Congratulations!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
-			endText = this.add.text(362, 215, 'You Won!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+			var endText = this.add.text(362, 185, 'congratulations!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+			endText = this.add.text(362, 215, 'you won!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
 			return true;
 		}
 		else //game isn't over
@@ -324,17 +324,17 @@ class GameBase extends Phaser.Scene {
 		cancelButton.on('pointerdown', () => {
 			location.reload();
 		});
-		this.add.text(760, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
+		this.add.text(760, 365, 'cancel', { color: '#ffffff', fontSize: '12px', fontFamily: 'Montserrat' });
 
 		// Add money and lives text info
-		moneyText = this.add.text(700, 10, `Money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
-		livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
-		currentWave = this.add.text(940, 10, `Wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		moneyText = this.add.text(700, 10, `money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		livesText = this.add.text(700, 45, `lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		currentWave = this.add.text(940, 10, `wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		// Add not enough funds text under towers
-		cantAffordWaterhoseText = this.add.text(740, 120, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
-		cantAffordSignalDisruptorText = this.add.text(740, 198, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
-		cantAffordLaserText = this.add.text(740, 276, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
+		cantAffordWaterhoseText = this.add.text(740, 120, 'not enough funds', { color: '#ff0000', fontSize: '12px', fontFamily: 'Montserrat' });
+		cantAffordSignalDisruptorText = this.add.text(740, 198, 'not enough funds', { color: '#ff0000', fontSize: '12px', fontFamily: 'Montserrat' });
+		cantAffordLaserText = this.add.text(740, 276, 'not enough funds', { color: '#ff0000', fontSize: '12px', fontFamily: 'Montserrat' });
 
 	}
 
@@ -500,7 +500,7 @@ class GameBase extends Phaser.Scene {
 			//if it's time for the next enemy to spawn
 			if (time > nextEnemy) {
 				if (newWave) {
-					currentWave.setText('Wave #' + (waveNum + 1));
+					currentWave.setText('wave #' + (waveNum + 1));
 					newWave = false;
 					waveSpawned = false;
 				}
