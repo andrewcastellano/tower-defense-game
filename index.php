@@ -36,7 +36,7 @@
         physics: {
             default: 'arcade',
         },
-        backgroundColor: 'rgba(0,0,255,0.5)',
+		backgroundColor: '#130f40',
         scene: [ NewGame, Easy, Medium, Hard ]
     };
 

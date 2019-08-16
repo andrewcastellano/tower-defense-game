@@ -7,19 +7,19 @@ class NewGame extends Phaser.Scene {
 	}
 
 	create() {
-		const titleText = this.add.text(300, 185, 'AI UPRISING', { color: '#ff0000', fontSize: '48px' });
+		const titleText = this.add.text(300, 185, 'ai uprising', { color: '#ffffff', fontSize: '48px', fontFamily: 'Montserrat' });
 		if (localStorage.getItem('isEasyCleared')) {
-			const easyClearedText = this.add.text(100, 80, 'CLEARED', { color: '#ff0000', fontSize: '24px' });
+			const easyClearedText = this.add.text(100, 80, 'cleared', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		}
-		const easyText = this.add.text(100, 100, 'EASY', { color: '#ffffff', fontSize: '24px' });
+		const easyText = this.add.text(100, 100, 'easy', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		if (localStorage.getItem('isMediumCleared')) {
-			const mediumClearedText = this.add.text(100, 180, 'CLEARED', { color: '#ff0000', fontSize: '24px' });
+			const mediumClearedText = this.add.text(100, 180, 'cleared', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		}
-		const mediumText = this.add.text(100, 200, 'MEDIUM', { color: '#ffffff', fontSize: '24px' });
+		const mediumText = this.add.text(100, 200, 'medium', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		if (localStorage.getItem('isHardCleared')) {
-			const hardClearedText = this.add.text(100, 280, 'CLEARED', { color: '#ff0000', fontSize: '24px' });
+			const hardClearedText = this.add.text(100, 280, 'cleared', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		}
-		const hardText = this.add.text(100, 300, 'HARD', { color: '#ffffff', fontSize: '24px' });
+		const hardText = this.add.text(100, 300, 'hard', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 		// const cancelText = this.add.text(700, 200, 'CANCEL', { color: '#ffffff', fontSize: '24px'});
 
 
@@ -29,7 +29,7 @@ class NewGame extends Phaser.Scene {
 			this.scene.stop();
 			this.scene.start('Easy');
 		});
-		
+
 		// Change scene to Medium
 		mediumText.setInteractive();
 		mediumText.on('pointerdown', () => {

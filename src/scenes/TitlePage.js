@@ -7,9 +7,9 @@ class TitlePage extends Phaser.Scene {
 	}
 
 	create() {
-		const titleText = this.add.text(300, 185, 'AI UPRISING', { color: '#ff0000', fontSize: '48px' });
-		const newGameText = this.add.text(100, 100, 'NEW GAME', { color: '#ffffff', fontSize: '24px' });
-		const highScoreText = this.add.text(100, 300, 'HIGH SCORES', { color: '#ffffff', fontSize: '24px' });
+		const titleText = this.add.text(300, 185, 'ai uprising', { color: '#ffffff', fontSize: '48px', fontFamily: 'Montserrat' });
+		const newGameText = this.add.text(100, 100, 'new game', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
+		const highScoreText = this.add.text(100, 300, 'high scores', { color: '#ffffff', fontSize: '24px', fontFamily: 'Montserrat' });
 
 		// Change scene to new game
 		newGameText.setInteractive();
