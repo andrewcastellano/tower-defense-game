@@ -178,12 +178,6 @@ class GameBase extends Phaser.Scene {
 		// spawn waves of enemies and clean up 
 		this.spawnEnemies(time);
 		this.cleanUpEnemies();
-
-		// check for game over conditions
-		if (this.gameOver() === true) {
-			this.scene.pause();
-			return;
-		}
 	}
 
 	// Creates all enemy movement animations to be used in their update functions
@@ -250,14 +244,27 @@ class GameBase extends Phaser.Scene {
 	}
 
 	gameOver() {
+		// Add gray panel to screen
+		var msgBox = this.add.graphics();
+		msgBox.fillStyle(0x2c3e50, 1);
+		msgBox.fillRect(175, 150, 375, 100);
+		msgBox.active = false;
+		msgBox.visible = false;
+
 		// check if player ran out of lives
 		if (gamestate.lives <= 0) {
-			var endText = this.add.text(150, 150, 'Game Over! You lost all your lives!', { fontSize: '20px', fill: '#ffffff' });
+			msgBox.active = true;
+			msgBox.visible = true;
+			var endText = this.add.text(362, 185, 'Game Over!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+			endText = this.add.text(362, 215, 'You lost all your lives!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
 			return true;
 		}
 		// check if player completed all waves
 		else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
-			var endText = this.add.text(170, 150, 'Congratulations! You won!', { fontSize: '20px', fill: '#ffffff' });
+			msgBox.active = true;
+			msgBox.visible = true;
+			var endText = this.add.text(362, 185, 'Congratulations!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
+			endText = this.add.text(362, 215, 'You Won!', { fontSize: '20px', fill: '#ffffff' }).setOrigin(.5);
 			return true;
 		}
 		else //game isn't over
@@ -311,25 +318,18 @@ class GameBase extends Phaser.Scene {
 		playButton = this.add.image(710, 345, 'play').setScale(0.06);
 		playButton.setInteractive();
 		playButton.on('pointerdown', this.startPlayMode);
-		this.add.text(697, 365, 'play', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
-		saveButton = this.add.image(780, 345, 'save').setScale(0.06);
-		saveButton.setInteractive();
-		saveButton.on('pointerdown', () => {
-			this.scene.start('SaveGame');
-			this.scene.destroy('Easy');
-		});
-		this.add.text(765, 365, 'save', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
-		cancelButton = this.add.image(850, 345, 'cancel').setScale(0.06);
+		this.add.text(697, 365, 'Play', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		cancelButton = this.add.image(780, 345, 'cancel').setScale(0.06);
 		cancelButton.setInteractive();
 		cancelButton.on('pointerdown', () => {
-			this.scene.start('NewGame');
+			location.reload();
 		});
-		this.add.text(830, 365, 'cancel', { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		this.add.text(760, 365, 'Cancel', { color: '#ffffff', fontSize: '12px' });
 
 		// Add money and lives text info
-		moneyText = this.add.text(700, 5, `money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
-		livesText = this.add.text(700, 45, `lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
-		currentWave = this.add.text(5, 5, `wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		moneyText = this.add.text(700, 10, `Money: ${gamestate.money}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		livesText = this.add.text(700, 45, `Lives: ${gamestate.lives}`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
+		currentWave = this.add.text(940, 10, `Wave #1`, { color: '#ffffff', fontSize: '16px', fontFamily: 'Montserrat' });
 
 		// Add not enough funds text under towers
 		cantAffordWaterhoseText = this.add.text(740, 120, 'not enough funds', { color: '#ff0000', fontSize: '12px' });
@@ -620,9 +620,8 @@ class GameBase extends Phaser.Scene {
 
 	// Handle placing tower when the mouse is clicked 
 	placeTowerWaterhose(pointer) {
-		if (gamestate.money < waterhoseCost) return;
-		else if (isPlacingTower) {
-			if (pointer.x < 675) {
+		if (isPlacingTower) {
+			if (pointer.x < 675 && gamestate.money >= waterhoseCost) {
 				// Pointer is in the game area
 				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
@@ -637,6 +636,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}
@@ -668,9 +669,8 @@ class GameBase extends Phaser.Scene {
 
 	// Handle placing tower when the mouse is clicked 
 	placeTowerSignalDisruptor(pointer) {
-		if (gamestate.money < signaldisruptorCost) return;
-		else if (isPlacingTower) {
-			if (pointer.x < 675) {
+		if (isPlacingTower) {
+			if (pointer.x < 675 && gamestate.money >= signaldisruptorCost) {
 				// Pointer is in the game area
 				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
@@ -685,6 +685,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}
@@ -716,9 +718,8 @@ class GameBase extends Phaser.Scene {
 
 	// Handle placing tower when the mouse is clicked 
 	placeTowerLaser(pointer) {
-		if (gamestate.money < laserCost) return;
-		else if (isPlacingTower) {
-			if (pointer.x < 675) {
+		if (isPlacingTower) {
+			if (pointer.x < 675 && gamestate.money >= laserCost) {
 				// Pointer is in the game area
 				if (!this.isPointerOverTrack(pointer) && !this.isOnTopOfTower(pointer)) {
 					// Tower placed in valid area
@@ -733,6 +734,8 @@ class GameBase extends Phaser.Scene {
 				// Cancel tower purchase by clicking in the HUD area
 				isPlacingTower = false;
 				newTowerPlaceholder.destroy();
+				rangeIndicator.setVisible(false);
+				cantPlaceTowerIndicator.setVisible(false);
 			}
 		}
 	}

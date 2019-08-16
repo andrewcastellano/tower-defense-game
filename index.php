@@ -9,8 +9,7 @@
     <script src="./src/scenes/Easy.js"></script>
     <script src="./src/scenes/Medium.js"></script>
     <script src="./src/scenes/Hard.js"></script>
-    <script src="./src/scenes/LoadGame.js"></script>
-    <script src="./src/scenes/SaveGame.js"></script>
+    <script src="./src/scenes/HighScores.js"></script>
     <!-- Enemies -->
     <script src="./src/enemies/Enemy.js"></script>
     <script src="./src/enemies/Robot.js"></script>
@@ -27,7 +26,7 @@
     <!-- Misc -->
     <script src="./src/Gamestate.js"></script>
 </head>
-<body>
+<body style="background:#202020">
 
     <script>
     var config = {
@@ -37,8 +36,8 @@
         physics: {
             default: 'arcade',
         },
-        backgroundColor: '#130f40',
-        scene: [ TitlePage, NewGame, Easy, Medium, Hard, LoadGame, SaveGame ]
+		backgroundColor: '#130f40',
+        scene: [ NewGame, Easy, Medium, Hard ]
     };
 
     var game = new Phaser.Game(config);
@@ -47,3 +46,4 @@
 
 </body>
 </html>
+
