@@ -173,7 +173,11 @@ class GameBase extends Phaser.Scene {
 
 		// update player money and lives
 		moneyText.setText('money: ' + gamestate.money);
-		livesText.setText('lives: ' + gamestate.lives)
+		if (gamestate.lives >= 0) {
+			livesText.setText('lives: ' + gamestate.lives)
+		} else {
+			livesText.setText('lives: ' + 0)
+		}
 
 		// spawn waves of enemies and clean up 
 		this.spawnEnemies(time);
@@ -244,27 +248,7 @@ class GameBase extends Phaser.Scene {
 	}
 
 	gameOver() {
-		// Add gray panel to screen
-		var msgBox = this.add.graphics();
-		msgBox.fillStyle(0x2c3e50, 1);
-		msgBox.fillRect(175, 150, 375, 100);
-		msgBox.active = false;
-		msgBox.visible = false;
-
-		// check if player ran out of lives
-		if (gamestate.lives <= 0) {
-			msgBox.active = true;
-			msgBox.visible = true;
-			var endText = this.add.text(362, 185, 'game over!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
-			endText = this.add.text(362, 215, 'you lost all your lives!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
-			return true;
-		}
-		// check if player completed all waves
-		else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
-			msgBox.active = true;
-			msgBox.visible = true;
-			var endText = this.add.text(362, 185, 'congratulations!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
-			endText = this.add.text(362, 215, 'you won!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+		if (gamestate.lives <= 0 || waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
 			return true;
 		}
 		else //game isn't over

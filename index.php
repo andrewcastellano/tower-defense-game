@@ -9,7 +9,6 @@
     <script src="./src/scenes/Easy.js"></script>
     <script src="./src/scenes/Medium.js"></script>
     <script src="./src/scenes/Hard.js"></script>
-    <script src="./src/scenes/HighScores.js"></script>
     <!-- Enemies -->
     <script src="./src/enemies/Enemy.js"></script>
     <script src="./src/enemies/Robot.js"></script>

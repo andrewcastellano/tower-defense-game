@@ -97,9 +97,40 @@ class Hard extends GameBase {
 
         // check for game over conditions
         if (GameBase.prototype.gameOver.call(this) === true) {
-            // Save Easy stage cleared data
-            localStorage.setItem("isHardCleared", "true");
-            this.scene.pause();
+            // Add gray panel to screen
+            var msgBox = this.add.graphics();
+            msgBox.fillStyle(0x2c3e50, 1);
+            msgBox.fillRect(175, 150, 375, 100);
+            msgBox.active = false;
+            msgBox.visible = false;
+
+            // check if player ran out of lives
+            if (gamestate.lives <= 0) {
+                isInPlayMode = false;
+                msgBox.active = true;
+                msgBox.visible = true;
+                var endText = this.add.text(362, 185, 'game over! you ran out of lives!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+                var playAgainText = this.add.text(362, 215, 'play again?', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+                playAgainText.setInteractive();
+                playAgainText.on('pointerdown', () => {
+                    location.reload();
+                });
+                return true;
+            }
+            // check if player completed all waves
+            else if (waveNum >= enemyList.length && waveSpawned && this.isBoardEmpty() === true) {
+                isInPlayMode = false;
+                msgBox.active = true;
+                msgBox.visible = true;
+                var endText = this.add.text(362, 185, 'congratulations! you won!', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+                var playAgainText = this.add.text(362, 215, 'play again?', { fontSize: '20px', fill: '#ffffff', fontFamily: 'Montserrat' }).setOrigin(.5);
+                playAgainText.setInteractive();
+                playAgainText.on('pointerdown', () => {
+                    location.reload();
+                });
+                localStorage.setItem("isHardCleared", "true");
+                return true;
+            }
             return;
         }
     }
