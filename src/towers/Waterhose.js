@@ -22,9 +22,9 @@ var Waterhose = new Phaser.Class({
 			//we can fire another
 			this.fire();
 			if (this.upgrade) {
-				this.nextTic = time + 500;
+				this.nextTic = time + 700;
 			} else {
-				this.nextTic = time + 1000;
+				this.nextTic = time + 1200;
 			}
 		}
 	}
